@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/hg19910.css">
 <Style>
 	/*임시 모든 구역 구분 선(테스트)*/	
 	main, header, section, footer, article, aside, div, label, table, th, td{
@@ -181,7 +182,7 @@
                             <tr>
                                 <td><a href="<%=request.getContextPath()%>"><img alt="홈버튼" src="<%=request.getContextPath()%>/image/house.svg"></a></td>
                                 <td><a href="#"><img alt="쪽지버튼" src="<%=request.getContextPath()%>/image/chat.svg"></a></td>
-                                <td><a href="#"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
+                                <td><a href="<%=request.getContextPath()%>/admin/home.jsp"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
                             </tr>
                         </tbody>   
                     </table>
@@ -193,10 +194,10 @@
             <aside>
                 <div class="menu">
                     <ul>
-                        <li class="menu menu-title"><a href="">일정</a></li>
+                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">일정</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="">내 일정</a></li>
-                            <li class="menu menu-detail"><a href="">일정 공유</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">내 일정</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/sch_manage.jsp">캘린더 설정</a></li>
                         </ul>
                     </ul>
                     <ul>
@@ -207,11 +208,11 @@
                         </ul>
                     </ul>
                     <ul>
-                        <li class="menu menu-title"><a href="">근태</a></li>
+                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="">근태 현황</a></li>
-                            <li class="menu menu-detail"><a href="">휴가 신청</a></li>
-                            <li class="menu menu-detail"><a href="">휴가 현황</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태 현황</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_add.jsp">휴가 신청</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_status.jsp">휴가 현황</a></li>
                         </ul>
                     </ul>
                     <ul>
