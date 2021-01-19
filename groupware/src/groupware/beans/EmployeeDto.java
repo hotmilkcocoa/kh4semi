@@ -11,7 +11,7 @@ public class EmployeeDto {
 	public String emp_phone;
 	public String emp_email;
 	public String emp_addr;
-	public String emp_birth;
+	public Date emp_birth;
 	public String emp_title;
 	public int emp_salary;
 	public String emp_auth;
@@ -81,11 +81,11 @@ public class EmployeeDto {
 		this.emp_addr = emp_addr;
 	}
 
-	public String getEmp_birth() {
+	public Date getEmp_birth() {
 		return emp_birth;
 	}
 
-	public void setEmp_birth(String emp_birth) {
+	public void setEmp_birth(Date emp_birth) {
 		this.emp_birth = emp_birth;
 	}
 
@@ -152,10 +152,6 @@ public class EmployeeDto {
 	public void setEmp_dep(String emp_dep) {
 		this.emp_dep = emp_dep;
 	}
-	
-	
-	
-	
-	
+
 	
 }

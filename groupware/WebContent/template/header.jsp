@@ -182,7 +182,7 @@
                             <tr>
                                 <td><a href="<%=request.getContextPath()%>"><img alt="홈버튼" src="<%=request.getContextPath()%>/image/house.svg"></a></td>
                                 <td><a href="#"><img alt="쪽지버튼" src="<%=request.getContextPath()%>/image/chat.svg"></a></td>
-                                <td><a href="#"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
+                                <td><a href="<%=request.getContextPath()%>/admin/home.jsp"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
                             </tr>
                         </tbody>   
                     </table>

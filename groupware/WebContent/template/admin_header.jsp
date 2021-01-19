@@ -142,7 +142,6 @@
                         <ul>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/admin/group.jsp">조직관리</a></li>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/admin/employee.jsp">사원관리</a></li>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/admin/manager.jsp">인사관리자</a></li>
                         </ul>
                     </ul>
                     <ul>
