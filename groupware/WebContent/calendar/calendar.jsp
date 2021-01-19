@@ -13,6 +13,7 @@
 		<input type="button" value="일간" id="daily" class="changeType">
 		<input type="button" value="주간" id="weekly" class="changeType">
 		<input type="button" value="월간" id="monthly" class="changeType">
+		<input type="button" value="일정 추가" id="sch_add" href="sch_add.jsp">
 	</div>
 	<hr>
 	<div class="calendar">
@@ -190,5 +191,10 @@
 	};
 	
 	paint(calType);
+	
+	document.querySelector("#sch_add").addEventListener("click", function(){
+		location.href = this.getAttribute("href");
+		console.log(this);
+	});
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include>  

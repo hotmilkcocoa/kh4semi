@@ -6,13 +6,13 @@
 <h3>내 일정 관리</h3>
 <div class="row">
     <span>내 일정 전체 정리하기</span>
-    <input type="button" value="실행">
+    <input type="button" value="실행" class="delBtn delAll">
 </div>
 <div class="row">
-    <form action="">
-        <input class="dataInput date" type="date" name="" id="">
+    <form action="sch_del.do">
+        <input class="dataInput date" type="date" name="del_from" required>
 	    <span>이전 일정 정리하기</span>
-	    <input type="button" value="실행">
+	    <input type="submit" value="실행" class="delBtn">
     </form>
 </div>
 <hr>
@@ -41,5 +41,11 @@
     </div>
 </div>
 <button>돌아가기</button>
+
+<script>
+	document.querySelector(".delBtn.delAll").addEventListener("click", function(){
+		location.href = "sch_del.do";
+	});
+</script>
             
 <jsp:include page="/template/footer.jsp"></jsp:include>  
