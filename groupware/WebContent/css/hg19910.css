@@ -49,7 +49,7 @@
     padding-right: 10px;
 }
 .calendar {
-    height: 750px;
+    height: 500px;
     display: flex;
     flex-direction: row;
     width: 100%;
