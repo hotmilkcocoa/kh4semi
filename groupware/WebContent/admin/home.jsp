@@ -88,4 +88,3 @@
 </div>
 
 <jsp:include page="/template/admin_footer.jsp"></jsp:include>
-		
