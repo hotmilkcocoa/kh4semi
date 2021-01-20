@@ -3,6 +3,8 @@ package groupware.beans;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import groupware.util.JdbcUtil;
 
@@ -45,7 +47,7 @@ public class EmployeeDao {
 		ps.setString(5, employeeDto.getEmp_phone());
 		ps.setString(6, employeeDto.getEmp_email());
 		ps.setString(7, employeeDto.getEmp_addr());
-		ps.setString(8, employeeDto.getEmp_birth());
+		ps.setDate(8, employeeDto.getEmp_birth());
 		ps.setString(9, employeeDto.getEmp_title());
 		ps.setInt(10, employeeDto.getEmp_salary());
 		ps.setString(11, employeeDto.getEmp_auth());
@@ -57,6 +59,252 @@ public class EmployeeDao {
 		
 		con.close();
 			
+	}
+	
+	//사원 상세 조회 메소드
+	public EmployeeDto find(int emp_no) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_no = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, emp_no);
+		ResultSet rs = ps.executeQuery();
+		EmployeeDto employeeDto;
+		
+		if(rs.next()) {
+			employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_id(rs.getString("emp_id"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
+			employeeDto.setEmp_addr(rs.getString("emp_addr"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
+			employeeDto.setEmp_salary(rs.getInt("emp_salary"));
+			employeeDto.setEmp_manager_no(rs.getInt("emp_manager_no"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_etc(rs.getString("emp_etc"));
+			
+		}
+		else {
+			employeeDto = null;
+		}
+		
+		con.close();
+		
+		return employeeDto;
+	}
+	
+	//사원 리스트 
+	public List<EmployeeDto> select() throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee order by emp_no desc";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+	}
+	
+	//사원 리스트(검색 결과)
+	public List<EmployeeDto> select(String type, String keyword) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where instr(#1, ?) > 0 order by emp_no desc";
+		
+		sql = sql.replace("#1", type);
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, keyword);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			
+			list.add(employeeDto);
+			
+		}
+		
+		con.close(); 
+		
+		return list;		
+	}
+	
+	//사원 정보 수정 메소드
+	//데이터 (사원번호, 이메일, 전화번호, 주소, 부서, 직급, 급여, 사수, 권한, 상태, 기타사항)
+	public void update(EmployeeDto employeeDto) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update employee set emp_email = ?, emp_phone = ?, emp_addr = ?, "
+				+ "emp_dep = ?, emp_title = ?, emp_salary = ?, emp_manager_no = ?, emp_auth = ?, "
+				+ "emp_state = ?, emp_etc =? where emp_no = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, employeeDto.getEmp_email());
+		ps.setString(2, employeeDto.getEmp_phone());
+		ps.setString(3, employeeDto.getEmp_addr());
+		ps.setString(4, employeeDto.getEmp_dep());
+		ps.setString(5, employeeDto.getEmp_title());
+		ps.setInt(6, employeeDto.getEmp_salary());
+		ps.setInt(7, employeeDto.getEmp_manager_no());
+		ps.setString(8, employeeDto.getEmp_auth());
+		ps.setString(9, employeeDto.getEmp_state());
+		ps.setString(10, employeeDto.getEmp_etc());
+		ps.setInt(11, employeeDto.getEmp_no());
+		ps.execute();
+		
+		con.close();
+			
+	}
+	
+	//사원 삭제
+	public void delete(int emp_no) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "delete employee where emp_no = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, emp_no);
+		ps.execute();
+		
+		con.close();
+		
+	}
+	
+	//페이징을 이용한 검색
+	public List<EmployeeDto> pagingList(String type, String keyword, int startRow, int endRow) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from(" +
+						"select rownum rn, TMP.* from(" +
+							"select * from employee "
+								+ "where instr(#1, ?) > 0 "
+								+ "order by emp_no desc" +
+							")TMP" +
+						") where rn between ? and ?";
+		
+		
+		sql = sql.replace("#1", type);
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, keyword);
+		ps.setInt(2, startRow);
+		ps.setInt(3, endRow);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+	}
+	
+	//페이징을 이용한 목록
+	public List<EmployeeDto> pagingList(int startRow, int endRow) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from(" +
+						"select rownum rn, TMP.* from(" +
+							"select * from employee order by emp_no desc" +
+						")TMP" +
+					") where rn between ? and ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, startRow);
+		ps.setInt(2, endRow);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+		
+	}
+	
+	//검색 개수를 구하는 메소드
+	public int getCount(String type, String keyword) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql ="select count(*) from employee where instr(#1,?) > 0";
+		
+		sql=sql.replace("#1", type);
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, keyword);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1); 
+	
+		con.close();
+		return count;
+		
+	}
+	
+	//목록 개수를 구하는 메소드
+	public int getCount() throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select count(*) from employee";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+	
+		con.close();
+		return count;
 	}
 	
 }

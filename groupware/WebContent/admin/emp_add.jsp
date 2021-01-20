@@ -7,24 +7,11 @@
 
 <jsp:include page="/template/admin_header.jsp"></jsp:include>
 
-<script>
-	(function(){
-		$("#cancle-Btn").click(function(e){
-			e.preventDefault();			
-			
-			if(confirm("정말 취소하시겠습니까?")){
-				location.href = "<%=request.getContextPath()%>/admin/employee.jsp";
-			}
-		});
-	});
-
-</script>
-
 <div class="outbox" style="width:900px">
 	<!-- 페이지 명 -->
 	<div class="row">
-		<img alt="" class="headerImg" src="<%=request.getContextPath()%>/image/playlist_add.svg" width="30" height="30"> 
-		<span>사원추가</span>	
+		<img alt="사원추가" class="headerImg" src="<%=request.getContextPath()%>/image/playlist_add.svg" width="30" height="30"> 
+		<span>사원 추가</span>	
 	</div>
 
 	<form action="<%=request.getContextPath()%>/admin/emp_add.do" method="post" style="width:800px">
@@ -72,7 +59,8 @@
 							<label><input type="radio" class="input input-inline" name="emp_auth" value="관리">관리</label>
 						</td>	
 						<th>상태</th>
-						<td><label><input type="radio" class="input input-inline" name="emp_state" value="정상" checked>정상</label>
+						<td>
+							<label><input type="radio" class="input input-inline" name="emp_state" value="정상" checked>정상</label>
 							<label><input type="radio" class="input input-inline" name="emp_state" value="휴가">휴가</label>
 							<label><input type="radio" class="input input-inline" name="emp_state" value="미사용">미사용</label>
 						</td>					
@@ -90,7 +78,7 @@
 						</td>
 						<td colspan="2" class="right">
 							<input type="submit" class="input input-inline" style="width:100px;" value="추가">
-							<button id="cancle-Btn" class="input input-inline" style="width:100px;">취소</button>
+							<a href="<%=request.getContextPath()%>/admin/employee.jsp"><input type=button id="cancle-Btn" class="input input-inline" style="width:100px;" value="취소"></a>
 						</td>
 					</tr>
 				</tfoot>

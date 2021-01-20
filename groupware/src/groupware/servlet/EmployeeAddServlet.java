@@ -1,6 +1,7 @@
 package groupware.servlet;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +26,7 @@ public class EmployeeAddServlet extends HttpServlet{
 			employeeDto.setEmp_pw(req.getParameter("emp_pw"));
 			employeeDto.setEmp_email(req.getParameter("emp_email"));
 			employeeDto.setEmp_phone(req.getParameter("emp_phone"));
-			employeeDto.setEmp_birth(req.getParameter("emp_birth"));
+			employeeDto.setEmp_birth(Date.valueOf(req.getParameter("emp_birth")));
 			employeeDto.setEmp_addr(req.getParameter("emp_addr"));
 			employeeDto.setEmp_dep(req.getParameter("emp_dep"));
 			employeeDto.setEmp_title(req.getParameter("emp_title"));
@@ -42,7 +43,7 @@ public class EmployeeAddServlet extends HttpServlet{
 			employeeDao.empAdd(employeeDto);
 			
 			//출력
-			resp.sendRedirect(req.getContextPath()+"/admin/emp_detail?emp_no="+emp_no);
+			resp.sendRedirect(req.getContextPath()+"/admin/emp_detail.jsp?emp_no="+emp_no);
 			
 		}
 		catch(Exception e) {
