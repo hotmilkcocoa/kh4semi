@@ -29,12 +29,6 @@ public class LoginDao {
 			
 			return result;
 	}
-
-	public LoginDto find(String emp_id) {
-		
-		return null;
-	}
-
 	
 	
 }

@@ -20,31 +20,20 @@ public class LoginServlet extends HttpServlet{
 			LoginDto dto = new LoginDto();
 			dto.setEmp_id(req.getParameter("emp_id"));
 			dto.setEmp_pw(req.getParameter("emp_pw"));
-			
+//			System.out.println(dto.getEmp_id());
+//			System.out.println(dto.getEmp_pw());
 
 			LoginDao dao = new LoginDao();
-			LoginDto result = dao.find(dto.getEmp_id());
+			boolean result = dao.login(dto);
+//			System.out.println(result);
 
-			boolean login;
-			if(result != null) {
-//				login = dto.getMember_pw().equals(result.getEmp_pw());
-				if(dto.getEmp_pw().equals(result.getEmp_pw())) {
-					login = true;
-				}
-				else {
-					login = false;
-				}
+			if(result) {
+//				resp.sendRedirect("../main.jsp");//상대경로
+				resp.sendRedirect(req.getContextPath()+"/main.jsp");//절대경로
 			}
 			else {
-				login = false;
-			}
-			if(login) {
-				resp.sendRedirect("../main.jsp");//상대경로
-//				resp.sendRedirect(req.getContextPath()+"/main.jsp");//절대경로
-			}
-			else {
-				resp.sendRedirect("main.jsp?error");//상대경로
-//				resp.sendRedirect(req.getContextPath()+"/index.jsp");//절대경로
+//				resp.sendRedirect("index.jsp?error");//상대경로
+				resp.sendRedirect(req.getContextPath()+"/index.jsp");//절대경로
 			}
 		}
 		catch(Exception e) {

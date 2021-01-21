@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>내가만든 홈페이지</title>
+<title>Gwork</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
 <style>
 	outbox	{
@@ -37,6 +37,17 @@
         width: 1000px;
         height: 600px;		
 	}
+	.left-box {
+		background-color: red;
+		float: left;
+		width:50%;
+		height:450px;
+		  
+	.right-box {
+	  	background-color: green;
+	  	float: right;
+	 	width: 50%;
+	 	height:450px;
 	
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -63,13 +74,13 @@
 			<input type="button" value="로그인" class="loginBtn">
 		</div>
 		
-		<div class="parents" style="height:250px; background-color:blue;">
-			<div class="left" style="height:auto; width:400px; background-color:red;"></div>
-			<div class="right" style="height:auto; width:400px; background-color:yellow;"></div>			
+		<div class="parents" style="height:250px; background-color:#95a5a6;">
+			<div class="left" style="height:auto; width:400px; background-color:#3498db;"></div>
+			<div class="right" style="height:auto; width:400px; background-color:#34495e;"></div>			
 		</div>
-		<div class="parents" style="height:250px; background-color:skyblue;">
-			<div class="left" style="height:auto; width:400px; background-color:green;"></div>
-			<div class="right" style="height:auto; width:400px; background-color:gray;"></div>			
+		<div class="parents" style="height:250px; background-color:#30336b;">
+			<div class="left" style="height:auto; width:400px; background-color:#2c3e50;"></div>
+			<div class="right" style="height:auto; width:400px; background-color:#2980b9;"></div>			
 		</div>
 	
 		<div class="outbox popup">
@@ -78,9 +89,15 @@
 				<h3 class="center">반갑습니다.</h3>				
 			</header>
 	<form action="login.do" method="post">
-			<div class="parents" style="height:500px; background-color:blue;">
+		<div class='left-box'>
+		</div>
+		<div class='right-box'>
+
+		</div>
+	
+<!--  			<div class="parents" style="height:500px; background-color:blue;">
 				
-				<div  style="height:auto; width:50%; background-color:pink;">
+				<div  style="height:auto; width:50%; background-color:pink;"> -->
 				
 					<div class="outbox" style="width:400px;">
 						<div class="row center">
@@ -88,17 +105,17 @@
 						</div>
 						<div class="row">
 							<label>ID</label>
-							<input type="text" name="member_id" class="input" required>
+							<input type="text" name="emp_id" class="input" required>
 						</div>
 						<div class="row">
 							<label>Password</label>
-							<input type="password" name="member_pw" class="input" required>
+							<input type="password" name="emp_pw" class="input" required>
 						</div>
 						
 						<%if(request.getParameter("error")!=null){ %>
 						
 						<div class="row center" style="color:red;">
-							입력하신 정보가 맞지 않습니다
+							정보를  확인해주세요!
 						</div>
 						<%} %>
 						
