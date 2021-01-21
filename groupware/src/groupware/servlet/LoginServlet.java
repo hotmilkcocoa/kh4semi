@@ -23,19 +23,28 @@ public class LoginServlet extends HttpServlet{
 			
 
 			LoginDao dao = new LoginDao();
-			boolean login = dao.login(dto);
-			
+			LoginDto result = dao.find(dto.getEmp_id());
 
-			if(login) {
-
-				LoginDto m = dao.find(dto.getEmp_id());//아이디로 회원정보 다 불러오기
-				req.getSession().setAttribute("check", m.getEmp_no());				
-				resp.sendRedirect("../main.jsp");//상대경로
-//				resp.sendRedirect(req.getContextPath()+"/index.jsp");//절대경로
+			boolean login;
+			if(result != null) {
+//				login = dto.getMember_pw().equals(result.getEmp_pw());
+				if(dto.getEmp_pw().equals(result.getEmp_pw())) {
+					login = true;
+				}
+				else {
+					login = false;
+				}
 			}
-			else { 
+			else {
+				login = false;
+			}
+			if(login) {
+				resp.sendRedirect("../main.jsp");//상대경로
+//				resp.sendRedirect(req.getContextPath()+"/main.jsp");//절대경로
+			}
+			else {
 				resp.sendRedirect("main.jsp?error");//상대경로
-//				resp.sendRedirect(req.getContextPath()+"/member/login.jsp");//절대경로
+//				resp.sendRedirect(req.getContextPath()+"/index.jsp");//절대경로
 			}
 		}
 		catch(Exception e) {

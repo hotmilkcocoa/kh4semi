@@ -12,8 +12,8 @@
 	outbox	{
 		
 	}
-	main, footer, 
-	label, span, p {
+	main, footer
+	{
 		border: 1px dotted #ccc;
 	}
 	main {

@@ -3,41 +3,38 @@ package groupware.beans;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
 import groupware.util.JdbcUtil;
+import groupware.beans.LoginDto;
 
 public class LoginDao {
 
 	public static final String USERNAME = "groupware";
 	public static final String PASSWORD = "groupware";
 	
-	//시퀀스 번호 생성 메소드
-	public int getSequence() throws Exception{
+	
+	
+	//로그인
+	public boolean login(LoginDto dto) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
-		
-		String sql ="select emp_seq.nextval from dual";
-		
+			
+		String sql = "select * from employee where emp_id=? and emp_pw=?";
 		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, dto.getEmp_id());
+		ps.setString(2, dto.getEmp_pw());
 		ResultSet rs = ps.executeQuery();
-		rs.next();
-		int seq = rs.getInt(1); 
 			
-		con.close();
-		
-		return seq; 
+		boolean result = rs.next();
 			
-	}
-
-	public boolean login(LoginDto dto) {
-		
-		return false;
+			con.close();
+			
+			return result;
 	}
 
 	public LoginDto find(String emp_id) {
 		
 		return null;
 	}
+
+	
 	
 }
