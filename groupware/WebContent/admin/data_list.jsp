@@ -13,12 +13,6 @@
 
 <jsp:include page="/template/admin_header.jsp"></jsp:include>
 
-<style>
-	*{
-		box-sizing: border-box;
-	}
-</style>
-
 <div class="outbox" style="width:900px">
 	<!-- 페이지 명 -->
 	<div class="row">
@@ -28,33 +22,33 @@
 
 	<div>		
 		<label>부서 설정</label>
-		<div class="row">
-			<form action="<%=request.getContextPath()%>/admin/dep_add.do" method="get">
+		<div action="<%=request.getContextPath()%>/admin/dep_add.do" class="row">
+			<form action="<%=request.getContextPath()%>/admin/dep_add.do" method="post">
 				<input type="text" class="input input-inline" style="width:600px;" name="dep_name">
 				<input type="submit" style="width:100px;" class="input input-inline" value="추가">
 			</form>
 		</div>
 		<div class="row">
-			<form method="get">
+			<form action="<%=request.getContextPath()%>/admin/dep_delete.do" method="post">
 				<select class="input input-inline" name="dep_no" style="width:600px;">
 					<%for(DataSettingDto dataSettingDto : depList){ %>
 					<option value="<%=dataSettingDto.getDep_no()%>"><%=dataSettingDto.getDep_name()%></option>
 					<%} %>
 				</select>	
-				<input type="submit" style="width:100px;" class="input input-inline" formaction="<%=request.getContextPath()%>/admin/dep_delete.do" value="삭제">
+				<input type="submit" style="width:100px;" class="input input-inline" value="삭제">
 			</form>
 		</div>
 	</div>
 	<div>
 		<label>직급 설정</label>
 		<div class="row">
-			<form method="get">
+			<form action="<%=request.getContextPath()%>/admin/title_add.do" method="post">
 				<input type="text" class="input input-inline" style="width:600px;" name="title_name">
-				<input type="submit" style="width:100px;" class="input input-inline" formaction="<%=request.getContextPath()%>/admin/title_add.do" value="추가">
+				<input type="submit" style="width:100px;" class="input input-inline" value="추가">
 			</form>	
 		</div>
 		<div class="row">
-			<form action="<%=request.getContextPath()%>/admin/title_delete.do" method="get">
+			<form action="<%=request.getContextPath()%>/admin/title_delete.do" method="post">
 				<select class="input input-inline" name="title_no" style="width:600px;">
 					<%for(DataSettingDto dataSettingDto : titleList){ %>
 					<option value="<%=dataSettingDto.getTitle_no()%>"><%=dataSettingDto.getTitle_name()%></option>

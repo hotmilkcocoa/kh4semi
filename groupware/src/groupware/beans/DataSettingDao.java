@@ -56,7 +56,7 @@ public class DataSettingDao {
 	public void titleDelete(int title_no) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
-		String sql = "delete jobtitle where dep_no = ?";
+		String sql = "delete jobtitle where title_no = ?";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, title_no);
@@ -69,7 +69,7 @@ public class DataSettingDao {
 	public List<DataSettingDto> depSelect() throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 				
-		String sql = "select * from department order by dep_no desc";
+		String sql = "select * from department order by dep_no asc";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
@@ -80,6 +80,7 @@ public class DataSettingDao {
 			DataSettingDto dataSettingDto = new DataSettingDto();
 			dataSettingDto.setDep_no(rs.getInt("dep_no"));
 			dataSettingDto.setDep_name(rs.getString("dep_name"));
+			dataSettingDto.setDep_head(rs.getString("dep_head"));
 			
 			depList.add(dataSettingDto);
 		}
@@ -109,4 +110,63 @@ public class DataSettingDao {
 		con.close();
 		return titleList;
 	}
+	
+	//부서정보 검색
+	public DataSettingDto find(int dep_no) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from department where dep_no = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, dep_no);
+		ResultSet rs = ps.executeQuery();
+		DataSettingDto dataSettingDto;
+		
+		if(rs.next()) {
+			dataSettingDto = new DataSettingDto();
+			dataSettingDto.setDep_no(rs.getInt("dep_no"));
+			dataSettingDto.setDep_name(rs.getString("dep_name"));
+			dataSettingDto.setDep_head(rs.getString("dep_head"));
+			
+		}
+		else {
+			dataSettingDto = null;
+		}
+		
+		con.close();
+		
+		return dataSettingDto;
+	}
+
+	//목록 개수를 구하는 메소드
+	public int getCount() throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select count(*) from department";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+	
+		con.close();
+		return count;
+	}
+	
+	//부서장 추가 및 수정
+	public void depUpdate(DataSettingDto dataSettingDto) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update department set dep_head = ? where dep_no = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, dataSettingDto.getDep_head());
+		ps.setInt(2, dataSettingDto.getDep_no());
+		ps.execute();
+		
+		con.close();
+	}
+	
+	
+	
 }

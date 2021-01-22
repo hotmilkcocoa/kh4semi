@@ -18,7 +18,6 @@ public class EmployeeDto {
 	public String emp_state;
 	public Date emp_hiredate;
 	public String emp_etc;
-	public int emp_manager_no;
 	public String emp_dep;
 	
 	public EmployeeDto() {
@@ -135,14 +134,6 @@ public class EmployeeDto {
 
 	public void setEmp_etc(String emp_etc) {
 		this.emp_etc = emp_etc;
-	}
-
-	public int getEmp_manager_no() {
-		return emp_manager_no;
-	}
-
-	public void setEmp_manager_no(int emp_manager_no) {
-		this.emp_manager_no = emp_manager_no;
 	}
 
 	public String getEmp_dep() {

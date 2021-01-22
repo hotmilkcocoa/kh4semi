@@ -45,8 +45,8 @@
 					<td><%=employeeDto.getEmp_id()%></td>					
 				</tr>
 				<tr>	
-					<th>사원번호[입사일]</th>
-					<td><%=employeeDto.getEmp_no()%> [<%=employeeDto.getEmp_hiredate()%>]</td>
+					<th>사원번호</th>
+					<td><%=employeeDto.getEmp_no()%></td>
 					<th>이메일</th>
 					<td><%=employeeDto.getEmp_email()%></td>					
 				</tr>
@@ -58,7 +58,7 @@
 				</tr>
 				<tr> 
 					<th>주소</th>
-					<td colspan="3"><%=employeeDto.getEmp_addr()%></td>					
+					<td colspan="3" class="left"><%=employeeDto.getEmp_addr()%></td>					
 				</tr>
 				<tr>
 					<th width="20%">부서</th>
@@ -69,8 +69,8 @@
 				<tr>
 					<th>급여</th>
 					<td><%=employeeDto.getEmp_salary()%></td>	
-					<th>사수(사원번호)</th>
-					<td><%=employeeDto.getEmp_manager_no()%></td>					
+					<th>입사일</th>
+					<td><%=employeeDto.getEmp_hiredate()%></td>					
 				</tr>
 				<tr>
 					<th>권한</th>

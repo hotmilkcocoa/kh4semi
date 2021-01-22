@@ -140,6 +140,7 @@
                     <ul>
                         <li class="menu menu-title"><a href="<%=request.getContextPath()%>/admin/hr.jsp">인사관리</a></li>
                         <ul>
+                        	<li class="menu menu-detail"><a href="<%=request.getContextPath()%>/admin/info.jsp">회사정보</a></li>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/admin/group.jsp">조직관리</a></li>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/admin/employee.jsp">사원관리</a></li>
                         </ul>
