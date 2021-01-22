@@ -13,7 +13,6 @@
 	if(isEdit){
 		ScheduleDao scheduleDao = new ScheduleDao();
 		scheduleDto = scheduleDao.find(Integer.parseInt(request.getParameter("sch_no")));
-		
 	}
 %>
 
@@ -112,7 +111,7 @@
             <span>공개</span>
             <div class="data">
                 <label>
-                    <input type="radio" name="sch_open" value="true">
+                    <input type="radio" name="sch_open" value="true" checked>
                    	 공개
                 </label>
                 <label>

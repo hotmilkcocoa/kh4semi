@@ -10,6 +10,8 @@ public class VacationDto {
 	private String vac_reason;
 	private String vac_comment;
 	private String vac_status;
+	private Date vac_write_date;
+
 	private int vac_writer_no;
 	private int vac_target_no;
 	
@@ -71,6 +73,14 @@ public class VacationDto {
 
 	public void setVac_status(String vac_status) {
 		this.vac_status = vac_status;
+	}
+	
+	public Date getVac_write_date() {
+		return vac_write_date;
+	}
+
+	public void setVac_write_date(Date vac_write_date) {
+		this.vac_write_date = vac_write_date;
 	}
 
 	public int getVac_writer_no() {
