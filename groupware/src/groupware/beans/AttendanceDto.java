@@ -1,11 +1,11 @@
 package groupware.beans;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class AttendanceDto {
 	private int att_no;
-	private Date att_start;
-	private Date att_end;
+	private Timestamp att_start;
+	private Timestamp att_end;
 	private int emp_no;
 	
 	public AttendanceDto() {
@@ -20,19 +20,19 @@ public class AttendanceDto {
 		this.att_no = att_no;
 	}
 
-	public Date getAtt_start() {
+	public Timestamp getAtt_start() {
 		return att_start;
 	}
 
-	public void setAtt_start(Date att_start) {
+	public void setAtt_start(Timestamp att_start) {
 		this.att_start = att_start;
 	}
 
-	public Date getAtt_end() {
+	public Timestamp getAtt_end() {
 		return att_end;
 	}
 
-	public void setAtt_end(Date att_end) {
+	public void setAtt_end(Timestamp att_end) {
 		this.att_end = att_end;
 	}
 

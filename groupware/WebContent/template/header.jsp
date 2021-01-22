@@ -211,7 +211,6 @@
                         <li class="menu menu-title"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태</a></li>
                         <ul>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태 현황</a></li>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_add.jsp">휴가 신청</a></li>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_status.jsp">휴가 현황</a></li>
                         </ul>
                     </ul>
