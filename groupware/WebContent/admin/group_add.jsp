@@ -11,9 +11,6 @@
 
 	DataSettingDao dataSettingDao = new DataSettingDao(); 
 	DataSettingDto dataSettingDto = dataSettingDao.find(dep_no);
-	
-	EmployeeDao employeeDao = new EmployeeDao();
-	EmployeeDto employeeDto = employeeDao.find(dataSettingDto.getDep_head());
 %>
     
 <jsp:include page="/template/admin_header.jsp"></jsp:include>
@@ -36,15 +33,14 @@
 <div class="outbox" style="width:900px;">
 	<!-- 페이지 명 -->
 	<div class="row">
-		<img alt="부서장정보수정" class="headerImg" src="<%=request.getContextPath()%>/image/flowchart_alt.svg" width="30" height="30"> 
+		<img alt="부서장정보추가" class="headerImg" src="<%=request.getContextPath()%>/image/flowchart_alt.svg" width="30" height="30"> 
 		<span>부서장 정보 수정</span>	
 	</div>
 
-	<span><%=employeeDto.getEmp_name()%> <%=employeeDto.getEmp_title()%>[<%=employeeDto.getEmp_id()%>]을 선택하셨습니다.</span>
 	
 	<form action="group_edit.do" method="post">
 		
-		<input type="hidden" name="dep_no" value="<%=dataSettingDto.getDep_no()%>">
+		<input type="hidden" name="dep_no" value="<%=dep_no%>">
 	
 	<div class="row">
 		<table class="table">
@@ -54,14 +50,14 @@
 					<td width="30%"><input type="text" class="input" name="dep_name" value="<%=dataSettingDto.getDep_name()%>"></td>
 					<th width="20%">부서장</th>
 					<td width="30%">
-						<input type="text" class="input" name="dep_head" value="<%=dataSettingDto.getDep_head()%>">
+						<input type="text" class="input" name="dep_head">
 					</td> 
 				</tr>
 				
 			<tfoot>
 				<tr>
 					<td colspan="4" class="right">
-					<input type="submit" class="input input-inline" value="수정">
+					<input type="submit" class="input input-inline" value="추가">
 					<button class="cancle-Btn input input-inline">취소</button></td>
 				</tr>
 				
