@@ -81,11 +81,17 @@
 				<tr>
 					<th>기타사항</th>
 					<!-- 목록부분이 Null이면 표시 않기 -->
-					<td colspan="3"><textarea rows="5" name="emp_etc" class="input" readonly>
 					<%if(employeeDto.getEmp_etc()!= null){ %>
-						<%=employeeDto.getEmp_etc()%>				
+					<td colspan="3">
+						<textarea rows="5" name="emp_etc" class="input" 
+						readonly><%=employeeDto.getEmp_etc()%></textarea>
+					</td>					
+					<%}else{ %>
+					<td colspan="3">
+						<textarea rows="5" name="emp_etc" class="input" 
+						readonly></textarea>
+					</td>	
 					<%} %>
-					</textarea></td>					
 				</tr>
 			</tbody>
 			<tfoot>

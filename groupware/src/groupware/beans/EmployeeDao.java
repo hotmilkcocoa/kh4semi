@@ -119,6 +119,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 		}
@@ -149,6 +151,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 			
@@ -230,6 +234,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 		}
@@ -264,6 +270,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 		}

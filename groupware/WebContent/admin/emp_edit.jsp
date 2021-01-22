@@ -86,7 +86,12 @@
 					</tr>
 					<tr>
 						<th>기타사항</th>
-						<td colspan="3"><textarea rows="3" name="emp_etc" class="input"><%=employeeDto.getEmp_etc()%></textarea></td>					
+						<!-- 목록부분이 Null이면 표시 않기 -->
+						<%if(employeeDto.getEmp_etc()!= null){ %>
+						<td colspan="3"><textarea rows="3" name="emp_etc" class="input"><%=employeeDto.getEmp_etc()%></textarea></td>
+						<%}else{ %>
+						<td colspan="3"><textarea rows="3" name="emp_etc" class="input"></textarea></td>
+						<%} %>					
 					</tr>
 				</tbody>
 				<tfoot>
