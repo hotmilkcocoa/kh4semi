@@ -1,8 +1,35 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.sql.Timestamp"%>
+<%@page import="groupware.beans.ScheduleDto"%>
+<%@page import="java.util.List"%>
+<%@page import="groupware.beans.ScheduleDao"%>
+<%@page import="java.time.LocalDate"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <jsp:include page="/template/header.jsp"></jsp:include>
+<style>
+	.calendarTdDiv{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+</style>
 
+<%
+	//int emp_no = (int) session.getAttribute("check");
+	int emp_no = 3;
+	
+	LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+	LocalDate startOfCal = startOfMonth.minusDays(startOfMonth.getDayOfWeek().getValue());
+	LocalDate endOfCal = startOfCal.plusDays(42);
+	
+	ScheduleDao scheduleDao = new ScheduleDao();
+	HashMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.select(emp_no, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
+	
+	
+%>
 <div class="scrollbox">
 	<h1 class="center date"></h1>
 	<input type="button" value="이전" class="prevNext" prev>
@@ -137,7 +164,13 @@
 					dayTableRow.append(dayTableTb);
 				}
 				var newTd = document.createElement("td");
-				newTd.innerHTML = start.getDate();
+				var calendarTdDiv = document.createElement("div");
+				calendarTdDiv.classList.add("calendarTdDiv");
+				newTd.append(calendarTdDiv);
+				var calendarDate = document.createElement("div");
+				calendarDate.innerText = start.getDate();
+				
+				calendarTdDiv.append(calendarDate);
 				start.setDate(start.getDate() + 1);
 				newTr.append(newTd);
 			}
@@ -196,5 +229,6 @@
 		location.href = this.getAttribute("href");
 		console.log(this);
 	});
+	
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include>  

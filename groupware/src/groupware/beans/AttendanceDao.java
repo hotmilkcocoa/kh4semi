@@ -4,12 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import com.sun.javafx.collections.MappingChange.Map;
 
 import groupware.util.JdbcUtil;
 
@@ -101,5 +97,17 @@ public class AttendanceDao {
 		return list;
 	}
 	
-	
+	public void testDate(int emp_no, Timestamp att_start, Timestamp att_end) throws Exception{
+		Connection con = JdbcUtil.getConnection(USER, PW);
+		
+		String sql = "insert into attendance values(attendance_seq.nextval, ?, ?, ?)";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setTimestamp(1, att_start);
+		ps.setTimestamp(2, att_end);
+		ps.setInt(3, emp_no);
+		
+		ps.execute();
+		
+		con.close();
+	}
 }

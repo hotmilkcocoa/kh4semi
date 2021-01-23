@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.AnnualDto"%>
+<%@page import="groupware.beans.AnnualDao"%>
 <%@page import="groupware.beans.VacationDto"%>
 <%@page import="groupware.beans.VacationDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -5,18 +7,22 @@
 <jsp:include page="/template/header.jsp"></jsp:include>
 
 <%
+	//int emp_no = (int) session.getAttribute("check");
+	int emp_no = 3;
 	boolean isEdit = request.getParameter("edit") != null;
 	VacationDto vacationDto = null;
 	if(isEdit){
 		VacationDao vacationDao = new VacationDao();
 		vacationDto = vacationDao.find(Integer.parseInt(request.getParameter("vac_no")));
 	}
+	AnnualDao annualDao = new AnnualDao();
+	AnnualDto annualDto = annualDao.find(emp_no);
 %>
 
-<h1 class="title center">2021.01</h1>
+<h1 class="title center">2021.1</h1>
 <hr>
 <div class="row right">
-    입사일 : 2019.01.01
+ 	입사일 : <%=annualDao.getHireDate(emp_no) %>
 </div>
 <div class="row center">
     <table class="table table-border vacationTable">
@@ -28,9 +34,9 @@
         </tr>
         <tr>
             <td>?</td>
-            <td>?</td>
-            <td>?</td>
-            <td>?</td>
+            <td><%=annualDto.getAnn_occurred() %></td>
+            <td><%=annualDto.getAnn_used() %></td>
+            <td><%=annualDto.getAnn_occurred() - annualDto.getAnn_used() %></td>
         </tr>
     </table>
 </div>
@@ -102,6 +108,13 @@
 <script>
 	document.querySelector(".cancel").addEventListener("click", function(){
 		location.href = "vac_status.jsp";
+	});
+	document.querySelector("input[name=vac_end]").addEventListener("input", function(){
+		var vac_start = document.querySelector("input[name=vac_start]");
+		if(this.value < vac_start.value){
+			alert("종료 시점은 시작 시점보다 빠를 수 없습니다.");
+			this.value = vac_start.value;
+		}
 	});
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include>

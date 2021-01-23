@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.AnnualDto"%>
+<%@page import="groupware.beans.AnnualDao"%>
 <%@page import="groupware.beans.VacationDto"%>
 <%@page import="java.util.List"%>
 <%@page import="groupware.beans.VacationDao"%>
@@ -6,15 +8,19 @@
 <jsp:include page="/template/header.jsp"></jsp:include>
 
 <%
+//	int emp_no = (int) session.getAttribute("check");
+	int emp_no = 3;
 	VacationDao vacationDao = new VacationDao();
-//	List<VacationDto> vacationList = vacationDao.select((int) session.getAttribute("check"));
-	List<VacationDto> vacationList = vacationDao.select(3);
+	List<VacationDto> vacationList = vacationDao.select(emp_no);
+	
+	AnnualDao annualDao = new AnnualDao();
+	AnnualDto annualDto = annualDao.find(emp_no);
 %>
 
 <h1 class="title center">2021.1</h1>
 <hr>
 <div class="row right">
- 	입사일 : 2019.01.01
+ 	입사일 : <%=annualDao.getHireDate(emp_no) %>
 </div>
 <div class="row center">
     <table class="table table-border vacationTable">
@@ -26,9 +32,9 @@
         </tr>
         <tr>
             <td>?</td>
-            <td>?</td>
-            <td>?</td>
-            <td>?</td>
+            <td><%=annualDto.getAnn_occurred() %></td>
+            <td><%=annualDto.getAnn_used() %></td>
+            <td><%=annualDto.getAnn_occurred() - annualDto.getAnn_used() %></td>
         </tr>
     </table>
 </div>
