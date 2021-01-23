@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import groupware.beans.CompanyDao;
 import groupware.beans.CompanyDto;
 
-@WebServlet(urlPatterns = "/admin/group_edit.do")
+@WebServlet(urlPatterns = "/admin/info_edit.do")
 public class CompanyEditServlet extends HttpServlet{
 
 	@Override
@@ -38,7 +38,7 @@ public class CompanyEditServlet extends HttpServlet{
 			companyDao.update(companyDto);
 			
 			//출력
-			resp.sendRedirect(req.getContextPath()+"/admin/group.jsp");
+			resp.sendRedirect(req.getContextPath()+"/admin/info.jsp");
 			
 		}
 		catch(Exception e) {

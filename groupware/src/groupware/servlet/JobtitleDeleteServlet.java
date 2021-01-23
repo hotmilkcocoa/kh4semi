@@ -9,32 +9,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import groupware.beans.DataSettingDao;
-import groupware.beans.DataSettingDto;
 
-@WebServlet(urlPatterns = "/admin/dep_add.do")
-public class DepartmentAddServlet extends HttpServlet{
+@WebServlet(urlPatterns = "/admin/title_delete.do")
+public class JobtitleDeleteServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			//준비
 			req.setCharacterEncoding("UTF-8");
-			DataSettingDto dataSettingDto = new DataSettingDto();
-			dataSettingDto.setDep_name(req.getParameter("dep_name"));
+			int title_no = Integer.parseInt(req.getParameter("title_no"));
 			
 			//처리
-			DataSettingDao datasSettingDao = new DataSettingDao();
-			datasSettingDao.depAdd(dataSettingDto);
-			
+			DataSettingDao dataSettingDao = new DataSettingDao();
+			dataSettingDao.titleDelete(title_no);
 			
 			//출력
 			resp.sendRedirect(req.getContextPath()+"/admin/data_list.jsp");
-			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);
 		}
 	}
-	
 }

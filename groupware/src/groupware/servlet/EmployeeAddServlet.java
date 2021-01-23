@@ -31,7 +31,6 @@ public class EmployeeAddServlet extends HttpServlet{
 			employeeDto.setEmp_dep(req.getParameter("emp_dep"));
 			employeeDto.setEmp_title(req.getParameter("emp_title"));
 			employeeDto.setEmp_salary(Integer.parseInt(req.getParameter("emp_salary")));
-			employeeDto.setEmp_manager_no(Integer.parseInt(req.getParameter("emp_manager_no")));
 			employeeDto.setEmp_auth(req.getParameter("emp_auth"));
 			employeeDto.setEmp_state(req.getParameter("emp_state"));
 			employeeDto.setEmp_etc(req.getParameter("emp_etc"));

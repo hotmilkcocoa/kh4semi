@@ -4,6 +4,7 @@ public class DataSettingDto {
 
 	private int dep_no;
 	private String dep_name;
+	private String dep_head;
 	private int title_no;
 	private String title_name;
 	
@@ -42,6 +43,15 @@ public class DataSettingDto {
 	public void setTitle_name(String title_name) {
 		this.title_name = title_name;
 	}
+
+	public String getDep_head() {
+		return dep_head;
+	}
+
+	public void setDep_head(String dep_head) {
+		this.dep_head = dep_head;
+	}
+
 	
 	
 	

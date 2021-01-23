@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import groupware.beans.DataSettingDao;
 import groupware.beans.DataSettingDto;
 
-@WebServlet(urlPatterns = "/admin/dep_add.do")
-public class DepartmentAddServlet extends HttpServlet{
+@WebServlet(urlPatterns = "/admin/group_add.do")
+public class DepartmentHeadAddServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -20,15 +20,17 @@ public class DepartmentAddServlet extends HttpServlet{
 			//준비
 			req.setCharacterEncoding("UTF-8");
 			DataSettingDto dataSettingDto = new DataSettingDto();
+			dataSettingDto.setDep_no(Integer.parseInt(req.getParameter("dep_no")));
+			dataSettingDto.setDep_head(req.getParameter("dep_head"));
 			dataSettingDto.setDep_name(req.getParameter("dep_name"));
 			
 			//처리
-			DataSettingDao datasSettingDao = new DataSettingDao();
-			datasSettingDao.depAdd(dataSettingDto);
-			
+			DataSettingDao dataSettingDao = new DataSettingDao();
+			dataSettingDao.depUpdate(dataSettingDto);
 			
 			//출력
-			resp.sendRedirect(req.getContextPath()+"/admin/data_list.jsp");
+			resp.sendRedirect(req.getContextPath()+"/admin/group.jsp");
+			
 			
 		}
 		catch(Exception e) {
@@ -36,5 +38,4 @@ public class DepartmentAddServlet extends HttpServlet{
 			resp.sendError(500);
 		}
 	}
-	
 }
