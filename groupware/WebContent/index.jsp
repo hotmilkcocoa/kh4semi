@@ -15,15 +15,14 @@
 	main, footer
 	{
 		border: 1px dotted #ccc;
+		padding:1rem;
 	}
 	main {
 		width:1200px;
 		margin:auto;
-	}
-	header, footer{
-		padding:1rem;
-	}
-	.parents{
+	}	
+	
+		.parents{
 		display:flex;
 	}
 	
@@ -37,17 +36,7 @@
         width: 1000px;
         height: 600px;		
 	}
-	.left-box {
-		background-color: red;
-		float: left;
-		width:50%;
-		height:450px;
-		  
-	.right-box {
-	  	background-color: green;
-	  	float: right;
-	 	width: 50%;
-	 	height:450px;
+	
 	
 </style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -92,10 +81,9 @@
 		<div class='left-box'>
 		</div>
 		<div class='right-box'>
-
 		</div>
 	
-<!--  			<div class="parents" style="height:500px; background-color:blue;">
+			<div class="parents" style="height:500px; background-color:blue;">
 				
 				<div  style="height:auto; width:50%; background-color:pink;"> -->
 				
@@ -110,14 +98,7 @@
 						<div class="row">
 							<label>Password</label>
 							<input type="password" name="emp_pw" class="input" required>
-						</div>
-						
-						<%if(request.getParameter("error")!=null){ %>
-						
-						<div class="row center" style="color:red;">
-							정보를  확인해주세요!
-						</div>
-						<%} %>
+						</div>  					 
 						
 						<div class="right">
 							<input type="submit" value="로그인" class="input">
@@ -126,12 +107,7 @@
 				</form>			
 				</div>						
 			</div>
-			
-<!--  			<aside>검색창</aside>
-			
-			<article>
-			로그인창
-			</article>  -->
+
 		</div>
 		
 	</main>

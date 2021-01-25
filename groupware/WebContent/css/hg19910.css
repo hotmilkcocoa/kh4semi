@@ -22,7 +22,7 @@
 }
 .dataInput.textarea{
     width: 500px;
-    height: 100px;
+    height: 40px;
     resize: none;
 }
 .row.rel{
@@ -66,4 +66,51 @@
 .scrollbox{
 	height: 490px;
 	overflow: scroll;
+}
+.attTable{
+    display: inline-block;
+    border: 1px solid lightgray;
+}
+.attTable>.thead{
+    background-color: lightgray;
+}
+.attContainer{
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}
+.attContainer>*{
+    font-size: 0.75rem;
+}
+.attContainer>.attTitle{
+    font-size: 1rem;
+    font-weight: bold;
+}
+.attContainer>.attBtn{
+    cursor: pointer;
+    width: 80px;
+    padding: 0.5rem;
+    border: none;
+    font-weight: bold;
+    color: white;
+    background-color: dimgrey;
+    border-radius: 15px;
+}
+.attContainer>.attBtn:disabled{
+    cursor: default;
+    opacity: 0.4;
+}
+.attTable{
+    display: inline-block;
+    border: 1px solid lightgray;
+}
+.attTable>span, .attContainer>.attTitle{
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    padding: 0.5rem;
+}
+.attTable>.thead{
+    background-color: lightgray;
 }

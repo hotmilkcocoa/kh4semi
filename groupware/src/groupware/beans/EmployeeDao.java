@@ -36,8 +36,8 @@ public class EmployeeDao {
 		
 		String sql = "insert into employee(emp_no, emp_name, emp_id, emp_pw, emp_phone, "
 						+ "emp_email, emp_addr, emp_birth, emp_title, emp_salary, emp_auth, "
-						+ "emp_state, emp_etc, emp_manager_no, emp_dep) "
-					+ "	values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+						+ "emp_state, emp_etc, emp_dep) "
+					+ "	values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, employeeDto.getEmp_no());
@@ -53,8 +53,7 @@ public class EmployeeDao {
 		ps.setString(11, employeeDto.getEmp_auth());
 		ps.setString(12, employeeDto.getEmp_state());
 		ps.setString(13, employeeDto.getEmp_etc());
-		ps.setInt(14, employeeDto.getEmp_manager_no());
-		ps.setString(15, employeeDto.getEmp_dep());
+		ps.setString(14, employeeDto.getEmp_dep());
 		ps.execute();
 		
 		con.close();
@@ -85,7 +84,6 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
 			employeeDto.setEmp_salary(rs.getInt("emp_salary"));
-			employeeDto.setEmp_manager_no(rs.getInt("emp_manager_no"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
 			employeeDto.setEmp_etc(rs.getString("emp_etc"));
@@ -99,6 +97,44 @@ public class EmployeeDao {
 		
 		return employeeDto;
 	}
+	
+	//사원 상세 조회 메소드
+		public EmployeeDto find(String emp_id) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "select * from employee where emp_id = ?";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, emp_id);
+			ResultSet rs = ps.executeQuery();
+			EmployeeDto employeeDto;
+			
+			if(rs.next()) {
+				employeeDto = new EmployeeDto();
+				employeeDto.setEmp_no(rs.getInt("emp_no"));
+				employeeDto.setEmp_name(rs.getString("emp_name"));
+				employeeDto.setEmp_id(rs.getString("emp_id"));
+				employeeDto.setEmp_email(rs.getString("emp_email"));
+				employeeDto.setEmp_phone(rs.getString("emp_phone"));
+				employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
+				employeeDto.setEmp_addr(rs.getString("emp_addr"));
+				employeeDto.setEmp_dep(rs.getString("emp_dep"));
+				employeeDto.setEmp_title(rs.getString("emp_title"));
+				employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
+				employeeDto.setEmp_salary(rs.getInt("emp_salary"));
+				employeeDto.setEmp_auth(rs.getString("emp_auth"));
+				employeeDto.setEmp_state(rs.getString("emp_state"));
+				employeeDto.setEmp_etc(rs.getString("emp_etc"));
+				
+			}
+			else {
+				employeeDto = null;
+			}
+			
+			con.close();
+			
+			return employeeDto;
+		}
 	
 	//사원 리스트 
 	public List<EmployeeDto> select() throws Exception {
@@ -119,6 +155,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 		}
@@ -149,6 +187,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 			
@@ -160,13 +200,13 @@ public class EmployeeDao {
 	}
 	
 	//사원 정보 수정 메소드
-	//데이터 (사원번호, 이메일, 전화번호, 주소, 부서, 직급, 급여, 사수, 권한, 상태, 기타사항)
+	//데이터 (사원번호, 이메일, 전화번호, 주소, 부서, 직급, 급여, 사수, 권한, 상태, 입사일, 기타사항)
 	public void update(EmployeeDto employeeDto) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
 		String sql = "update employee set emp_email = ?, emp_phone = ?, emp_addr = ?, "
-				+ "emp_dep = ?, emp_title = ?, emp_salary = ?, emp_manager_no = ?, emp_auth = ?, "
-				+ "emp_state = ?, emp_etc =? where emp_no = ?";
+				+ "emp_dep = ?, emp_title = ?, emp_salary = ?, emp_auth = ?, "
+				+ "emp_state = ?, emp_hiredate = ?, emp_etc =? where emp_no = ?";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, employeeDto.getEmp_email());
@@ -175,9 +215,9 @@ public class EmployeeDao {
 		ps.setString(4, employeeDto.getEmp_dep());
 		ps.setString(5, employeeDto.getEmp_title());
 		ps.setInt(6, employeeDto.getEmp_salary());
-		ps.setInt(7, employeeDto.getEmp_manager_no());
-		ps.setString(8, employeeDto.getEmp_auth());
-		ps.setString(9, employeeDto.getEmp_state());
+		ps.setString(7, employeeDto.getEmp_auth());
+		ps.setString(8, employeeDto.getEmp_state());
+		ps.setDate(9, employeeDto.getEmp_hiredate());
 		ps.setString(10, employeeDto.getEmp_etc());
 		ps.setInt(11, employeeDto.getEmp_no());
 		ps.execute();
@@ -230,6 +270,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 		}
@@ -264,6 +306,8 @@ public class EmployeeDao {
 			employeeDto.setEmp_title(rs.getString("emp_title"));
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
 			
 			list.add(employeeDto);
 		}

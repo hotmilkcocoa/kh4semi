@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet{
 			}
 			else {
 //				resp.sendRedirect("index.jsp?error");//상대경로
-				resp.sendRedirect(req.getContextPath()+"/index.jsp");//절대경로
+				resp.sendRedirect(req.getContextPath()+"/login_fail.jsp");//절대경로
 			}
 		}
 		catch(Exception e) {

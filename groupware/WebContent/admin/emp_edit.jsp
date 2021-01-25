@@ -1,3 +1,6 @@
+<%@page import="groupware.beans.DataSettingDto"%>
+<%@page import="java.util.List"%>
+<%@page import="groupware.beans.DataSettingDao"%>
 <%@page import="groupware.beans.EmployeeDto"%>
 <%@page import="groupware.beans.EmployeeDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -7,9 +10,15 @@
 	int emp_no = Integer.parseInt(request.getParameter("emp_no"));
 
 	EmployeeDao employeeDao = new EmployeeDao();
-	EmployeeDto employeeDto = employeeDao.find(emp_no); 
+	EmployeeDto employeeDto = employeeDao.find(emp_no);
+	
 %>
 
+<% 
+	DataSettingDao dataSettingDao = new DataSettingDao();
+	List<DataSettingDto> depList = dataSettingDao.depSelect();
+	List<DataSettingDto> titleList = dataSettingDao.titleSelect();
+%>
 
 <jsp:include page="/template/admin_header.jsp"></jsp:include>
 
@@ -22,6 +31,11 @@
 				location.href = $(this).attr("href");
 			}
 		});
+		
+		//부서, 직급 수정 전 데이터 선택
+		$("#dep_check").val("<%=employeeDto.getEmp_dep()%>");
+		
+		$("#title_check").val("<%=employeeDto.getEmp_title()%>");
 	});
 
 </script>
@@ -38,14 +52,14 @@
 			<table class="table">
 				<tbody>
 					<tr>
-						<th>이름</th>
-						<td><input type="text" class="input" readonly value="<%=employeeDto.getEmp_name()%>"></td>
-						<th>아이디</th>
+						<th width="15%">이름</th>
+						<td width="35%"><input type="text" class="input" readonly value="<%=employeeDto.getEmp_name()%>"></td>
+						<th width="15%">아이디</th>
 						<td><input type="text" class="input" readonly value="<%=employeeDto.getEmp_id()%>"></td>					
 					</tr>
 					<tr>	
-						<th>사원번호[입사일]</th>
-						<td><input type="text" class="input input-inline" name="emp_no" style="width:40px;" readonly value="<%=employeeDto.getEmp_no()%>"> [<%=employeeDto.getEmp_hiredate()%>]</td>
+						<th>사원번호</th>
+						<td><input type="text" class="input" name="emp_no" readonly value="<%=employeeDto.getEmp_no()%>"></td>
 						<th>이메일</th>
 						<td><input type="text" class="input" name="emp_email" value="<%=employeeDto.getEmp_email()%>"></td>					
 					</tr>
@@ -60,16 +74,28 @@
 						<td colspan="3"><input type="text" class="input" name="emp_addr" value="<%=employeeDto.getEmp_addr()%>"></td>					
 					</tr>
 					<tr>
-						<th width="20%">부서</th>
-						<td width="30%"><input type="text" class="input" name="emp_dep" value="<%=employeeDto.getEmp_dep()%>"></td>	
-						<th width="20%">직급</th>
-						<td><input type="text" class="input" name="emp_title" value="<%=employeeDto.getEmp_title()%>"></td>					
+						<th>부서</th>
+						<td>
+							<select class="input" id="dep_check" name="emp_dep" required>
+								<%for(DataSettingDto dataSettingDto : depList){ %>
+								<option><%=dataSettingDto.getDep_name()%></option>
+								<%} %>
+							</select>
+						</td>	
+						<th>직급</th>
+						<td>
+							<select class="input" id="title_check" name="emp_title" required>
+								<%for(DataSettingDto dataSettingDto : titleList){ %>
+								<option><%=dataSettingDto.getTitle_name()%></option>
+								<%} %>
+							</select>
+						</td>		
 					</tr>
 					<tr>
 						<th>급여</th>
 						<td><input type="text" class="input" name="emp_salary" value="<%=employeeDto.getEmp_salary()%>"></td>	
-						<th>사수(사원번호)</th>
-						<td><input type="text" class="input" name="emp_manager_no" value="<%=employeeDto.getEmp_manager_no()%>"></td>					
+						<th>입사일</th>
+						<td><input type="date" class="input" name="emp_hiredate" value="<%=employeeDto.getEmp_hiredate()%>"></td>					
 					</tr>
 					<tr>
 						<th>권한</th>
@@ -86,7 +112,12 @@
 					</tr>
 					<tr>
 						<th>기타사항</th>
-						<td colspan="3"><textarea rows="3" name="emp_etc" class="input"><%=employeeDto.getEmp_etc()%></textarea></td>					
+						<!-- 목록부분이 Null이면 표시 않기 -->
+						<%if(employeeDto.getEmp_etc()!= null){ %>
+						<td colspan="3"><textarea rows="3" name="emp_etc" class="input"><%=employeeDto.getEmp_etc()%></textarea></td>
+						<%}else{ %>
+						<td colspan="3"><textarea rows="3" name="emp_etc" class="input"></textarea></td>
+						<%} %>					
 					</tr>
 				</tbody>
 				<tfoot>
