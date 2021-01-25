@@ -100,14 +100,14 @@
             </div>
             <div class="row">
                 <input type="submit" value="신청">
-                <input type="button" value="취소" class="cancel">
+                <input type="button" value="취소" class="cancelBtn">
             </div>
         </fieldset>
     </form>
 </div>
 <script>
-	document.querySelector(".cancel").addEventListener("click", function(){
-		location.href = "vac_status.jsp";
+	document.querySelector(".cancelBtn").addEventListener("click", function(){
+		window.history.back();
 	});
 	document.querySelector("input[name=vac_end]").addEventListener("input", function(){
 		var vac_start = document.querySelector("input[name=vac_start]");

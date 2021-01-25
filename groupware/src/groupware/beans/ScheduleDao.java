@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import groupware.util.JdbcUtil;
 
@@ -104,10 +105,22 @@ public class ScheduleDao {
 		con.close();
 	}
 
-	public HashMap<LocalDate, List<ScheduleDto>> select(int emp_no, Timestamp startOfCal, Timestamp endOfCal) throws Exception{
+	public void deleteOne(int sch_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "select * from schedule where emp_no = ? and sch_start > ? and sch_start < ? order by sch_no";
+		String sql = "delete from schedule where sch_no = ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, sch_no);
+		
+		ps.execute();
+		
+		con.close();
+	}
+
+	public TreeMap<LocalDate, List<ScheduleDto>> select(int emp_no, int index, Timestamp startOfCal, Timestamp endOfCal) throws Exception{
+		Connection con = JdbcUtil.getConnection(USER, PW);
+		
+		String sql = "select * from schedule where emp_no = ? and sch_start > ? and sch_start < ? order by sch_no desc";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
 		ps.setTimestamp(2, startOfCal);
@@ -131,9 +144,9 @@ public class ScheduleDao {
 		}
 		con.close();
 		
-		HashMap<LocalDate, List<ScheduleDto>> schMap = new HashMap<>();
+		TreeMap<LocalDate, List<ScheduleDto>> schMap = new TreeMap<>();
 		
-		for(int i=0; i<42; i++) {
+		for(int i=0; i<index; i++) {
 			schMap.put(startOfCal.toLocalDateTime().toLocalDate().plusDays(i), null);
 		}
 		for(LocalDate key : schMap.keySet()) {
@@ -141,8 +154,7 @@ public class ScheduleDao {
 			for(ScheduleDto schDto : schList) {
 				if(key.isEqual(schDto.getSch_start().toLocalDateTime().toLocalDate())) {
 					newList.add(schDto);
-					System.out.println("날짜 : " + key);
-					System.out.println("일정명 : " + schDto.getSch_name());
+					System.out.println(schDto.getSch_name());
 				}
 			}
 			schMap.replace(key, newList);
@@ -151,4 +163,5 @@ public class ScheduleDao {
 		
 		return schMap;
 	}
+
 }

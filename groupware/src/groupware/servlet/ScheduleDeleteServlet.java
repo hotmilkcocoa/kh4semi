@@ -24,11 +24,16 @@ public class ScheduleDeleteServlet extends HttpServlet{
 			
 			ScheduleDao scheduleDao = new ScheduleDao();
 			
-			String del_from = req.getParameter("del_from");
-			if(del_from == null) {
-				scheduleDao.delete(emp_no);
+			String delDate = req.getParameter("delDate");
+			
+			String only = req.getParameter("only");
+			if(delDate != null) {
+				scheduleDao.delete(emp_no, Timestamp.valueOf(LocalDate.parse(delDate).atStartOfDay()));
+			} else if(only != null){
+				int sch_no = Integer.parseInt(req.getParameter("sch_no"));
+				scheduleDao.deleteOne(sch_no);
 			} else {
-				scheduleDao.delete(emp_no, Timestamp.valueOf(LocalDate.parse(del_from).atStartOfDay()));
+				scheduleDao.delete(emp_no);
 			}
 			
 			resp.sendRedirect("sch_manage.jsp");
