@@ -65,13 +65,13 @@ public class BoardDao {
 		return list;
 	}
 	//검색
-	public List<BoardDto> select(String keyword) throws Exception {
+	public List<BoardDto> select(String key) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
 		String sql = "select * from board where instr(board_titld,?)>0 order by board_no desc";
 
 		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setString(1, keyword);
+		ps.setString(1, key);
 		ResultSet rs = ps.executeQuery();
 		
 		List<BoardDto> list = new ArrayList<>();
@@ -109,7 +109,7 @@ public class BoardDao {
 			dto.setBoard_header(rs.getString("board_header"));
 			dto.setBoard_title(rs.getString("board_title"));
 			dto.setBoard_context(rs.getString("board_context"));
-			dto.setBoard_writedate(rs.getDate("writedate"));
+			dto.setBoard_writedate(rs.getDate("board_writedate"));
 			dto.setBoard_dep(rs.getString("board_dep"));
 			list.add(dto);
 		}

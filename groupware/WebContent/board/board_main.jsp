@@ -23,12 +23,17 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
 %>
 
 <%
-//검색창
-String type = request.getParameter("type");
-String key = request.getParameter("key");
-boolean isSearch = type != null && key != null;
+// 	목록,검색을 위해 필요한 프로그래밍 코드
+// 	type : 분류 , key : 검색어
+	String type = request.getParameter("type");
+	String key = request.getParameter("key");
+	boolean isSearch = type != null && key != null;
+		if(isSearch){
+			mainlist = boardDao.select(type,key);
+		}else{
+			mainlist = boardDao.mainlist();
+		}
 %>
-
 <link rel="stylesheet" type="text/css" href="./css/common.css">
 <style>
 .outbox{
@@ -112,7 +117,7 @@ boolean isSearch = type != null && key != null;
 							<%if(dto.getBoard_header() != null){ %>
 								[<%=dto.getBoard_header()%>]
 							<%}%>
-							<a href="detail.jsp?board_no=<%=dto.getBoard_no()%>">				
+							<a href="notice_detail.jsp?board_no=<%=dto.getBoard_no()%>">				
 								<%=dto.getBoard_title()%>
 							</a>
 						</td>
