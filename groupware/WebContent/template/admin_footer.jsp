@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-</article>
+ 
+		</article>
+		
         </section>
         
         <!-- 바닥 부분 -->
@@ -13,4 +15,11 @@
         </footer>
     </main>
 </body>
-</html>          
+</html>        
+    
+    
+    
+    
+    
+
+    

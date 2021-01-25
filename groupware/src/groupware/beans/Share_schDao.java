@@ -1,5 +1,5 @@
 package groupware.beans;
 
-public class MemberDao {
+public class Share_schDao {
 
 }

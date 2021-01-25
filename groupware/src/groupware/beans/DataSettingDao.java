@@ -9,7 +9,7 @@ import java.util.List;
 import groupware.util.JdbcUtil;
 
 public class DataSettingDao {
-	
+
 	public static final String USERNAME = "groupware";
 	public static final String PASSWORD = "groupware";
 	
@@ -64,7 +64,7 @@ public class DataSettingDao {
 		
 		con.close();
 	}
-		
+	
 	//부서데이터 검색
 	public List<DataSettingDto> depSelect() throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
@@ -87,7 +87,7 @@ public class DataSettingDao {
 		con.close();
 		return depList;
 	}
-
+	
 	
 	//직급데이터 검색
 	public List<DataSettingDto> titleSelect() throws Exception {
@@ -137,7 +137,7 @@ public class DataSettingDao {
 		
 		return dataSettingDto;
 	}
-	
+
 	//목록 개수를 구하는 메소드
 	public int getCount() throws Exception{
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
