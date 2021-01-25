@@ -6,10 +6,9 @@
 <jsp:include page="/template/header.jsp"></jsp:include>
 <%
 	
-	//페이지 분할, 네비게이터
-	int viewSize = 8; // 한 페이지에 나올 목록 개수
+	int viewSize = 8;
 	
-	int p; // 페이지 번호
+	int p;
 	
 	try{
 		p = Integer.parseInt(request.getParameter("p"));
@@ -98,8 +97,8 @@
 	</div>
 
 	<div class="row" style="float:left;">
-	<form action="delete.do" method="post" name="form">
-		<input type="hidden" id="hiddenValue" name="checked">
+	<form action="delete.do" method="get" name="form">
+		<input type="hidden" id="hiddenValue" name="cont_no">
 		<input type="button" id="delete_btn" value="선택삭제" class="input input-inline">
 	</form>
 	</div>
@@ -153,9 +152,9 @@
 	<div class="row center">
 			<ul class="pagination">
 				<%if(isSearch) {%>
-					<li><a href="contactList?p=<%=startBlock-1%>&key=<%=key%>">&it;</a></li>
+					<li><a href="contList.jsp?p=<%=startBlock-1%>&key=<%=key%>">&lt;</a></li>
 				<% } else { %>
-					<li><a href="contacList?p=<%=startBlock-1%>">&it;</a></li>
+					<li><a href="contList.jsp?p=<%=startBlock-1%>">&lt;</a></li>
 				<% } %>
 				
 				<%for(int i = startBlock; i <= endBlock; i++) {%>

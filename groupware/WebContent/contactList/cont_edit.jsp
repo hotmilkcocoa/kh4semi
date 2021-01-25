@@ -9,15 +9,17 @@
 	ContactListDto contDto = contDao.find(cont_no);
 
 %>
-
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
-window.onload = function() {
-	submit_btn.onclick = function(){
-		document.form.target = opener.name;
-		document.form.submit();
-		self.close();
-	}
-};
+$(function() {
+
+	$("#submit_btn").click(function(){
+			document.form.target = opener.name;
+			document.form.submit();
+			self.close();
+		
+	});
+});
 </script>
 <div class="outbox">
 	<div class="row center">

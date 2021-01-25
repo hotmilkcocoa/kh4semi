@@ -28,7 +28,7 @@
 	/*메인 영역 : 폭 1200px, 높이 600px 고정*/
 	main{
 	    width: 1200px;
-	    height: 600px;
+	   	height: 600px;
 	    margin: auto;
 	}
 	/*헤더 영역 : 높이 80px 고정*/
@@ -141,25 +141,6 @@
 	footer img{
 	    vertical-align: middle;
 	}
-	
-	.favCk+label {
-	display: block;
-	width:24px;
-	height:24px;
-	border:none;
-	background: url('../image/nonfav.png') no-repeat 0 0px / contain;
-	text-align: center !important;
-	}
-	
-	.favCk:checked+label {
-		background: url('../image/fav.png') no-repeat 0 0px / contain;
-		 text-align: center !important;
-	}
-	
-	
-	.favCk {
-		display: none;
-	}
 </Style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
@@ -221,8 +202,8 @@
                     <ul>
                         <li class="menu menu-title"><a href="">주소록</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="">나의 주소록</a></li>
-                            <li class="menu menu-detail"><a href="">직원 목록</a></li>
+                            <li class="menu menu-detail"><a href="#">나의 주소록</a></li>
+                            <li class="menu menu-detail"><a href="#">직원 목록</a></li>
                         </ul>
                     </ul>
                     <ul>
