@@ -1,3 +1,6 @@
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="java.time.LocalTime"%>
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="groupware.beans.ScheduleDto"%>
@@ -13,7 +16,17 @@
 	if(isEdit){
 		ScheduleDao scheduleDao = new ScheduleDao();
 		scheduleDto = scheduleDao.find(Integer.parseInt(request.getParameter("sch_no")));
-		
+	}
+	String start_date = request.getParameter("date");
+	String end_date = request.getParameter("date");
+	
+	String start_time, end_time;
+	if(request.getParameter("start_time")!=null){
+		start_time = LocalTime.parse(request.getParameter("start_time")).toString();
+		end_time = LocalTime.parse(request.getParameter("start_time")).plusHours(1).toString();
+	} else{
+		start_time = LocalTime.of(LocalTime.now().getHour(), 0).toString();
+		end_time = LocalTime.of(LocalTime.now().plusHours(1).getHour(), 0).toString();		
 	}
 %>
 
@@ -112,7 +125,7 @@
             <span>공개</span>
             <div class="data">
                 <label>
-                    <input type="radio" name="sch_open" value="true">
+                    <input type="radio" name="sch_open" value="true" checked>
                    	 공개
                 </label>
                 <label>
@@ -123,37 +136,41 @@
         </div>
         <div class="row rel">
             <input class="dataInput" type="submit" value="저장">
-            <input class="dataInput" type="button" value="취소">
+            <input class="dataInput cancelBtn" type="button" value="취소">
         </div>
     </form>
 </div>
 <script>
 	<%if(isEdit){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String start_date = sdf.format(scheduleDto.getSch_start());
-		String end_date = sdf.format(scheduleDto.getSch_end());
+		start_date = sdf.format(scheduleDto.getSch_start());
+		end_date = sdf.format(scheduleDto.getSch_end());
 		
 		sdf = new SimpleDateFormat("HH:mm");
-		String start_time = sdf.format(scheduleDto.getSch_start());
-		String end_time = sdf.format(scheduleDto.getSch_end());
+		start_time = sdf.format(scheduleDto.getSch_start());
+		end_time = sdf.format(scheduleDto.getSch_end());
 	%>
-		var date = document.querySelectorAll(".dataInput.date");
-		date[0].value = "<%=start_date%>";
-		date[1].value = "<%=end_date%>";
-		
-		var select = document.querySelectorAll(".dataInput.select");
-		for(var i=0; i<select.length; i++){
-			var time = (i==0) ? "<%=start_time%>" : "<%=end_time%>";
-			for(var j=0; j<select[i].length; j++){
-				if(select[i].children[j].innerText == time){
-					select[i].children[j].selected = true;
-				}
-			}
-		}
 		
 		var radio = document.querySelectorAll("input[name=sch_open]");
 		radio[0].value == "<%=scheduleDto.getSch_open()%>" ? radio[0].checked=true : radio[1].checked=true;
 	<%}%>
+	var date = document.querySelectorAll(".dataInput.date");
+	date[0].value = "<%=start_date!=null ? start_date : LocalDate.now()%>";
+	date[1].value = "<%=end_date!=null ? end_date : LocalDate.now()%>";
+	
+	var select = document.querySelectorAll(".dataInput.select");
+	for(var i=0; i<select.length; i++){
+		var time = (i==0) ? "<%=start_time%>" : "<%=end_time%>";
+		for(var j=0; j<select[i].length; j++){
+			if(select[i].children[j].innerText == time){
+				select[i].children[j].selected = true;
+			}
+		}
+	}
+	document.querySelector(".cancelBtn").addEventListener("click", function(){
+		window.history.back();
+	});
+	
 </script>
             
 <jsp:include page="/template/footer.jsp"></jsp:include>  

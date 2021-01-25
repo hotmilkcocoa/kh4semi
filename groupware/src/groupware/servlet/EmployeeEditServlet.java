@@ -1,6 +1,7 @@
 package groupware.servlet;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,11 +27,11 @@ public class EmployeeEditServlet extends HttpServlet{
 			employeeDto.setEmp_dep(req.getParameter("emp_dep"));
 			employeeDto.setEmp_title(req.getParameter("emp_title"));
 			employeeDto.setEmp_salary(Integer.parseInt(req.getParameter("emp_salary")));
-			employeeDto.setEmp_manager_no(Integer.parseInt(req.getParameter("emp_manager_no")));
 			employeeDto.setEmp_auth(req.getParameter("emp_auth"));
 			employeeDto.setEmp_state(req.getParameter("emp_state"));
 			employeeDto.setEmp_etc(req.getParameter("emp_etc"));
 			employeeDto.setEmp_no(Integer.parseInt(req.getParameter("emp_no")));
+			employeeDto.setEmp_hiredate(Date.valueOf(req.getParameter("emp_hiredate")));
 			
 			//처리
 			EmployeeDao employeeDao = new EmployeeDao();

@@ -1,8 +1,13 @@
+<%@page import="groupware.beans.DataSettingDto"%>
+<%@page import="java.util.List"%>
+<%@page import="groupware.beans.DataSettingDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <% 
-
+	DataSettingDao dataSettingDao = new DataSettingDao();
+	List<DataSettingDto> depList = dataSettingDao.depSelect();
+	List<DataSettingDto> titleList = dataSettingDao.titleSelect();
 %>
 
 <jsp:include page="/template/admin_header.jsp"></jsp:include>
@@ -19,9 +24,9 @@
 			<table class="table" style="border-color: transparent;">
 				<tbody>
 					<tr>
-						<th>이름</th>
-						<td><input type="text" class="input" name="emp_name" required></td>
-						<th>아이디</th>
+						<th width="15%">이름</th>
+						<td width="35%"><input type="text" class="input" name="emp_name" required></td>
+						<th width="15%">아이디</th>
 						<td><input type="text" class="input" name="emp_id" required></td>					
 					</tr>
 					<tr>	
@@ -41,16 +46,28 @@
 						<td colspan="3"><input type="text" class="input" name="emp_addr" required></td>					
 					</tr>
 					<tr>
-						<th width="15%">부서</th>
-						<td width="35%"><input type="text" class="input" name="emp_dep" required></td>	
-						<th width="15%">직급</th>
-						<td><input type="text" class="input" name="emp_title" required></td>					
+						<th>부서</th>
+						<td>
+							<select class="input" name="emp_dep" required>
+								<%for(DataSettingDto dataSettingDto : depList){ %>
+								<option><%=dataSettingDto.getDep_name()%></option>
+								<%} %>
+							</select>
+						</td>	
+						<th>직급</th>
+						<td>
+							<select class="input" name="emp_title" required>
+								<%for(DataSettingDto dataSettingDto : titleList){ %>
+								<option><%=dataSettingDto.getTitle_name()%></option>
+								<%} %>
+							</select>
+						</td>					
 					</tr>
 					<tr>
 						<th>급여</th>
 						<td><input type="text" class="input" name="emp_salary" required></td>	
-						<th>사수</th>
-						<td><input type="text" class="input" name="emp_manager_no"></td>					
+						<th>사진</th>
+						<td><input type="file" name="f" accept=".jpg, .png"></td>					
 					</tr>
 					<tr>
 						<th>권한</th>
@@ -72,11 +89,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<th>사진</th>
-						<td>
-							<input type="file" name="f" accept=".jpg, .png">
-						</td>
-						<td colspan="2" class="right">
+						<td colspan="4" class="right">
 							<input type="submit" class="input input-inline" style="width:100px;" value="추가">
 							<a href="<%=request.getContextPath()%>/admin/employee.jsp"><input type=button id="cancle-Btn" class="input input-inline" style="width:100px;" value="취소"></a>
 						</td>

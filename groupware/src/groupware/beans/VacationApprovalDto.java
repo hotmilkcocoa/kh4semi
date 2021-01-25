@@ -1,11 +1,13 @@
 package groupware.beans;
 
-public class Vacation_approvalDto {
+public class VacationApprovalDto {
 	private int vac_no;
+	private int dep_head_no;
 	private String dep_head_app;
+	private int hr_app_no;
 	private String hr_app;
 	
-	public Vacation_approvalDto() {
+	public VacationApprovalDto() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -31,6 +33,22 @@ public class Vacation_approvalDto {
 
 	public void setHr_app(String hr_app) {
 		this.hr_app = hr_app;
+	}
+
+	public int getDep_head_no() {
+		return dep_head_no;
+	}
+
+	public void setDep_head_no(int dep_head_no) {
+		this.dep_head_no = dep_head_no;
+	}
+
+	public int getHr_app_no() {
+		return hr_app_no;
+	}
+
+	public void setHr_app_no(int hr_app_no) {
+		this.hr_app_no = hr_app_no;
 	}
 	
 	
