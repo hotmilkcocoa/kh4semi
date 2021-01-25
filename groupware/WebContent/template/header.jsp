@@ -81,7 +81,8 @@
 	    float: left;
 	    width: 25%;
 	}
-	header .profile th, td{
+	header .profile th,
+	header .profile td{
 	    width: 85px;
 	    height: 29px;
 	}
