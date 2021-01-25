@@ -100,14 +100,14 @@
 					<tr>
 						<th>권한</th>
 						<td>
-							<label><input type="radio" class="input input-inline" name="emp_auth" value="일반" checked>일반</label>
-							<label><input type="radio" class="input input-inline" name="emp_auth" value="관리">관리</label>
+							<label><input type="radio" class="input input-inline" name="emp_auth" value="일반" <%=employeeDto.getEmp_auth().equals("일반")?"checked":"" %>>일반</label>
+							<label><input type="radio" class="input input-inline" name="emp_auth" value="관리" <%=employeeDto.getEmp_auth().equals("관리")?"checked":"" %>>관리</label>
 						</td>	
 						<th>상태</th>
 						<td>
-							<label><input type="radio" class="input input-inline" name="emp_state" value="정상" checked>정상</label>
-							<label><input type="radio" class="input input-inline" name="emp_state" value="휴가">휴가</label>
-							<label><input type="radio" class="input input-inline" name="emp_state" value="미사용">미사용</label>
+							<label><input type="radio" class="input input-inline" name="emp_state" value="정상" <%=employeeDto.getEmp_state().equals("정상")?"checked":"" %>>정상</label>
+							<label><input type="radio" class="input input-inline" name="emp_state" value="휴가" <%=employeeDto.getEmp_state().equals("휴가")?"checked":"" %>>휴가</label>
+							<label><input type="radio" class="input input-inline" name="emp_state" value="미사용" <%=employeeDto.getEmp_state().equals("미사용")?"checked":"" %>>미사용</label>
 						</td>					
 					</tr>
 					<tr>

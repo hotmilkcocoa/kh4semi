@@ -167,6 +167,46 @@ public class DataSettingDao {
 		con.close();
 	}
 	
-	
-	
+	//근태설정정보 검색
+	public DataSettingDto att_setFind(int att_set_no) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from att_set where att_set_no = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, att_set_no);
+		ResultSet rs = ps.executeQuery();
+		DataSettingDto dataSettingDto;
+		
+		if(rs.next()) {
+			dataSettingDto = new DataSettingDto();
+			dataSettingDto.setAtt_set_no(rs.getInt("att_set_no"));
+			dataSettingDto.setAtt_set_start(rs.getDate("att_set_start"));
+			dataSettingDto.setAtt_set_end(rs.getDate("att_set_end"));
+			dataSettingDto.setAtt_set_late(rs.getInt("att_set_late"));
+			
+		}
+		else {
+			dataSettingDto = null;
+		}
+		
+		con.close();
+		
+		return dataSettingDto;
+	}
+
+	public void att_setUpdate(DataSettingDto dataSettingDto, String att_set_start, String att_set_end) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update att_set set att_set_start = to_date(?, 'HH24:MI'), att_set_end = to_date(?, 'HH24:MI'), att_set_late = ? where att_set_no = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, att_set_start);
+		ps.setString(2, att_set_end);
+		ps.setInt(3, dataSettingDto.getAtt_set_late());
+		ps.setInt(4, dataSettingDto.getAtt_set_no());
+		ps.execute();
+		
+		con.close();
+	}
 }

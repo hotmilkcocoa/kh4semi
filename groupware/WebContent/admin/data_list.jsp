@@ -22,7 +22,7 @@
 
 	<div>		
 		<label>부서 설정</label>
-		<div action="<%=request.getContextPath()%>/admin/dep_add.do" class="row">
+		<div class="row">
 			<form action="<%=request.getContextPath()%>/admin/dep_add.do" method="post">
 				<input type="text" class="input input-inline" style="width:600px;" name="dep_name">
 				<input type="submit" style="width:100px;" class="input input-inline" value="추가">
