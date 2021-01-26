@@ -16,10 +16,11 @@ public class ScheduleDao {
 	public static final String USER = "groupware";
 	public static final String PW = "groupware";
 	
+	//개인 일정 등록
 	public void insert(ScheduleDto scheduleDto) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "insert into schedule values(schedule_seq.nextval, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into schedule values(schedule_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'false')";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, scheduleDto.getSch_name());
 		ps.setString(2, scheduleDto.getSch_content());
@@ -33,7 +34,25 @@ public class ScheduleDao {
 		
 		con.close();
 	}
-	
+	//회사 일정 등록
+	public void insertForCom(ScheduleDto scheduleDto) throws Exception{
+		Connection con = JdbcUtil.getConnection(USER, PW);
+		
+		String sql = "insert into schedule values(schedule_seq.nextval, ?, ?, ?, ?, ?, ?, ?, 'true')";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, scheduleDto.getSch_name());
+		ps.setString(2, scheduleDto.getSch_content());
+		ps.setString(3, scheduleDto.getSch_place());
+		ps.setTimestamp(4, scheduleDto.getSch_start());
+		ps.setTimestamp(5, scheduleDto.getSch_end());
+		ps.setString(6, scheduleDto.getSch_open());
+		ps.setInt(7, scheduleDto.getEmp_no());
+		
+		ps.execute();
+		
+		con.close();
+	}
+	//일정 단일 조회
 	public ScheduleDto find(int sch_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
@@ -61,7 +80,7 @@ public class ScheduleDao {
 		con.close();
 		return scheduleDto;
 	}
-	
+	//일정 수정
 	public void update(ScheduleDto scheduleDto) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
@@ -79,7 +98,7 @@ public class ScheduleDao {
 		
 		con.close();
 	}
-
+	//일정 전체 삭제
 	public void delete(int emp_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
@@ -91,7 +110,7 @@ public class ScheduleDao {
 		
 		con.close();
 	}
-
+	//일정 기간 삭제
 	public void delete(int emp_no, Timestamp del_from) throws Exception {
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
@@ -104,7 +123,7 @@ public class ScheduleDao {
 		
 		con.close();
 	}
-
+	//일정 단일 삭제
 	public void deleteOne(int sch_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
@@ -116,11 +135,11 @@ public class ScheduleDao {
 		
 		con.close();
 	}
-
+	//일정 사원별 기간 조회
 	public TreeMap<LocalDate, List<ScheduleDto>> select(int emp_no, int index, Timestamp startOfCal, Timestamp endOfCal) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "select * from schedule where emp_no = ? and sch_start > ? and sch_start < ? order by sch_no desc";
+		String sql = "select * from schedule where emp_no = ? and sch_start >= ? and sch_start < ? order by sch_no desc";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
 		ps.setTimestamp(2, startOfCal);
@@ -154,7 +173,6 @@ public class ScheduleDao {
 			for(ScheduleDto schDto : schList) {
 				if(key.isEqual(schDto.getSch_start().toLocalDateTime().toLocalDate())) {
 					newList.add(schDto);
-					System.out.println(schDto.getSch_name());
 				}
 			}
 			schMap.replace(key, newList);

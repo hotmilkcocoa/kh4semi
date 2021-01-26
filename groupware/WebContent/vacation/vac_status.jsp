@@ -10,11 +10,38 @@
 <%
 //	int emp_no = (int) session.getAttribute("check");
 	int emp_no = 3;
-	VacationDao vacationDao = new VacationDao();
-	List<VacationDto> vacationList = vacationDao.select(emp_no);
-	
+	//연차 테이블 데이터 가져오기
 	AnnualDao annualDao = new AnnualDao();
 	AnnualDto annualDto = annualDao.find(emp_no);
+	
+	//휴가 신청 내역 가져오기
+	int listSize = 5;
+	
+	//페이징 정보
+	int p;
+	try{
+		p = Integer.parseInt(request.getParameter("p"));
+		if(p<1) throw new Exception();
+	} catch(Exception e){
+		p = 1;
+	}
+	int endRow = p * listSize;
+	int startRow = endRow - listSize + 1;
+	
+	VacationDao vacationDao = new VacationDao();
+	List<VacationDto> vacationList = vacationDao.select(emp_no, startRow, endRow);
+	
+	//블록 정보
+	int blockSize = 5;
+	
+	int startBlock = (p-1) / blockSize * blockSize + 1;
+	int endBlock = startBlock + blockSize - 1;
+	
+	int count = vacationDao.getCount(emp_no);
+	
+	int pageSize = (count + listSize -1) / listSize;
+	
+	if(endBlock > pageSize) endBlock = pageSize;
 %>
 
 <h1 class="title center">2021.1</h1>
@@ -43,7 +70,7 @@
 	<h3>사용 내역</h3>
 </div>
 <div class="row">
-    <table class="table table-border">
+    <table class="vacTable table table-border">
         <tr>
             <td>번호</td>
             <td>분류</td>
@@ -79,6 +106,23 @@
         <%index--;} %>
     </table>
 </div>
+<div class="row">
+	<ul class="pagination">
+		<li><a href="vac_status.jsp?p=<%=startBlock-1%>">&lt;</a></li>
+		
+		<%for(int i=startBlock; i<=endBlock; i++){ %>
+			<%if(i == p){ %>
+			<li class="active">
+			<%}else{ %>
+			<li>
+			<%} %>
+			<a href="vac_status.jsp?p=<%=i%>"><%=i%></a>
+			</li>
+		<%} %>
+		
+		<li><a href="vac_status.jsp?p=<%=endBlock+1 > pageSize ? pageSize : endBlock+1%>">&gt;</a></li>
+	</ul>
+</div>
 <div class="row right">
 	<input type="button" value="신청하기" class="vacAdd">
 </div>
@@ -93,7 +137,7 @@
 	});
 	document.querySelectorAll(".vacCancelBtn").forEach(function(ele){
 		ele.addEventListener("click", function(){
-			location.href = "vac_cancel.do?vac_no=" + this.getAttribute("vac_no");
+			location.href = "vac_sign.do?cancel&vac_no=" + this.getAttribute("vac_no");
 		});
 	});
 </script>

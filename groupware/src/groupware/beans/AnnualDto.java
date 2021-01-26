@@ -1,11 +1,9 @@
 package groupware.beans;
 
-import java.sql.Date;
-
 public class AnnualDto {
 	private int emp_no;
-	private int ann_occurred;
-	private int ann_used;
+	private double ann_occurred;
+	private double ann_used;
 	
 	public AnnualDto() {
 		// TODO Auto-generated constructor stub
@@ -19,19 +17,19 @@ public class AnnualDto {
 		this.emp_no = emp_no;
 	}
 
-	public int getAnn_occurred() {
+	public double getAnn_occurred() {
 		return ann_occurred;
 	}
 
-	public void setAnn_occurred(int ann_occurred) {
+	public void setAnn_occurred(double ann_occurred) {
 		this.ann_occurred = ann_occurred;
 	}
 
-	public int getAnn_used() {
+	public double getAnn_used() {
 		return ann_used;
 	}
 
-	public void setAnn_used(int ann_used) {
+	public void setAnn_used(double ann_used) {
 		this.ann_used = ann_used;
 	}
 
