@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.EmployeeDto"%>
+<%@page import="groupware.beans.EmployeeDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -148,6 +150,17 @@
 <script>
 
 </script>
+
+<%
+//	int emp_no = (int) request.getSession().getAttribute("check");
+	int emp_no = 21;
+	EmployeeDao empDao = new EmployeeDao();
+	EmployeeDto empDto = empDao.find(emp_no);
+	
+	//부서장인지 인사부 팀장인지 검사
+	boolean isHrhead = empDto.getEmp_dep().equals("인사부") && empDto.getEmp_title().equals("팀장");
+	boolean isDephead = empDto.getEmp_title().equals("팀장");
+%>
 </head>
 <body>
 	<main>
@@ -198,7 +211,7 @@
                         <li class="menu menu-title"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">일정</a></li>
                         <ul>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">내 일정</a></li>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/sch_manage.jsp">캘린더 설정</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/share_calendar.jsp">공유 일정</a></li>
                         </ul>
                     </ul>
                     <ul>
@@ -213,6 +226,9 @@
                         <ul>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태 현황</a></li>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_status.jsp">휴가 현황</a></li>
+                            <%if(isDephead || isHrhead){ %>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_app.jsp">휴가 승인</a></li>
+                        	<%} %>
                         </ul>
                     </ul>
                     <ul>

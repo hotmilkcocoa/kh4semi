@@ -28,12 +28,12 @@ public class AnnualDao {
 	public void insert(int emp_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		int anuual = getAnnual(getHireDate(emp_no).toLocalDate());
+		double anuual = getAnnual(getHireDate(emp_no).toLocalDate());
 		
 		String sql = "insert into annual values(?, ?, 0)";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
-		ps.setInt(2, anuual);
+		ps.setDouble(2, anuual);
 		ps.execute();
 		
 		con.close();
@@ -50,8 +50,8 @@ public class AnnualDao {
 		AnnualDto annualDto = new AnnualDto();
 		if(rs.next()) {
 			annualDto.setEmp_no(rs.getInt("emp_no"));
-			annualDto.setAnn_occurred(rs.getInt("ann_occurred"));
-			annualDto.setAnn_used(rs.getInt("ann_used"));
+			annualDto.setAnn_occurred(rs.getDouble("ann_occurred"));
+			annualDto.setAnn_used(rs.getDouble("ann_used"));
 		}
 		
 		con.close();
@@ -64,7 +64,7 @@ public class AnnualDao {
 		String sql = "update annual set ann_occurred = ? where emp_no = ?";
 		PreparedStatement ps = con.prepareStatement(sql);
 		int annual = getAnnual(getHireDate(emp_no).toLocalDate());
-		ps.setInt(1, annual);
+		ps.setDouble(1, annual);
 		ps.setInt(2, emp_no);
 		ps.execute();
 		
@@ -75,11 +75,22 @@ public class AnnualDao {
 		if(fullYear) {
 			sql = "update annual set ann_used = ? where emp_no = ?";
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, 0);
+			ps.setDouble(1, 0);
 			ps.setInt(2, emp_no);
 			ps.execute();			
 		}
 
+		con.close();
+	}
+	
+	public void use(int emp_no, double days) throws Exception{
+		Connection con = JdbcUtil.getConnection(USER, PW);
+		
+		String sql = "update annual set ann_used = ann_used + ? where emp_no = ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setDouble(1, days);
+		ps.setInt(2, emp_no);
+		ps.execute();
 		
 		con.close();
 	}

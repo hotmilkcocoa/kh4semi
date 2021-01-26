@@ -112,9 +112,13 @@
 	document.querySelector("input[name=vac_end]").addEventListener("input", function(){
 		var vac_start = document.querySelector("input[name=vac_start]");
 		if(this.value < vac_start.value){
-			alert("종료 시점은 시작 시점보다 빠를 수 없습니다.");
+			alert("신청기간을 확인해주세요.");
 			this.value = vac_start.value;
 		}
 	});
+	<%if(request.getParameter("error")!=null){%>
+		alert("잔여 연차가 부족합니다.");
+	<%}%>
+
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include>
