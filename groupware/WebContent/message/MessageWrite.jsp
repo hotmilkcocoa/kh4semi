@@ -5,27 +5,29 @@
     pageEncoding="UTF-8"%>
 <%
 	String msg_emp_no = request.getParameter("emp_no");
-	String[] m_emp_no = msg_emp_no.split(",");
-	int[] emp_no_m = new int[m_emp_no.length];
+	List<EmployeeDto> empList = new ArrayList<>();
 	EmployeeDao empDao = new EmployeeDao();
 	EmployeeDto empDto = new EmployeeDto();
-	List<EmployeeDto> empList = new ArrayList<>();
+	String[] emp_name = new String[]{};
+	boolean isCheck = msg_emp_no != null;
+	if(isCheck) {
+		String[] m_emp_no = msg_emp_no.split(",");
+		int[] emp_no_m = new int[m_emp_no.length];
 
+		for(int i = 0; i < emp_no_m.length; i++) {
+			emp_no_m[i] = Integer.parseInt(m_emp_no[i]);
+			empDto = empDao.find(emp_no_m[i]);
+			empList.add(empDto);
+		}
 	
-	for(int i = 0; i < emp_no_m.length; i++) {
-		emp_no_m[i] = Integer.parseInt(m_emp_no[i]);
-		empDto = empDao.find(emp_no_m[i]);
-		empList.add(empDto);
-	}
-	
-	String[] emp_name = new String[empList.size()];
-	int size = 0;
-	for(EmployeeDto dto : empList) {
-		emp_name[size++] = dto.getEmp_name();
-	}
-	
-	for(int i = 0; i <emp_name.length; i++) {
-	System.out.println(emp_name[i]);
+		emp_name = new String[empList.size()];
+		int size = 0;
+		for(EmployeeDto dto : empList) {
+			emp_name[size++] = dto.getEmp_name();
+		}
+		
+	} else {
+		
 	}
 	
 %>
@@ -35,15 +37,18 @@
 <script>
 	
 	$(function() {
+		<%if(isCheck) {  %>		
 		var array = new Array();
-		<%for(int i = 0; i <emp_name.length; i++) {%>
+		<%for(int i = 0; i < emp_name.length; i++) {%>
 		array.push(
-		"<%=emp_name[i]%>"
-			 );
+			"<%=emp_name[i]%>"
+		);
 		<%} %>
 			 console.log(array);
 		$("#msg_receiver").val(array);
-		
+		<% } else {%>
+			$("#msg_receiver").val("");
+		<% }%>
 		$("#search-btn").click(function() {
 			window.open("search.jsp", "사원검색", "width=700px, height=600px");
 		});

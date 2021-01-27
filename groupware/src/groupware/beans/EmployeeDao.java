@@ -503,6 +503,23 @@ public class EmployeeDao {
 		return count;
 	}
 	
+	//부서이름+검색으로 조회한 목록 개수
+	public int getDepCount(String emp_dep, String keyword) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select count(*) from employee where emp_dep=? and (emp_name || emp_phone || emp_email ||emp_dep) like ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_dep);
+		ps.setString(2, "%"+keyword+"%");
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+	
+		con.close();
+		return count;
+	}
+	
 	//목록 구하는 메소드(부서이름)
 	public List<EmployeeDto> getDep(String emp_dep) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);

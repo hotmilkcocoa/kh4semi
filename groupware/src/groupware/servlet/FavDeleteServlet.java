@@ -24,7 +24,7 @@ public class FavDeleteServlet extends HttpServlet{
 			EmpFavoriteDao emp_favDao = new EmpFavoriteDao();
 			emp_favDao.delete(emp_no, fav_emp_no);
 			
-			resp.sendRedirect(req.getContextPath() + "/contactList/contMain.jsp");
+			resp.sendRedirect(req.getHeader("referer"));
 		}
 		catch(Exception e) {
 			e.printStackTrace();

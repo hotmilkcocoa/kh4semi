@@ -25,7 +25,7 @@ public class FavInsertServlet extends HttpServlet{
 			
 			emp_favDao.insert(emp_no, fav_emp_no);
 			
-			resp.sendRedirect(req.getContextPath() + "/contactList/contMain.jsp");
+			resp.sendRedirect(req.getHeader("referer"));
 		}
 		catch(Exception e) {
 			e.printStackTrace();

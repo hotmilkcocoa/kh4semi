@@ -3,6 +3,29 @@
 <%@page import="groupware.beans.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<head>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
+<style>
+	.favCk+label {
+		display: block;
+		width:24px;
+		height:24px;
+		border:none;
+		background: url('../image/nonfav.png') no-repeat 0 0px / contain;
+		text-align: center !important;
+	}
+	
+	.favCk:checked+label {
+		background: url('../image/fav.png') no-repeat 0 0px / contain;
+		text-align: center !important;
+	}
+	
+	
+	.favCk {
+		display: none;
+	}
+</style>
 
 <%
 	int viewSize = 8;
@@ -91,107 +114,34 @@
  		no[size++] = dto.getFav_emp_no();
  	}
  	
+ 	String opt = request.getParameter("opt");
 %>
 
-<jsp:include page="/template/header.jsp"></jsp:include>
-<style>
-	.favCk+label {
-		display: block;
-		width:24px;
-		height:24px;
-		border:none;
-		background: url('../image/nonfav.png') no-repeat 0 0px / contain;
-		text-align: center !important;
-	}
-	
-	.favCk:checked+label {
-		background: url('../image/fav.png') no-repeat 0 0px / contain;
-		text-align: center !important;
-	}
-	
-	
-	.favCk {
-		display: none;
-	}
-</style>
+
 <script>
 	$(function () {
 		
 		//전체선택
-		$("#allCheck-btn").on("input", function(){
+		$("search.jspallCheck-btn").on("input", function(){
 			var check = $(this).prop("checked");
 			$(".check-btn").prop("checked", check);
 		});
-	
-		//쪽지보내기
-		var chkArray = new Array();
-		$("#message_write").click(function(){
-				$(".check-btn:checked").each(function(i){
-						chkArray.push($(this).val());
-					});
-				$("#hiddenValue").val(chkArray);
-				document.form.submit();
-			
-		});
-			
-		//부서 선택 시 부서검색
-		$("#dep_chooser").change(function(){
-			location.href= "<%=request.getContextPath()%>/contactList/contMain.jsp?dep_no="+$(this).val();
-			
-			if($(this).val() == 0) {
-				location.href= "<%=request.getContextPath()%>/contactList/contMain.jsp";
-			}
-			
-			});
 
-		//emp_fav에 해당 fav_emp_no 가 있다면! checked
-		var check = $(".favCk").val();
-		
-		//check버튼을 누르면 insert / 해제하면 delete
-		$(".favCk").click(function () {
-			if($(this).prop("checked")) {
-				location.href = "<%=request.getContextPath()%>/contactList/insert.do?fav_emp_no="+$(this).val();
-			} else {
-				
-				location.href = "<%=request.getContextPath()%>/contactList/favDelete.do?fav_emp_no="+$(this).val();
-			}
-		})
-			
+
 	});		
 			
 	
 </script>
-
-<div class="outbox">
-<% for(int m = 0; m < no.length; m++) {%>
-<input type="hidden" class="hiddenCk" value="<%=no[m]%>">
-<%} %>
-		<div class="row">
-			<select class="input input-inline" name="dep_name" id="dep_chooser">
-				<option value="0">부서검색</option>
-				<%
-					for(DataSettingDto dto : depList) {
-				%>
-					<option value="<%=dto.getDep_no()%>" <%if(dep_name!=null&&dep_name.equals(dto.getDep_name())){%>selected<%}%>><%=dto.getDep_name()%></option>
-				<%
-					}
-				%>
-			</select>
-		</div>
-		
-	<div class="row float-box">
-		<div class="row" style="float:left;">
-		<form action="../message/MessageWrite.jsp" method="get" name="form">
-			<input type="hidden" id="hiddenValue" name="emp_no">
-			<input type="button" value="쪽지보내기" id="message_write" class="input input-inline">
-			</form>
-		</div>
-		
-		<form action="contMain.jsp" method="get">
+</head>
+<body>
+<div class="outbox" style="width:600px;">
+<div class="row float-box">
+	
+		<form action="search.jsp" method="get">
 		<div class="row" style="float:right;">
-		<%if(dep_no != null)  {%>
-			<input type="hidden" name="dep_no" value=<%=dep_no%>>
-			<%} %>
+		<%if(opt != null) {%>
+		<input type="hidden" name="opt" value=<%=opt %>>
+		<%} %>
 			<%if(isSearch) {%>
 				<input type="text" name="keyword" class="input input-inline" value="<%=keyword%>">
 				<%} else { %>
@@ -224,15 +174,6 @@
 						<td>
 							<%=empDto.getEmp_name()%> <%=empDto.getEmp_title()%>
 							
-							<span style="display:inline-block"> 
-								<input type="checkbox" id=<%=empDto.getEmp_no()%> class="favCk" name="fav_emp_no" value="<%=empDto.getEmp_no()%>"
-								<%for(int h = 0; h < no.length; h ++) {%>
-								<%if(no[h] == empDto.getEmp_no()){ %>
-								checked
-									<% }}%>
-								>
-								<label for=<%=empDto.getEmp_no() %>></label>
-							</span>
 						</td>
 						<td><%=empDto.getEmp_dep()%></td>
 						<td><%=empDto.getEmp_phone()%></td>
@@ -249,14 +190,10 @@
 	<!-- 페이지 네비게이션 -->
 	<div class="row center">
 			<ul class="pagination">
-				<% if(isSearch && dep_name == null) {%>
-					<li><a href="contMain.jsp?p=<%=startBlock-1%>&keyword=<%=keyword%>">&lt;</a></li>
-				<%} else if(isSearch && dep_name != null) {%>
-					<li><a href="contMain.jsp?p=<%=startBlock-1%>&keyword=<%=keyword%>">&lt;</a></li>
-				<%} else if(dep_name != null) {%>
-					<li><a href="contMain.jsp?p=<%=startBlock-1%>">&lt;</a></li>
+				<% if(isSearch) {%>
+					<li><a href="search.jsp?opt=<%=opt%>&p=<%=startBlock-1%>&keyword=<%=keyword%>">&lt;</a></li>
 				<% } else { %>
-					<li><a href="contMain.jsp?p=<%=startBlock-1%>">&lt;</a></li>
+					<li><a href="search.jsp?opt=<%=opt%>&p=<%=startBlock-1%>">&lt;</a></li>
 				<% } %>
 				
 				<%for(int i = startBlock; i <= endBlock; i++) { %>
@@ -266,31 +203,23 @@
 							<li>
 						<%} %>
 						
-						<%if(isSearch && dep_name == null) {%>		
+						<%if(isSearch) {%>		
 							<!-- 검색용 링크 -->
-							<a href="contMain.jsp?p=<%=i%>&keyword=<%=keyword%>"><%=i %></a>
-						<%} else if(isSearch && dep_name != null){ %>
-							<a href="contMain.jsp?p=<%=i%>&dep_no=<%=dep_no%>&keyword=<%=keyword%>"><%=i %></a>
-						<%} else if(dep_name != null){ %>
-							<a href="contMain.jsp?p=<%=i%>&dep_no=<%=dep_no%>"><%=i%></a>
+							<a href="search.jsp?opt=<%=opt%>&p=<%=i%>&keyword=<%=keyword%>"><%=i %></a>
 						<%} else {%>
 							<!-- 목록용 링크 -->
-							<a href="contMain.jsp?p=<%=i%>"><%=i%></a>
+							<a href="search.jsp?opt=<%=opt%>&p=<%=i%>"><%=i%></a>
 						<%} %>
 						</li>
 					<%} %>
 					
-				<%if(isSearch && dep_name == null) {%>
-					<li><a href="contMain.jsp?p=<%=endBlock+1%>&keyword=<%=keyword%>">&gt;</a><li>
-				<%} else if(isSearch && dep_name != null){ %>
-					<li><a href="contMain.jsp?p=<%=endBlock+1%>&dep_no=<%=dep_no%>&keyword=<%=keyword%>">&gt;</a><li>
-				<%} else if(dep_name != null) { %>
-					<li><a href="contMain.jsp?p=<%=endBlock+1%>&dep_no=<%=dep_no%>">&gt;</a><li>
+				<%if(isSearch) {%>
+					<li><a href="search.jsp?opt=<%=opt%>&p=<%=endBlock+1%>&keyword=<%=keyword%>">&gt;</a><li>
 				<%} else { %>
-					<li><a href="contMain.jsp?p=<%=endBlock+1%>">&gt;</a><li>
+					<li><a href="search.jsp?opt=<%=opt %>&p=<%=endBlock+1%>">&gt;</a><li>
 				<%} %>
 			</ul>
 		</div>
 		
 </div>
-<jsp:include page="/template/footer.jsp"></jsp:include>
+</body>

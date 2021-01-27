@@ -143,24 +143,6 @@
 	    vertical-align: middle;
 	}
 	
-	.favCk+label {
-	display: block;
-	width:24px;
-	height:24px;
-	border:none;
-	background: url('../image/nonfav.png') no-repeat 0 0px / contain;
-	text-align: center !important;
-	}
-	
-	.favCk:checked+label {
-		background: url('../image/fav.png') no-repeat 0 0px / contain;
-		 text-align: center !important;
-	}
-	
-	
-	.favCk {
-		display: none;
-	}
 </Style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
@@ -220,10 +202,10 @@
                         </ul>
                     </ul>
                     <ul>
-                        <li class="menu menu-title"><a href="">주소록</a></li>
+                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/contactList/contList.jsp">주소록</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="">나의 주소록</a></li>
-                            <li class="menu menu-detail"><a href="">직원 목록</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/contactList/contList.jsp">나의 주소록</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/contactList/contMain.jsp">직원 주소록</a></li>
                         </ul>
                     </ul>
                     <ul>
