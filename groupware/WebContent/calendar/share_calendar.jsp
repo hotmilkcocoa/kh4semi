@@ -159,7 +159,7 @@
         </div>
         <div class="row rel ">
             <span>내용</span>
-            <div class="data schContent" style="white-space:pre-wrap;"></div>
+            <div class="data schContent"></div>
         </div>
         <div class="row rel ">
             <span>장소</span>
@@ -422,7 +422,7 @@
 						openpop();
 						document.querySelector(".schName").innerText = "<%=schDto.getSch_name()%>";
 						document.querySelector(".schDateTime").innerText = "<%=sdf.format(schDto.getSch_start())+" - "+sdf.format(schDto.getSch_end())%>";
-						document.querySelector(".schContent").innerHTML = "<%=schDto.getSch_content()%>";
+						document.querySelector(".schContent").innerText = "<%=schDto.getSch_content()%>";
 						document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
 						document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
 						

@@ -43,7 +43,8 @@ public class ScheduleAddServlet extends HttpServlet{
 				scheduleDao.update(scheduleDto);
 			}
 			
-			resp.sendRedirect("calendar.jsp");
+			resp.getWriter().println("<script>window.history.go(-2)</script>");
+//			resp.sendRedirect("calendar.jsp?");
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);

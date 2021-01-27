@@ -100,21 +100,25 @@
             </div>
             <div class="row">
                 <input type="submit" value="신청">
-                <input type="button" value="취소" class="cancel">
+                <input type="button" value="취소" class="cancelBtn">
             </div>
         </fieldset>
     </form>
 </div>
 <script>
-	document.querySelector(".cancel").addEventListener("click", function(){
-		location.href = "vac_status.jsp";
+	document.querySelector(".cancelBtn").addEventListener("click", function(){
+		window.history.back();
 	});
 	document.querySelector("input[name=vac_end]").addEventListener("input", function(){
 		var vac_start = document.querySelector("input[name=vac_start]");
 		if(this.value < vac_start.value){
-			alert("종료 시점은 시작 시점보다 빠를 수 없습니다.");
+			alert("신청기간을 확인해주세요.");
 			this.value = vac_start.value;
 		}
 	});
+	<%if(request.getParameter("error")!=null){%>
+		alert("잔여 연차가 부족합니다.");
+	<%}%>
+
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include>

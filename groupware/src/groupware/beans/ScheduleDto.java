@@ -11,6 +11,7 @@ public class ScheduleDto {
 	private Timestamp sch_end;
 	private String sch_open;
 	private int emp_no;
+	private String sch_for_com;
 	
 	public ScheduleDto() {
 		// TODO Auto-generated constructor stub
@@ -78,6 +79,14 @@ public class ScheduleDto {
 
 	public void setEmp_no(int emp_no) {
 		this.emp_no = emp_no;
+	}
+
+	public String getSch_for_com() {
+		return sch_for_com;
+	}
+
+	public void setSch_for_com(String sch_for_com) {
+		this.sch_for_com = sch_for_com;
 	}
 	
 	
