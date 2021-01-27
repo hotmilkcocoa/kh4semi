@@ -260,4 +260,145 @@ public class ScheduleDao {
 	      con.close();
 	      return scheduleDtoList;
 	   }
+	   
+	 //회사일정 리스트(검색 결과)
+	   public List<ScheduleDto> select(String start, String end) throws Exception {
+	      Connection con = JdbcUtil.getConnection(USER, PW);
+	      
+	      String sql = "select * from schedule where sch_for_com = 'true' and sch_start between to_date(?) and to_date(?) order by sch_no desc";
+	      
+	      PreparedStatement ps = con.prepareStatement(sql);
+	      ps.setString(1, start);
+	      ps.setString(2, end);
+	      ResultSet rs = ps.executeQuery();
+	      
+	      List<ScheduleDto> scheduleDtoList = new ArrayList<>();
+	      
+	      while(rs.next()) {
+	         ScheduleDto scheduleDto = new ScheduleDto();
+	         scheduleDto.setSch_no(rs.getInt("sch_no"));
+	         scheduleDto.setSch_name(rs.getString("sch_name"));
+	         scheduleDto.setSch_content(rs.getString("sch_content"));
+	         scheduleDto.setSch_place(rs.getString("sch_place"));
+	         scheduleDto.setSch_start(rs.getTimestamp("sch_start"));
+	         scheduleDto.setSch_end(rs.getTimestamp("sch_end"));
+	         scheduleDto.setSch_open(rs.getString("sch_open"));
+	         scheduleDto.setEmp_no(rs.getInt("emp_no"));
+	         scheduleDto.setSch_for_com(rs.getString("sch_for_com"));
+	         
+	         scheduleDtoList.add(scheduleDto);
+	         
+	      }
+	      con.close();
+	      return scheduleDtoList;
+	   }
+	   //페이징을 이용한 검색
+	   public List<ScheduleDto> pagingList(String start, String end, int startRow, int endRow) throws Exception {
+	      Connection con = JdbcUtil.getConnection(USER, PW);
+	      
+	      String sql = "select * from(" +
+	                  "select rownum rn, TMP.* from(" +
+	                     "select * from schedule "
+	                        + "where sch_for_com = 'true' and sch_start between to_date(?) and to_date(?) "
+	                        + "order by sch_no desc" +
+	                     ")TMP" +
+	                  ") where rn between ? and ?";
+	      
+	      PreparedStatement ps = con.prepareStatement(sql);
+	      ps.setString(1, start);
+	      ps.setString(2, end);
+	      ps.setInt(3, startRow);
+	      ps.setInt(4, endRow);
+	      ResultSet rs = ps.executeQuery();
+	      
+	      List<ScheduleDto> scheduleDtoList = new ArrayList<>();
+	      
+	      while(rs.next()) {
+	         ScheduleDto scheduleDto = new ScheduleDto();
+	         scheduleDto.setSch_no(rs.getInt("sch_no"));
+	         scheduleDto.setSch_name(rs.getString("sch_name"));
+	         scheduleDto.setSch_content(rs.getString("sch_content"));
+	         scheduleDto.setSch_place(rs.getString("sch_place"));
+	         scheduleDto.setSch_start(rs.getTimestamp("sch_start"));
+	         scheduleDto.setSch_end(rs.getTimestamp("sch_end"));
+	         scheduleDto.setSch_open(rs.getString("sch_open"));
+	         scheduleDto.setEmp_no(rs.getInt("emp_no"));
+	         scheduleDto.setSch_for_com(rs.getString("sch_for_com"));
+	         
+	         scheduleDtoList.add(scheduleDto);
+	         
+	      }
+	      con.close();
+	      return scheduleDtoList;
+	   }
+	   
+	   //페이징을 이용한 목록
+	   public List<ScheduleDto> pagingList(int startRow, int endRow) throws Exception {
+	      Connection con = JdbcUtil.getConnection(USER, PW);
+	      
+	      String sql = "select * from(" +
+	                  "select rownum rn, TMP.* from(" +
+	                     "select * from schedule where sch_for_com = 'true' order by sch_no desc" +
+	                  ")TMP" +
+	               ") where rn between ? and ?";
+	      
+	      PreparedStatement ps = con.prepareStatement(sql);
+	      ps.setInt(1, startRow);
+	      ps.setInt(2, endRow);
+	      ResultSet rs = ps.executeQuery();
+	      
+	      List<ScheduleDto> scheduleDtoList = new ArrayList<>();
+	      
+	      while(rs.next()) {
+	         ScheduleDto scheduleDto = new ScheduleDto();
+	         scheduleDto.setSch_no(rs.getInt("sch_no"));
+	         scheduleDto.setSch_name(rs.getString("sch_name"));
+	         scheduleDto.setSch_content(rs.getString("sch_content"));
+	         scheduleDto.setSch_place(rs.getString("sch_place"));
+	         scheduleDto.setSch_start(rs.getTimestamp("sch_start"));
+	         scheduleDto.setSch_end(rs.getTimestamp("sch_end"));
+	         scheduleDto.setSch_open(rs.getString("sch_open"));
+	         scheduleDto.setEmp_no(rs.getInt("emp_no"));
+	         scheduleDto.setSch_for_com(rs.getString("sch_for_com"));
+	         
+	         scheduleDtoList.add(scheduleDto);
+	         
+	      }
+	      con.close();
+	      return scheduleDtoList;
+	      
+	   }
+	   
+	   //검색 개수를 구하는 메소드
+	   public int getCount(String start, String end) throws Exception{
+	      Connection con = JdbcUtil.getConnection(USER, PW);
+	      
+	      String sql ="select count(*) from schedule where sch_for_com = 'true' and sch_start between to_date(?) and to_date(?)";
+	      
+	      PreparedStatement ps = con.prepareStatement(sql);
+	      ps.setString(1, start);
+	      ps.setString(2, end);
+	      ResultSet rs = ps.executeQuery();
+	      rs.next();
+	      int count = rs.getInt(1); 
+	   
+	      con.close();
+	      return count;
+	      
+	   }
+	   
+	   //목록 개수를 구하는 메소드
+	   public int getCount() throws Exception{
+	      Connection con = JdbcUtil.getConnection(USER, PW);
+	      
+	      String sql = "select count(*) from schedule where sch_for_com = 'true'";
+	      
+	      PreparedStatement ps = con.prepareStatement(sql);
+	      ResultSet rs = ps.executeQuery();
+	      rs.next();
+	      int count = rs.getInt(1);
+	   
+	      con.close();
+	      return count;
+	   }
 }
