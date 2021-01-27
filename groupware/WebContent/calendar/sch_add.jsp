@@ -170,6 +170,13 @@
 	document.querySelector(".cancelBtn").addEventListener("click", function(){
 		window.history.back();
 	});
+	document.forms[0].addEventListener("submit", function(e){
+		e.preventDefault();
+		var str = document.querySelector(".textarea").value;
+		str = str.replace(/\n/g, '<br/>');
+		document.querySelector(".textarea").value = str;
+		this.submit();
+	});
 	
 </script>
             
