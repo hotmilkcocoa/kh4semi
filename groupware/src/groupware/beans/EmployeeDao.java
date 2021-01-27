@@ -87,7 +87,6 @@ public class EmployeeDao {
 			employeeDto.setEmp_auth(rs.getString("emp_auth"));
 			employeeDto.setEmp_state(rs.getString("emp_state"));
 			employeeDto.setEmp_etc(rs.getString("emp_etc"));
-			
 		}
 		else {
 			employeeDto = null;
@@ -200,7 +199,7 @@ public class EmployeeDao {
 	}
 	
 	//사원 정보 수정 메소드
-	//데이터 (사원번호, 이메일, 전화번호, 주소, 부서, 직급, 급여, 사수, 권한, 상태, 입사일, 기타사항)
+	//데이터 (사원번호, 이메일, 전화번호, 주소, 부서, 직급, 급여, 사수, 권한, 상태, 기타사항)
 	public void update(EmployeeDto employeeDto) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
@@ -239,6 +238,8 @@ public class EmployeeDao {
 		con.close();
 		
 	}
+	
+	
 	
 	//페이징을 이용한 검색
 	public List<EmployeeDto> pagingList(String type, String keyword, int startRow, int endRow) throws Exception {
@@ -318,6 +319,124 @@ public class EmployeeDao {
 		
 	}
 	
+	//페이징을 이용한 검색(type제외)
+	public List<EmployeeDto> pagingList(int startRow, int endRow, String keyword) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from(" +
+						"select rownum rn, TMP.* from(" +
+							"select * from employee "
+								+ "where (emp_name || emp_dep || emp_phone || emp_email) like ? "
+								+ "order by emp_no desc" +
+							")TMP" +
+						") where rn between ? and ?";
+		
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, "%"+keyword+"%");
+		ps.setInt(2, startRow);
+		ps.setInt(3, endRow);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+	}
+	
+	//페이징을 이용한 목록(부서)
+	public List<EmployeeDto> pagingList(String emp_dep, int startRow, int endRow) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from(" +
+						"select rownum rn, TMP.* from(" +
+							"select * from employee where emp_dep = ? order by emp_no desc" +
+						")TMP" +
+					") where rn between ? and ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_dep);
+		ps.setInt(2, startRow);
+		ps.setInt(3, endRow);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+		
+	}
+	
+	//페이징을 이용한 검색(부서/type제외)
+	public List<EmployeeDto> pagingList(String emp_dep, int startRow, int endRow, String keyword) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from (" + 
+						"select rownum rn, TMP.* from(" + 
+							"select * from(select * from employee where emp_dep = ?) " + 
+							"where (emp_name || emp_phone || emp_email) like ?" + 
+						")TMP" + 
+						")where rn between ? and ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_dep);
+		ps.setString(2, "%" + keyword + "%");
+		ps.setInt(3, startRow);
+		ps.setInt(4, endRow);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+		
+	}
+	
 	//검색 개수를 구하는 메소드
 	public int getCount(String type, String keyword) throws Exception{
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
@@ -327,6 +446,23 @@ public class EmployeeDao {
 		sql=sql.replace("#1", type);
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, keyword);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1); 
+	
+		con.close();
+		return count;
+		
+	}
+	
+	//검색 개수를 구하는 메소드(type제외)
+	public int getCount(String keyword) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql ="select count(*) from employee where (emp_name || emp_phone || emp_email ||emp_dep) like ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, "%"+keyword+"%");
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		int count = rs.getInt(1); 
@@ -351,4 +487,66 @@ public class EmployeeDao {
 		return count;
 	}
 	
+	//부서이름으로 조회한 목록 개수
+	public int getDepCount(String emp_dep) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select count(*) from employee where emp_dep=?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_dep);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+	
+		con.close();
+		return count;
+	}
+	
+	//부서이름+검색으로 조회한 목록 개수
+	public int getDepCount(String emp_dep, String keyword) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select count(*) from employee where emp_dep=? and (emp_name || emp_phone || emp_email ||emp_dep) like ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_dep);
+		ps.setString(2, "%"+keyword+"%");
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int count = rs.getInt(1);
+	
+		con.close();
+		return count;
+	}
+	
+	//목록 구하는 메소드(부서이름)
+	public List<EmployeeDto> getDep(String emp_dep) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_dep = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_dep);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		while(rs.next()) {
+			EmployeeDto empDto = new EmployeeDto();
+			empDto.setEmp_no(rs.getInt("emp_no"));
+			empDto.setEmp_name(rs.getString("emp_name"));
+			empDto.setEmp_dep(rs.getString("emp_dep"));
+			empDto.setEmp_title(rs.getString("emp_title"));
+			empDto.setEmp_auth(rs.getString("emp_auth"));
+			empDto.setEmp_state(rs.getString("emp_state"));
+			empDto.setEmp_email(rs.getString("emp_email"));
+			empDto.setEmp_phone(rs.getString("emp_phone"));
+			
+			list.add(empDto);
+		}
+		
+		con.close();
+		return list;
+		
+	}
 }

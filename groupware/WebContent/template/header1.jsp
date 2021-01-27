@@ -1,5 +1,3 @@
-<%@page import="groupware.beans.EmployeeDto"%>
-<%@page import="groupware.beans.EmployeeDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -8,7 +6,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/hg19910.css">
 <Style>
 	/*임시 모든 구역 구분 선(테스트)*/	
 	main, header, section, footer, article, aside, div, label, table, th, td{
@@ -31,7 +28,7 @@
 	/*메인 영역 : 폭 1200px, 높이 600px 고정*/
 	main{
 	    width: 1200px;
-	    height: 600px;
+	   	height: 600px;
 	    margin: auto;
 	}
 	/*헤더 영역 : 높이 80px 고정*/
@@ -83,8 +80,7 @@
 	    float: left;
 	    width: 25%;
 	}
-	header .profile th,
-	header .profile td{
+	header .profile th, td{
 	    width: 85px;
 	    height: 29px;
 	}
@@ -145,23 +141,11 @@
 	footer img{
 	    vertical-align: middle;
 	}
-	
 </Style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
 
 </script>
-
-<%
-//	int emp_no = (int) request.getSession().getAttribute("check");
-	int emp_no = 21;
-	EmployeeDao empDao = new EmployeeDao();
-	EmployeeDto empDto = empDao.find(emp_no);
-	
-	//부서장인지 인사부 팀장인지 검사
-	boolean isHrhead = empDto.getEmp_dep().equals("인사부") && empDto.getEmp_title().equals("팀장");
-	boolean isDephead = empDto.getEmp_title().equals("팀장");
-%>
 </head>
 <body>
 	<main>
@@ -197,7 +181,7 @@
                             <tr>
                                 <td><a href="<%=request.getContextPath()%>"><img alt="홈버튼" src="<%=request.getContextPath()%>/image/house.svg"></a></td>
                                 <td><a href="#"><img alt="쪽지버튼" src="<%=request.getContextPath()%>/image/chat.svg"></a></td>
-                                <td><a href="<%=request.getContextPath()%>/admin/home.jsp"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
+                                <td><a href="#"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
                             </tr>
                         </tbody>   
                     </table>
@@ -209,27 +193,25 @@
             <aside>
                 <div class="menu">
                     <ul>
-                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">일정</a></li>
+                        <li class="menu menu-title"><a href="">일정</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">내 일정</a></li>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/share_calendar.jsp">공유 일정</a></li>
+                            <li class="menu menu-detail"><a href="">내 일정</a></li>
+                            <li class="menu menu-detail"><a href="">일정 공유</a></li>
                         </ul>
                     </ul>
                     <ul>
-                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/contactList/contList.jsp">주소록</a></li>
+                        <li class="menu menu-title"><a href="">주소록</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/contactList/contList.jsp">나의 주소록</a></li>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/contactList/contMain.jsp">직원 주소록</a></li>
+                            <li class="menu menu-detail"><a href="#">나의 주소록</a></li>
+                            <li class="menu menu-detail"><a href="#">직원 목록</a></li>
                         </ul>
                     </ul>
                     <ul>
-                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태</a></li>
+                        <li class="menu menu-title"><a href="">근태</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태 현황</a></li>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_status.jsp">휴가 현황</a></li>
-                            <%if(isDephead || isHrhead){ %>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_app.jsp">휴가 승인</a></li>
-                        	<%} %>
+                            <li class="menu menu-detail"><a href="">근태 현황</a></li>
+                            <li class="menu menu-detail"><a href="">휴가 신청</a></li>
+                            <li class="menu menu-detail"><a href="">휴가 현황</a></li>
                         </ul>
                     </ul>
                     <ul>
