@@ -40,7 +40,6 @@
         position: fixed;
         top: 30px;
         left: 30px;
-        z-index: 1000;
         background-color: white;
     }
     .viewheader{
@@ -69,7 +68,6 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 999;
     }
     .closeBtn{
     	position: absolute;
@@ -79,7 +77,13 @@
     .timeline{
     	width: 70px;
     }
-    .
+    .listpop{
+    	position: fixed;
+    	width: 150px;
+    	padding: 0.5rem;
+    	border: 1px solid lightgray;
+    	background-color: white;
+    }
 </style>
 
 <%
@@ -87,19 +91,9 @@
 	int emp_no = 3;
 
 	String calType = request.getParameter("calType")!=null ? request.getParameter("calType") : "monthly";
+	String date = request.getParameter("date");
 	
-	int year, month, day;
-	if(request.getParameter("year")!=null){
-		year = Integer.parseInt(request.getParameter("year"));
-		month = Integer.parseInt(request.getParameter("month"));
-		day = Integer.parseInt(request.getParameter("day"));		
-	} else{
-		year = 0;
-		month = 0;
-		day = 0;
-	}
-	
-	LocalDate tempDate = year==0 ? LocalDate.now() : LocalDate.of(year, month, day);
+	LocalDate tempDate = date==null ? LocalDate.now() : LocalDate.parse(date);
 	LocalDate startOfCal;
 	LocalDate endOfCal;
 	int index;
@@ -134,6 +128,7 @@
 		<input type="button" value="주간" id="weekly" class="changeType">
 		<input type="button" value="월간" id="monthly" class="changeType">
 		<input type="button" value="일정 추가" id="sch_add">
+		<input type="button" value="캘린더 설정" id="sch_manage">
 	</div>
 	<hr>
 	<div class="calendar">
@@ -182,6 +177,15 @@
 			parent.removeChild(parent.firstChild);
 		}
 	}
+	function getDateString(date){
+		var year = date.getFullYear();
+		var month = (date.getMonth() + 1);
+		month = month < 10 ? "0" + month : month;
+		var day = date.getDate();
+		day = day < 10 ? "0" + day : day;
+		
+		return year + "-" + month + "-" + day;
+	}
 	function newdiv(){
 		var newdiv = document.createElement("div");
 		return newdiv;
@@ -199,8 +203,8 @@
 	//일간, 주간, 월간 버튼 클릭 시 캘린더 타입 변경
 	document.querySelectorAll(".changeType").forEach(function (ele) {
 		ele.addEventListener("click", function () {
-			var link = "calendar.jsp?calType={calType}&year={year}&month={month}&day={day}";
-			link = link.replace("{calType}", this.getAttribute("id")).replace("{year}", temp_date.getFullYear()).replace("{month}", (temp_date.getMonth()+1)).replace("{day}", temp_date.getDate());
+			var link = "calendar.jsp?calType={calType}&date={date}";
+			link = link.replace("{calType}", this.getAttribute("id")).replace("{date}", getDateString(temp_date));
 			location.href = link;
 		});
 	});
@@ -217,8 +221,8 @@
 			} else {
 				temp_date.setDate(temp_date.getDate() + val);
 			}
-			var link = "calendar.jsp?calType={calType}&year={year}&month={month}&day={day}";
-			link = link.replace("{calType}", calType).replace("{year}", temp_date.getFullYear()).replace("{month}", (temp_date.getMonth()+1)).replace("{day}", temp_date.getDate());
+			var link = "calendar.jsp?calType={calType}&date={date}";
+			link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
 			location.href = link;
 		});
 	});
@@ -226,8 +230,8 @@
 	// 오늘 클릭 시 오늘 날짜로 페인트
 	document.querySelector(".today").addEventListener("click", function () {
 		temp_date = new Date(today);
-		var link = "calendar.jsp?calType={calType}&year={year}&month={month}&day={day}";
-		link = link.replace("{calType}", calType).replace("{year}", temp_date.getFullYear()).replace("{month}", (temp_date.getMonth()+1)).replace("{day}", temp_date.getDate());
+		var link = "calendar.jsp?calType={calType}&date={date}";
+		link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
 		location.href = link;
 	});
 
@@ -280,7 +284,13 @@
 				var listCount = newdiv();
 				calTdDiv.append(listCount);
 				listCount.classList.add("listCount");
+				listCount.classList.add("cursor-pointer");
 				listCount.classList.add("right");
+				
+				var listpop = newdiv();
+				calTdDiv.append(listpop);
+				listpop.classList.add("listpop");
+				listpop.classList.add("hide");
 				
 				start.setDate(start.getDate() + 1);
 			}
@@ -370,77 +380,96 @@
 	
 	//일정추가 버튼 클릭 시 일정 추가 페이지로
 	document.querySelector("#sch_add").addEventListener("click", function(){
-		location.href = "sch_add.jsp?date="+"<%=tempDate%>";
+		location.href = "sch_add.jsp?calType=<%=calType%>&date="+"<%=tempDate%>";
+	});
+	document.querySelector("#sch_manage").addEventListener("click", function(){
+		location.href = "sch_manage.jsp";
 	});
 	
 	//커서 위치에 일정상세 팝업 열기
-	function openpop(){
-		var viewpop = document.querySelector(".viewpop");
-        viewpop.style.left = event.pageX+"px";
-        viewpop.style.top = event.pageY+"px";
-        viewpop.classList.remove("hide");
-        document.querySelector(".blurarea").classList.remove("hide");
+	function openpop(ele, zindex){
+		ele.style.left = event.pageX+"px";
+		ele.style.top = event.pageY+"px";
+		ele.style.zIndex = zindex;
+		ele.classList.remove("hide");
+		
+		var blurarea = newdiv();
+		blurarea.style.zIndex = zindex - 1;
+		blurarea.classList.add("blurarea");
+        document.querySelector("main").append(blurarea);
+        
+        blurarea.addEventListener("click", function(){
+			ele.classList.add("hide");
+			this.remove();
+        });
 	}
-	//팝업 닫기
-	function closepop(){
-		document.querySelector(".viewpop").classList.add("hide");
-		document.querySelector(".blurarea").classList.add("hide");
-	};
-	document.querySelector(".blurarea").addEventListener("click", closepop);
-	document.querySelector(".closeBtn").addEventListener("click", closepop);
-	
 <%
 	int i = 0;
 	for(LocalDate key : schMap.keySet()){
 		List<ScheduleDto> schList= schMap.get(key);%>
 		
+		//타임라인, 테이블 날짜 클릭시 일정 추가로 이동 이벤트
 		if(calType!="daily"){
 			document.querySelectorAll(".calTdDivDate")[<%=i%>].addEventListener("click", function(){
-				location.href = "sch_add.jsp?date=<%=key.toString()%>";
+				location.href = "sch_add.jsp?calType=<%=calType%>&date=<%=key.toString()%>";
 			});			
 		} else{
 			document.querySelectorAll(".timeline").forEach(function(ele){
 				ele.addEventListener("click", function(){
-					location.href = "sch_add.jsp?date=<%=key.toString()%>&start_time="+this.innerText;
+					location.href = "sch_add.jsp?calType=<%=calType%>&date=<%=key.toString()%>&start_time="+this.innerText;
 				});
 			});
 		}
+		//리스트에 일정이 있을 시 실행
 		<%if(schList != null){
 			for(ScheduleDto schDto : schList){%>
 				var calTdDivSchList = calType=="daily" ? document.querySelectorAll(".calTdDivSchList")[<%=schDto.getSch_start().toLocalDateTime().toLocalTime().getHour()%>] : document.querySelectorAll(".calTdDivSchList")[<%=i%>];
+				var listpop = document.querySelectorAll(".listpop")[<%=i%>];
 				
-				if(calTdDivSchList.children.length < 3){
-					var newSch = document.createElement("div");
+				var newSch = document.createElement("div");
+				//월간일 때 일정이 3개 초과면 리스트 팝업에 추가
+				if(calType=="monthly" && calTdDivSchList.children.length>2){
+					listpop.append(newSch);
+				} else{
 					calTdDivSchList.append(newSch);					
-					newSch.classList.add("schedule");
-					newSch.classList.add("cursor-pointer");
-					newSch.innerText = "<%=schDto.getSch_name()%>";
+				}
+				newSch.classList.add("schedule");
+				newSch.classList.add("cursor-pointer");
+				newSch.innerText = "<%=schDto.getSch_name()%>";
+				
+				//일정 클릭 이벤트
+				//팝업 내용 수정하고 열기
+				newSch.addEventListener("click", function(){
+					var viewpop = document.querySelector(".viewpop");
+					openpop(viewpop, 200);
+					document.querySelector(".schName").innerText = "<%=schDto.getSch_name()%>";
+					document.querySelector(".schDateTime").innerText = "<%=sdf.format(schDto.getSch_start())+" - "+sdf.format(schDto.getSch_end())%>";
+					document.querySelector(".schContent").innerHTML = "<%=schDto.getSch_content()%>";
+					document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
+					document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
 					
-					//일정 클릭 이벤트
-					//팝업 내용 수정하고 열기
-					newSch.addEventListener("click", function(){
-						openpop();
-						document.querySelector(".schName").innerText = "<%=schDto.getSch_name()%>";
-						document.querySelector(".schDateTime").innerText = "<%=sdf.format(schDto.getSch_start())+" - "+sdf.format(schDto.getSch_end())%>";
-						document.querySelector(".schContent").innerHTML = "<%=schDto.getSch_content()%>";
-						document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
-						document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
-						
-						document.querySelector(".viewDelBtn").addEventListener("click", function(){
-							location.href = "sch_del.do?only&sch_no=<%=schDto.getSch_no()%>";
-						});
-						document.querySelector(".viewEditBtn").addEventListener("click", function(){
-							location.href = "sch_add.jsp?edit&sch_no=<%=schDto.getSch_no()%>";
-						});
+					document.querySelector(".viewDelBtn").addEventListener("click", function(){
+						location.href = "sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
 					});
-				}
-					
-				if(calType == "monthly"){
-					document.querySelectorAll(".listCount")[<%=i%>].innerText = "<%=schList.size() > 3 ? schList.size()-3 : ""%>";
-				}
+					document.querySelector(".viewEditBtn").addEventListener("click", function(){
+						location.href = "sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
+					});
+				});
 			<%
 			}
-		}
+			%>
+			//리스트 팝업 열기
+			if(calType == "monthly"){
+				var listCount = document.querySelectorAll(".listCount")[<%=i%>];
+				listCount.innerText = "<%=schList.size() > 3 ? schList.size()-3 : ""%>";
+				listCount.addEventListener("click", function(){
+					var listpop = document.querySelectorAll(".listpop")[<%=i%>];
+					var daterow = newdiv();
+					date
+					openpop(listpop, 100);
+				});
+			}
+		<%}
 		i++;
 	}
 %>

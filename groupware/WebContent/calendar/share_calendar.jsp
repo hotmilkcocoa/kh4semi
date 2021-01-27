@@ -117,7 +117,7 @@
 	endOfCal = startOfCal.plusDays(index);
 	
 	ScheduleDao scheduleDao = new ScheduleDao();
-	TreeMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.select(emp_no, index, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
+	TreeMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.selectForCom(index, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	
@@ -134,6 +134,7 @@
 		<input type="button" value="주간" id="weekly" class="changeType">
 		<input type="button" value="월간" id="monthly" class="changeType">
 		<input type="button" value="일정 추가" id="sch_add">
+		<input type="button" value="캘린더 설정" id="sch_manage">
 	</div>
 	<hr>
 	<div class="calendar">
@@ -372,6 +373,9 @@
 	document.querySelector("#sch_add").addEventListener("click", function(){
 		location.href = "sch_add.jsp?date="+"<%=tempDate%>";
 	});
+	document.querySelector("#sch_manage").addEventListener("click", function(){
+		location.href = "sch_manage.jsp";
+	});
 	
 	//커서 위치에 일정상세 팝업 열기
 	function openpop(){
@@ -422,7 +426,7 @@
 						openpop();
 						document.querySelector(".schName").innerText = "<%=schDto.getSch_name()%>";
 						document.querySelector(".schDateTime").innerText = "<%=sdf.format(schDto.getSch_start())+" - "+sdf.format(schDto.getSch_end())%>";
-						document.querySelector(".schContent").innerText = "<%=schDto.getSch_content()%>";
+						document.querySelector(".schContent").innerHTML = "<%=schDto.getSch_content()%>";
 						document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
 						document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
 						

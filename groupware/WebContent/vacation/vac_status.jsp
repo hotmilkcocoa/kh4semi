@@ -108,7 +108,7 @@
 </div>
 <div class="row">
 	<ul class="pagination">
-		<li><a href="vac_status.jsp?p=<%=startBlock-1%>">&lt;</a></li>
+		<li><a class="paginatin arrow" href="vac_status.jsp?p=<%=startBlock-1%>">&lt;</a></li>
 		
 		<%for(int i=startBlock; i<=endBlock; i++){ %>
 			<%if(i == p){ %>
@@ -116,11 +116,11 @@
 			<%}else{ %>
 			<li>
 			<%} %>
-			<a href="vac_status.jsp?p=<%=i%>"><%=i%></a>
+			<a class="pagination num" href="vac_status.jsp?p=<%=i%>"><%=i%></a>
 			</li>
 		<%} %>
 		
-		<li><a href="vac_status.jsp?p=<%=endBlock+1 > pageSize ? pageSize : endBlock+1%>">&gt;</a></li>
+		<li><a class="paginatin arrow" href="vac_status.jsp?p=<%=endBlock+1 > pageSize ? pageSize : endBlock+1%>">&gt;</a></li>
 	</ul>
 </div>
 <div class="row right">
