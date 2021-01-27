@@ -17,7 +17,7 @@ public class DataSettingDao {
 	public void depAdd(DataSettingDto dataSettingDto) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
-		String sql = "insert into department values(dep_seq.nextval, ?)";
+		String sql = "insert into department values(dep_seq.nextval, ?, '')";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, dataSettingDto.getDep_name());

@@ -1,15 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
-	window.onload = function() {
-		
-		submit_btn.onclick = function(){
-			document.form.target = opener.name;
-			document.form.submit();
-			self.close();
-		}
-	};
+	$(function() {
+
+		$("#submit_btn").click(function(){
+				document.form.target = opener.name;
+				document.form.submit();
+				self.close();
+			
+		});
+	});
 </script>
 <div class="outbox">
 		<div class="row center">
@@ -56,7 +58,7 @@
 	
 	<div class="row center" >
 			<input type="button" value="취소" onclick="window.close()" class="input input-inline">
-			<input type="button" value="추가" id = "submit_btn" class="input input-inline" onclick="self.close()">
+			<input type="button" value="추가" id = "submit_btn" class="input input-inline"">
 		</div>
 </div>
 </div>
