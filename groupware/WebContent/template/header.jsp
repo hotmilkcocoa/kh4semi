@@ -176,12 +176,12 @@
                         <tbody>
                             <tr>
                                 <td rowspan="2" class="center"><img alt="직원사진" id="profileImg" class="img img-circle" src="<%=request.getContextPath()%>/image/profile_img.png"></td>
-                                <th>이름</th>
-                                <th>직급</th>
+                                <th><%=empDto.getEmp_name()%></th>
+                                <th><%=empDto.getEmp_title()%></th>
                                 <td rowspan="2" class="center logoutBtn"><button>로그아웃</button></td>
                             </tr>
                             <tr>
-                                <th>부서</th>
+                                <th><%=empDto.getEmp_dep()%></th>
                                 <td class="center"><a href="#"><img alt="개인정보수정" src="<%=request.getContextPath()%>/image/cog.svg" width="20" height="20"></a></td>     
                             </tr>
                         </tbody>
@@ -198,7 +198,7 @@
                     <table class="table table-border">
                         <tbody>
                             <tr>
-                                <td><a href="<%=request.getContextPath()%>"><img alt="홈버튼" src="<%=request.getContextPath()%>/image/house.svg"></a></td>
+                                <td><a href="<%=request.getContextPath()%>/main.jsp"><img alt="홈버튼" src="<%=request.getContextPath()%>/image/house.svg"></a></td>
                                 <td><a href="#"><img alt="쪽지버튼" src="<%=request.getContextPath()%>/image/chat.svg"></a></td>
                                 <td><a href="<%=request.getContextPath()%>/admin/home.jsp"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
                             </tr>
