@@ -31,8 +31,8 @@
 		border:1px solid black;
         display:block;
 		position: absolute;
-		top:50px;
-        left:300px;
+		top:5%;
+        left:23%;
         width: 1000px;
         height: 600px;		
 	}
