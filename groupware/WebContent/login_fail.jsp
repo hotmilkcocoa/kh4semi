@@ -95,7 +95,8 @@
 						<label>ID</label>
 						<input type="text" name="emp_id" class="input" required>
 					</div>
-					<div class="row">							<label>Password</label>
+					<div class="row">							
+						<label>Password</label>
 						<input type="password" name="emp_pw" class="input" required>
 					</div>  					 
 							
