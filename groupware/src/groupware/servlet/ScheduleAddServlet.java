@@ -23,7 +23,7 @@ public class ScheduleAddServlet extends HttpServlet{
 			
 			ScheduleDto scheduleDto = new ScheduleDto();
 			scheduleDto.setSch_name(req.getParameter("sch_name"));
-			scheduleDto.setSch_content(req.getParameter("sch_content"));
+			scheduleDto.setSch_content(req.getParameter("sch_content").replace("\r\n", "<br>"));
 			scheduleDto.setSch_place(req.getParameter("sch_place"));
 			scheduleDto.setSch_open(req.getParameter("sch_open"));
 			
@@ -43,7 +43,8 @@ public class ScheduleAddServlet extends HttpServlet{
 				scheduleDao.update(scheduleDto);
 			}
 			
-			resp.sendRedirect("calendar.jsp");
+			String link = "calendar.jsp?calType={1}&date={2}".replace("{1}", req.getParameter("calType")).replace("{2}", req.getParameter("sch_start_date"));
+			resp.sendRedirect(link);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);

@@ -59,7 +59,7 @@
             <div class="row rel">
                 <span>구분</span>
                 <div class="data">
-                    <select class="dataInput select" name="vac_category">
+                    <select class="dataInput select" name="vac_category" required>
                         <option <%if(isEdit && vacationDto.getVac_category().equals("연차")){ %>selected<%} %>>연차</option>
                         <option <%if(isEdit && vacationDto.getVac_category().equals("반차")){ %>selected<%} %>>반차</option>
                     </select>
@@ -81,21 +81,21 @@
             <div class="row rel">
                 <span>신청기간</span>
                 <div class="data">
-                    <input class="dataInput date" type="date" name="vac_start" <%if(isEdit){ %>value="<%=vacationDto.getVac_start()%>"<%} %>>
+                    <input class="dataInput date" type="date" name="vac_start" required <%if(isEdit){ %>value="<%=vacationDto.getVac_start()%>"<%} %>>
                      - 
-                    <input class="dataInput date" type="date" name="vac_end" <%if(isEdit){ %>value="<%=vacationDto.getVac_end()%>"<%} %>>
+                    <input class="dataInput date" type="date" name="vac_end" required <%if(isEdit){ %>value="<%=vacationDto.getVac_end()%>"<%} %>>
                 </div>
             </div>
             <div class="row rel">
                 <span>사유</span>
                 <div class="data">
-                    <input class="dataInput text" type="text" name="vac_reason"  <%if(isEdit){ %>value="<%=vacationDto.getVac_reason()%>"<%} %>>
+                    <input class="dataInput text" type="text" name="vac_reason" required <%if(isEdit){ %>value="<%=vacationDto.getVac_reason()%>"<%} %>>
                 </div>
             </div>
             <div class="row rel">
                 <span>기타사항</span>
                 <div class="data">
-                    <textarea class="dataInput textarea" name="vac_comment"> <%if(isEdit){ %><%=vacationDto.getVac_comment()%><%} %></textarea>
+                    <textarea class="dataInput textarea" name="vac_comment" required> <%if(isEdit){ %><%=vacationDto.getVac_comment()%><%} %></textarea>
                 </div>
             </div>
             <div class="row">
@@ -109,12 +109,18 @@
 	document.querySelector(".cancelBtn").addEventListener("click", function(){
 		window.history.back();
 	});
-	document.querySelector("input[name=vac_end]").addEventListener("input", function(){
-		var vac_start = document.querySelector("input[name=vac_start]");
-		if(this.value < vac_start.value){
-			alert("종료 시점은 시작 시점보다 빠를 수 없습니다.");
-			this.value = vac_start.value;
-		}
+	var vacDate = document.querySelectorAll(".dataInput.date");
+	vacDate.forEach(function(ele){
+		ele.addEventListener("input", function(){
+			if(vacDate[1].value < vacDate[0].value && vacDate[1].value){
+				alert("신청기간을 확인해주세요.");
+				vacDate[1].value = vacDate[0].value;
+			}
+		});
 	});
+	<%if(request.getParameter("error")!=null){%>
+		alert("잔여 연차가 부족합니다.");
+	<%}%>
+
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include>
