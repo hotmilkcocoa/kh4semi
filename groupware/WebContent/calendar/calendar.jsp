@@ -26,10 +26,12 @@
 		font-size: 14px;
 	}
 	.monthTd{
-		width: 140px;
-		height: 100px;
+		height: 80px;	
 	}
-	.schedule{
+	.monthTd, .monthDayTableTd{
+		width: 142px;
+	}
+	.monthTd .schedule{
 		max-width: 130px;
 		overflow: hidden;
 	}
@@ -78,12 +80,22 @@
     	width: 70px;
     }
     .listpop{
-    	position: fixed;
-    	width: 150px;
-    	padding: 0.5rem;
-    	border: 1px solid lightgray;
-    	background-color: white;
-    }
+	    position: fixed;
+	    width: 150px;
+	    border: 1px solid lightgray;
+	    background-color: white;
+	    font-size: 14px;
+	    padding: 0.25rem;
+	}
+	.schedule{
+		font-weight: bold;
+		margin-left: 0.5rem;
+		overflow: hidden;
+	}
+	.pop>div{
+		word-break: break-all;
+		padding-right: 30px;
+	}
 </style>
 
 <%
@@ -142,7 +154,7 @@
 		</div>
 	</div>
 </div>
-<div class="viewpop hide">
+<div class="viewpop pop hide">
 	<input type="button" class="closeBtn" value="X">
     <div class="viewheader">
         <div class="data schName"></div>
@@ -260,6 +272,7 @@
 			for (var j = 0; j < 7; j++) {
 				if (!dayTable.firstChild) {
 					var dayTableTb = document.createElement("td");
+					dayTableTb.classList.add("monthDayTableTd");
 					dayTableTb.innerHTML = dayArr[j];
 					dayTableRow.append(dayTableTb);
 				}
@@ -289,8 +302,19 @@
 				
 				var listpop = newdiv();
 				calTdDiv.append(listpop);
+				listpop.innerHTML = '<input type="button" class="closeBtn" value="X">';
 				listpop.classList.add("listpop");
+				listpop.classList.add("pop");
 				listpop.classList.add("hide");
+				
+				var listpopDate = newdiv();
+				listpop.append(listpopDate);
+				listpopDate.classList.add("listpopDate");
+				listpopDate.innerText = getDateString(start);
+				
+				var listpopContainer = newdiv();
+				listpop.append(listpopContainer);
+				listpopContainer.classList.add("listpopContainer");
 				
 				start.setDate(start.getDate() + 1);
 			}
@@ -402,6 +426,11 @@
 			ele.classList.add("hide");
 			this.remove();
         });
+        
+        ele.children[0].addEventListener("click", function(){
+        	ele.classList.add("hide");
+        	blurarea.remove();
+        });
 	}
 <%
 	int i = 0;
@@ -424,12 +453,12 @@
 		<%if(schList != null){
 			for(ScheduleDto schDto : schList){%>
 				var calTdDivSchList = calType=="daily" ? document.querySelectorAll(".calTdDivSchList")[<%=schDto.getSch_start().toLocalDateTime().toLocalTime().getHour()%>] : document.querySelectorAll(".calTdDivSchList")[<%=i%>];
-				var listpop = document.querySelectorAll(".listpop")[<%=i%>];
+				var listpopContainer = document.querySelectorAll(".listpopContainer")[<%=i%>];
 				
 				var newSch = document.createElement("div");
 				//월간일 때 일정이 3개 초과면 리스트 팝업에 추가
 				if(calType=="monthly" && calTdDivSchList.children.length>2){
-					listpop.append(newSch);
+					listpopContainer.append(newSch);
 				} else{
 					calTdDivSchList.append(newSch);					
 				}
@@ -464,8 +493,6 @@
 				listCount.innerText = "<%=schList.size() > 3 ? schList.size()-3 : ""%>";
 				listCount.addEventListener("click", function(){
 					var listpop = document.querySelectorAll(".listpop")[<%=i%>];
-					var daterow = newdiv();
-					date
 					openpop(listpop, 100);
 				});
 			}

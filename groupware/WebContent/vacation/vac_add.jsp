@@ -19,21 +19,17 @@
 	AnnualDto annualDto = annualDao.find(emp_no);
 %>
 
-<h1 class="title center">2021.1</h1>
-<hr>
 <div class="row right">
  	입사일 : <%=annualDao.getHireDate(emp_no) %>
 </div>
 <div class="row center">
     <table class="table table-border vacationTable">
         <tr>
-            <td>발생 월차</td>
             <td>총 연차</td>
             <td>사용 연차</td>
             <td>잔여 연차</td>
         </tr>
         <tr>
-            <td>?</td>
             <td><%=annualDto.getAnn_occurred() %></td>
             <td><%=annualDto.getAnn_used() %></td>
             <td><%=annualDto.getAnn_occurred() - annualDto.getAnn_used() %></td>
@@ -82,13 +78,13 @@
                 <span>신청기간</span>
                 <div class="data">
                     <input class="dataInput date" type="date" name="vac_start" required <%if(isEdit){ %>value="<%=vacationDto.getVac_start()%>"<%} %>>
-                     - 
+                    <span class="dash">-</span> 
                     <input class="dataInput date" type="date" name="vac_end" required <%if(isEdit){ %>value="<%=vacationDto.getVac_end()%>"<%} %>>
                 </div>
             </div>
             <div class="row rel">
                 <span>사유</span>
-                <div class="data">
+                <div class="hyphen">
                     <input class="dataInput text" type="text" name="vac_reason" required <%if(isEdit){ %>value="<%=vacationDto.getVac_reason()%>"<%} %>>
                 </div>
             </div>

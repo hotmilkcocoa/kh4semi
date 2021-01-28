@@ -8,6 +8,11 @@
 <%@page import="groupware.util.Util"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<style>
+	.workingHourTable{
+		font-size: 14px;
+	}
+</style>
 
 <jsp:include page="/template/header.jsp"></jsp:include>
 <div class="scrollbox">

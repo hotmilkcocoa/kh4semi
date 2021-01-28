@@ -44,21 +44,17 @@
 	if(endBlock > pageSize) endBlock = pageSize;
 %>
 
-<h1 class="title center">2021.1</h1>
-<hr>
 <div class="row right">
  	입사일 : <%=annualDao.getHireDate(emp_no) %>
 </div>
 <div class="row center">
     <table class="table table-border vacationTable">
         <tr>
-            <td>발생 월차</td>
             <td>총 연차</td>
             <td>사용 연차</td>
             <td>잔여 연차</td>
         </tr>
         <tr>
-            <td>?</td>
             <td><%=annualDto.getAnn_occurred() %></td>
             <td><%=annualDto.getAnn_used() %></td>
             <td><%=annualDto.getAnn_occurred() - annualDto.getAnn_used() %></td>
@@ -82,11 +78,11 @@
             <td>관리</td>
         </tr>
         <%
-        int index = vacationList.size();
+        int index = 0;
         for(VacationDto dto : vacationList){ 
         %>
         <tr>
-            <td><%=index%></td>
+            <td><%=count-((p-1)*listSize)-index%></td>
             <td><%=dto.getVac_category() %></td>
             <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
             <td><%=dto.getVac_reason() %></td>
@@ -103,7 +99,8 @@
             	<%} %>
             </td>
         </tr>
-        <%index--;} %>
+			<%index++;
+        } %>
     </table>
 </div>
 <div class="row">

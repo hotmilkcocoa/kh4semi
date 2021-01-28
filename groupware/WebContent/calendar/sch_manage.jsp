@@ -1,8 +1,21 @@
+<%@page import="groupware.beans.EmployeeDto"%>
+<%@page import="groupware.beans.EmployeeDao"%>
+<%@page import="groupware.beans.Share_schDto"%>
+<%@page import="java.util.List"%>
+<%@page import="groupware.beans.Share_schDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <jsp:include page="/template/header.jsp"></jsp:include>
 
+<%
+	//int emp_no = (int) session.getAttribute("check");
+	int emp_no = 3;
+	
+	String no = request.getParameter("emp_no");
+	Share_schDao shareDao = new Share_schDao();
+	List<Share_schDto> shareList = shareDao.select(emp_no);
+%>
 <h3>내 일정 관리</h3>
 <div class="row">
     <span>내 일정 전체 정리하기</span>
@@ -23,26 +36,30 @@
 <div>
     <div>
         <table class="table table-border">
+            <%for(Share_schDto shareDto : shareList){ 
+            	EmployeeDto empDto = new EmployeeDao().find(shareDto.getTarget_no());%>
             <tr>
-                <td>이름</td>
-                <td>관리</td>
+                <td><%=empDto.getEmp_name()%></td>
+                <td><button class="shareDel">삭제하기</button><input type="hidden" value="<%=shareDto.getShare_no()%>"></td>
             </tr>
-            <tr>
-                <td>박효길</td>
-                <td>삭제하기</td>
-            </tr>
+            <%} %>
         </table>
     </div>
     <div class="row">
-        <span>이름</span>
-        <input class="dataInput" type="text" name="" id="">
-        <button>+ 주소록</button>
-        <button>추가하기</button>
+    	<form action="share_add.do" method="post">
+	        <span>이메일</span>
+	        <input class="dataInput" type="text" name="emp_email" value="">
+			<input type="submit" value="추가하기">
+    	</form>
+        <button id="search-btn">+ 주소록</button>
     </div>
 </div>
-<button>돌아가기</button>
+<button class="return">내 일정으로</button>
 
 <script>
+	<%if(request.getParameter("error") != null){%>
+		alert("이메일을 확인해주세요.");
+	<%}%>
 	document.querySelector(".delBtn.delAll").addEventListener("click", function(){
 		if(confirm("정말 지우시겠습니까?")){
 			location.href = "sch_del.do";			
@@ -53,6 +70,17 @@
 		if(confirm("정말 지우시겠습니까?")){
 			document.querySelector("#form").submit();
 		}
+	});
+	document.querySelector(".return").addEventListener("click", function(){
+		location.href = "calendar.jsp";
+	});
+	document.querySelectorAll(".shareDel").forEach(function(ele){
+		ele.addEventListener("click", function(){
+			location.href = "share_del.do?share_no=" + this.nextElementSibling.value;
+		});
+	});
+	$("#search-btn").click(function() {
+		window.open("<%=request.getContextPath()%>/message/search.jsp", "사원검색", "width=700px, height=600px");
 	});
 </script>
             

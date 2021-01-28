@@ -79,11 +79,11 @@
         
         <%
 		//목록 가져와서 출력
-        int index = vacationList.size();
+        int index = 0;
         for(VacationDto dto : vacationList){ 
         %>
         <tr>
-            <td><%=index%></td>
+            <td><%=count-((p-1)*listSize)-index%></td>
             <td><%=dto.getVac_category() %></td>
             <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
             <td><%=dto.getVac_reason() %></td>
@@ -95,7 +95,7 @@
         		<button class="vacApproveBtn" vac_no=<%=dto.getVac_no() %>>승인</button>
             </td>
         </tr>
-        <%index--;} %>
+        <%index++;} %>
     </table>
 </div>
 <div class="row">
