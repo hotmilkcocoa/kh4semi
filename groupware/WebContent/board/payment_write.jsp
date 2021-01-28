@@ -31,6 +31,14 @@
 		</div>
 		
 		<div class="row">
+			<input type="text" class="input" name="payment_recive" required>
+		</div>
+		
+		<div class="row">
+			<input type="button" value="이미지 업로드" class="file_up">
+		</div>
+		
+		<div class="row">
 			<input type="submit" class="input" onclick="alert('글을 등록하시겠습니까?')" value="등록">
 		</div>
 		

@@ -27,6 +27,7 @@ public class BoardPaymentDao {
 			dto.setPayment_header(rs.getString("payment_header"));
 			dto.setPayment_title(rs.getString("payment_title"));
 			dto.setPayment_context(rs.getString("payment_context"));
+			dto.setPayment_recive(rs.getInt("payment_recive"));
 			dto.setPayment_date(rs.getDate("payment_date"));
 			dto.setBoard_dep(rs.getString("board_dep"));
 			paymentlist.add(dto);

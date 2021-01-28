@@ -3,6 +3,7 @@
 <%@ page import="groupware.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="groupware.beans.*"%>
+
 <jsp:include page="/template/header.jsp"></jsp:include>
 <%
 	request.setCharacterEncoding("UTF-8");

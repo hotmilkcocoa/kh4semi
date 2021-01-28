@@ -23,6 +23,7 @@ public class BoardPaymentWriteServlet extends HttpServlet{
 		paymentDto.setPayment_header(req.getParameter("payment_header"));
 		paymentDto.setPayment_title(req.getParameter("payment_title"));
 		paymentDto.setPayment_context(req.getParameter("payment_context"));
+		paymentDto.setPayment_recive(req.getParameter("payment_recive"));
 		
 		int emp_no=1;
 		EmployeeDao employeeDao = new EmployeeDao();
