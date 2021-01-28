@@ -31,8 +31,8 @@
 		border:1px solid black;
         display:block;
 		position: absolute;
-		top:50px;
-        left:300px;
+		top:5%;
+        left:23%;
         width: 1000px;
         height: 505px;		
 	}
@@ -80,8 +80,7 @@
 			</header>
 			
 			<div  style="height:100%; width:50%; background-color:#34495e; float:right;">
-			
-			
+				
 			</div>
 			<div  style="height:100%; width:50%; background-color:#95a5a6; float:left;"> 
 					
