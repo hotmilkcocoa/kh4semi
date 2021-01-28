@@ -23,8 +23,6 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
 %>
 
 <%
-// 	목록,검색을 위해 필요한 프로그래밍 코드
-// 	type : 분류 , key : 검색어
 	String type = request.getParameter("type");
 	String key = request.getParameter("key");
 	boolean isSearch = type != null && key != null;
@@ -83,7 +81,7 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
 							<%if(dto.getPayment_header() != null){ %>
 								[<%=dto.getPayment_header()%>]
 							<%}%>
-							<a href="detail.jsp?board_no=<%=dto.getPayment_no()%>">				
+							<a href="payment_detail.jsp?board_no=<%=dto.getPayment_no()%>">				
 								<%=dto.getPayment_title()%>
 							</a>
 						</td>
@@ -146,7 +144,7 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
 							<%if(dto.getFree_header() != null){ %>
 								[<%=dto.getFree_header()%>]
 							<%}%>
-							<a href="detail.jsp?free_no=<%=dto.getFree_no()%>">				
+							<a href="free_detail.jsp?free_no=<%=dto.getFree_no()%>">				
 								<%=dto.getFree_title()%>
 							</a>
 						</td>

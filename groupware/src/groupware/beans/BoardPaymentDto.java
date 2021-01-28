@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class BoardPaymentDto {
 	public int payment_no;
-	public String payment_writer;
+	public int payment_writer;
 	public String payment_header;
 	public String payment_title;
 	public String payment_context;
@@ -20,10 +20,10 @@ public class BoardPaymentDto {
 	public void setPayment_no(int payment_no) {
 		this.payment_no = payment_no;
 	}
-	public String getPayment_writer() {
+	public int getPayment_writer() {
 		return payment_writer;
 	}
-	public void setPayment_writer(String payment_writer) {
+	public void setPayment_writer(int payment_writer) {
 		this.payment_writer = payment_writer;
 	}
 	public String getPayment_header() {
@@ -62,5 +62,13 @@ public class BoardPaymentDto {
 	public void setBoard_dep(String board_dep) {
 		this.board_dep = board_dep;
 	}
-
+	public String getPayment_header_string() {
+		if(this.payment_header == null) 
+			return "";
+		else
+			return this.payment_header;
+	}
 }
+
+
+

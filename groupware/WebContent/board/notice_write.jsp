@@ -4,7 +4,7 @@
 <style>
 
 </style>
-	<div>
+	<div class="outbox">
 		<form action="write.do" method="post" >
 		<div class="row">
 			<label>말머리</label>
@@ -26,7 +26,7 @@
 		</div>
 		
 		<div class="row">
-			<input type="submit" class="input" value="등록">
+			<input type="submit" class="input" onclick="alert('글을 등록하시겠습니까?')" value="등록">
 		</div>
 		
 		</form>

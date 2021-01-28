@@ -20,7 +20,7 @@
 		});
 		
 		$(".edit-btn").click(function(){
-			location.href = "edit.jsp?board_no=<%=board_no%>";
+			location.href = "notice_edit.jsp?board_no=<%=board_no%>";
 		});
 		
 		$(".delete-btn").click(function(){
@@ -36,7 +36,7 @@
 </script>
 
 <div class="outbox">
-	<div class="row center";>
+	<div class="row center">
 		<h2>
 			<%=dto.getBoard_no()%>번 게시글
 			<%if(dto.getBoard_header() != null){%>
@@ -48,14 +48,6 @@
 	<div class="row">
 		<table class="table table-border">
 			<thead>
-				<tr>
-					<th class="right" colspan="2">
-						<button class="input input-inline write-btn">새글</button>
-						<!-- 수정과 삭제 버튼은 작성자 본인과 관리자에게만 표시되어야 한다 -->
-						<button class="input input-inline edit-btn">수정</button>
-						<button class="input input-inline delete-btn">삭제</button>
-						<button class="input input-inline list-btn">목록</button>
-				</tr>
 			</thead>
 			<tbody>
 				<tr>
