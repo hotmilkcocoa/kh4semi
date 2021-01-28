@@ -7,11 +7,6 @@
     pageEncoding="UTF-8"%>
 
 <%
-	DataSettingDao dataSettingDao = new DataSettingDao(); 
-	List<DataSettingDto> depList = dataSettingDao.depSelect();	
-%>
-
-<%
 //페이지 분할 계산 코드 작성
 	int boardSize = 8;
 	int p;
@@ -26,6 +21,11 @@
 	//p의 값에 따라 시작 row번호와 종료 row번호를 계산
 	int endRow = p * boardSize;
 	int startRow = endRow - boardSize +1;
+%>
+
+<%
+	DataSettingDao dataSettingDao = new DataSettingDao(); 
+	List<DataSettingDto> depList = dataSettingDao.depSelect(startRow, endRow);
 %>
 
 <%
@@ -87,7 +87,7 @@
 	<!-- 페이지 네비게이션 -->
 	<div class="row center">
 		<ul class="pagination">
-			<li><a href="employee.jsp?p=<%=startBlock-1%>">&lt;</a></li>
+			<li><a href="group.jsp?p=<%=startBlock-1%>">&lt;</a></li>
 			
 				<%for(int i=startBlock; i<=endBlock; i++){ %>
 					<%if(i==p){ %>
@@ -95,12 +95,12 @@
 					<%}else{ %>
 						<li>
 					<%} %>
-					<!-- 목록용 링크 -->
-					<a href="employee.jsp?p=<%=i%>"><%=i%></a>
-					</li>
+						<!-- 목록용 링크 -->
+						<a href="group.jsp?p=<%=i%>"><%=i%></a>
+						</li>
 				<%} %>
 			
-			<li><a href="employee.jsp?p=<%=endBlock+1%>">&gt;</a></li>
+			<li><a href="group.jsp?p=<%=endBlock+1%>">&gt;</a></li>
 		</ul>
 	</div>
 

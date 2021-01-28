@@ -31,8 +31,8 @@
 		border:1px solid black;
         display:block;
 		position: absolute;
-		top:5%;
-        left:23%;
+		top:50px;
+        left:300px;
         width: 1000px;
         height: 600px;		
 	}
@@ -111,4 +111,12 @@
 	</main>
 	
 </body>
+
+
+<div class="outbox">
+	<div class="row center" style="color:red">
+		<h3>정보를 다시확인해주세요</h3>
+	</div>
+</div>
+
 <jsp:include page="/template/footer.jsp"></jsp:include>
