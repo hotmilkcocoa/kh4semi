@@ -111,4 +111,12 @@
 	</main>
 	
 </body>
+
+
+<div class="outbox">
+	<div class="row center" style="color:red">
+		<h3>정보를 다시확인해주세요</h3>
+	</div>
+</div>
+
 <jsp:include page="/template/footer.jsp"></jsp:include>

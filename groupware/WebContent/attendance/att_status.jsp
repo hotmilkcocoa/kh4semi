@@ -23,18 +23,21 @@
 	//int emp_no = (int) session.getAttribute("check");
 	int emp_no = 3;
 
-	LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+	String date = request.getParameter("date");
+	
+	LocalDate tempDate = date == null ? LocalDate.now() : LocalDate.parse(date);
+	LocalDate startOfMonth = tempDate.withDayOfMonth(1);
 	LocalDate startOfCal = startOfMonth.minusDays(startOfMonth.getDayOfWeek().getValue());
 	LocalDate endOfCal = startOfCal.plusDays(42);
 	AttendanceDao attendanceDao = new AttendanceDao();
 	List<AttendanceDto> attList = attendanceDao.select(emp_no, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
 	
-	HashMap<LocalDate, AttendanceDto> map = new HashMap<LocalDate, AttendanceDto>();
+	HashMap<LocalDate, AttendanceDto> attMap = new HashMap<LocalDate, AttendanceDto>();
 	for(int i=0; i<42; i++){
-		map.put(startOfCal.plusDays(i), null);
+		attMap.put(startOfCal.plusDays(i), null);
 	}
 	for(AttendanceDto dto : attList){
-		map.replace(dto.getAtt_start().toLocalDateTime().toLocalDate(), dto);
+		attMap.replace(dto.getAtt_start().toLocalDateTime().toLocalDate(), dto);
 	}
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -67,9 +70,18 @@
 			parent.removeChild(parent.firstChild);
 		}
     }
+    function getDateString(date){
+		var year = date.getFullYear();
+		var month = (date.getMonth() + 1);
+		month = month < 10 ? "0" + month : month;
+		var day = date.getDate();
+		day = day < 10 ? "0" + day : day;
+		
+		return year + "-" + month + "-" + day;
+	}
         
     var today = new Date();
-    var temp_date = new Date(today.getFullYear(), today.getMonth(), 1);
+    var temp_date = new Date("<%=startOfMonth.toString()%>");
     var dayArr = ["일", "월", "화", "수", "목", "금", "토", "일"];
 
     function paintTemplate(){
@@ -117,7 +129,9 @@
             var val = 1;
             if (this.hasAttribute("prev")) val = -1;
             temp_date.setMonth(temp_date.getMonth() + val);
-            paintTable();
+            var link = "att_status.jsp?date={date}";
+            link = link.replace("{date}", getDateString(temp_date));
+            location.href = link;
 		});
 	});
     document.querySelector(".close").addEventListener("click", function(){
@@ -129,7 +143,7 @@
     for(int i=0; i<6; i++){
     	long workingHour = 0;
     	for(int j=0; j<7; j++){
-    		AttendanceDto attendanceDto = map.get(startOfCal.plusDays(j+(i*7)));
+    		AttendanceDto attendanceDto = attMap.get(startOfCal.plusDays(j+(i*7)));
     		if(attendanceDto == null){%>
 	    		var dayTr = document.querySelectorAll(".dayTr")[<%=j+(i*7)%>];
 	    		dayTr.children[3].remove();

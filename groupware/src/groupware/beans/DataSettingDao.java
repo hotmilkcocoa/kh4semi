@@ -17,7 +17,7 @@ public class DataSettingDao {
 	public void depAdd(DataSettingDto dataSettingDto) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
-		String sql = "insert into department values(dep_seq.nextval, ?)";
+		String sql = "insert into department values(dep_seq.nextval, ?, '')";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, dataSettingDto.getDep_name());
@@ -88,6 +88,34 @@ public class DataSettingDao {
 		return depList;
 	}
 	
+	//페이징을 이용한 목록
+	public List<DataSettingDto> depSelect(int startRow, int endRow) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+				
+		String sql = "select * from(" +
+						"select rownum rn, TMP.* from(" +
+							"select * from department order by dep_no asc" +
+						")TMP" +
+					") where rn between ? and ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, startRow);
+		ps.setInt(2, endRow);
+		ResultSet rs = ps.executeQuery();
+		
+		List<DataSettingDto> depList = new ArrayList<>();
+		
+		while(rs.next()) {
+			DataSettingDto dataSettingDto = new DataSettingDto();
+			dataSettingDto.setDep_no(rs.getInt("dep_no"));
+			dataSettingDto.setDep_name(rs.getString("dep_name"));
+			dataSettingDto.setDep_head(rs.getString("dep_head"));
+			
+			depList.add(dataSettingDto);
+		}
+		con.close();
+		return depList;
+	}
 	
 	//직급데이터 검색
 	public List<DataSettingDto> titleSelect() throws Exception {
@@ -195,6 +223,7 @@ public class DataSettingDao {
 		return dataSettingDto;
 	}
 
+	//근태관리 기본설정 수정
 	public void att_setUpdate(DataSettingDto dataSettingDto, String att_set_start, String att_set_end) throws Exception{
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
