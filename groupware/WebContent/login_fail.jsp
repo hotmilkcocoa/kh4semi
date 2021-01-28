@@ -79,8 +79,6 @@
 				<h2 class="center">반갑습니다.</h2>				
 			</header>
 	
-		
-	
 			<div  style="height:100%; background-color:#34495e;">
 					
 				<div  style="height:100%; width:50%; background-color:#95a5a6;"> 
