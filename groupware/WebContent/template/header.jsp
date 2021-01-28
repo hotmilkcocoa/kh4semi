@@ -153,8 +153,7 @@
 </script>
 
 <%
-//	int emp_no = (int) request.getSession().getAttribute("check");
-	int emp_no = 21;
+	int emp_no = (int) request.getSession().getAttribute("check");
 	EmployeeDao empDao = new EmployeeDao();
 	EmployeeDto empDto = empDao.find(emp_no);
 	
