@@ -133,7 +133,7 @@
             	</div>
             	
             	<div class="row right">
-            		<a href="<%=request.getContextPath()%>"><img alt="홈으로" id="homeBtn" src="<%=request.getContextPath()%>/image/house.svg"></a>
+            		<a href="<%=request.getContextPath()%>/main.jsp"><img alt="홈으로" id="homeBtn" src="<%=request.getContextPath()%>/image/house.svg"></a>
             	</div>
             
                 <div class="menu">
