@@ -29,6 +29,16 @@ public class LoginDao {
 			
 			return result;
 	}
+
+
+
+	public EmployeeDto login(String emp_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 	
 	
 }

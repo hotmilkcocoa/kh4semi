@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import groupware.beans.EmployeeDto;
 import groupware.beans.LoginDao;
 import groupware.beans.LoginDto;
+
 
 @WebServlet(urlPatterns = "/login.do")
 public class LoginServlet extends HttpServlet{
@@ -28,11 +30,12 @@ public class LoginServlet extends HttpServlet{
 //			System.out.println(result);
 
 			if(result) {
-//				resp.sendRedirect("../main.jsp");//상대경로
+				EmployeeDto e = dao.login(dto.getEmp_id());
+				req.getSession().setAttribute("check",e.getEmp_no());
+				req.getSession().setAttribute("auth", e.getEmp_auth());
 				resp.sendRedirect(req.getContextPath()+"/main.jsp");//절대경로
 			}
 			else {
-//				resp.sendRedirect("index.jsp?error");//상대경로
 				resp.sendRedirect(req.getContextPath()+"/login_fail.jsp");//절대경로
 			}
 		}
