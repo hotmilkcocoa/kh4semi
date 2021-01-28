@@ -81,32 +81,33 @@
 	
 		
 	
-			<div  style="height:100%; background-color:#34495e;">
-					
-				<div  style="height:100%; width:50%; background-color:#95a5a6;"> 
-					
-					<div class="outbox" style="width:350px;">
-						<div class="row center">
-							<h2>로그인</h2>
-						</div>
-						<div class="row">
-							<label>ID</label>
-							<input type="text" name="emp_id" class="input" required>
-						</div>
-						<div class="row">
-							<label>Password</label>
-							<input type="password" name="emp_pw" class="input" required>
-						</div>  					 
-							
-						<div class="right">
-							<input type="submit" value="로그인" class="input">
-						</div>
-					</div>
-				
-				</div>						
+			<div  style="height:505px; width:50%; background-color:#34495e; float:right;">
+			
 			</div>
-	
+					
+			<div  style="height:505px; width:50%; background-color:#95a5a6; float:left"> 
+					
+				<div class="outbox" style="width:350px;">
+					<div class="center">
+						<h2>로그인</h2>
+					</div>
+					<div class="row">
+						<label>ID</label>
+						<input type="text" name="emp_id" class="input" required>
+					</div>
+					<div class="row">							<label>Password</label>
+						<input type="password" name="emp_pw" class="input" required>
+					</div>  					 
+							
+					<div class="right">
+						<input type="submit" value="로그인" class="input">
+					</div>
+				</div>
+				
+			</div>						
 		</div>
+	
+		
 	</form>		
 	</main>
 	
