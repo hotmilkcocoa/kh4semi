@@ -91,5 +91,4 @@ public class DataSettingDto {
 		this.att_set_late = att_set_late;
 	}
 
-	
 }

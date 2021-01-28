@@ -549,4 +549,24 @@ public class EmployeeDao {
 		return list;
 		
 	}
+	
+	//로그인
+	public boolean login(EmployeeDto dto) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+		String sql = "select * from employee where emp_id=? and emp_pw=?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, dto.getEmp_id());
+		ps.setString(2, dto.getEmp_pw());
+		ResultSet rs = ps.executeQuery();
+			
+		boolean result = rs.next();
+			
+			con.close();
+			
+			return result;
+	}
+	
+	//로그아웃
+	
 }

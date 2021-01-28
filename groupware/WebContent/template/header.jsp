@@ -149,12 +149,15 @@
 </Style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
-
+	$(function(){
+		$(".logoutBtn").click(function(){
+			location.href = "<%=request.getContextPath()%>/logout.do";
+		});
+	});
 </script>
 
 <%
-//	int emp_no = (int) request.getSession().getAttribute("check");
-	int emp_no = 21;
+	int emp_no = (int) request.getSession().getAttribute("check");
 	EmployeeDao empDao = new EmployeeDao();
 	EmployeeDto empDto = empDao.find(emp_no);
 	
@@ -175,7 +178,7 @@
                                 <td rowspan="2" class="center"><img alt="직원사진" id="profileImg" class="img img-circle" src="<%=request.getContextPath()%>/image/profile_img.png"></td>
                                 <th>이름</th>
                                 <th>직급</th>
-                                <td rowspan="2" class="center"><button>로그아웃</button></td>
+                                <td rowspan="2" class="center logoutBtn"><button>로그아웃</button></td>
                             </tr>
                             <tr>
                                 <th>부서</th>
