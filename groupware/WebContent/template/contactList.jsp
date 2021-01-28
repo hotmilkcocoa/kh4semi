@@ -122,7 +122,7 @@
 	$(function () {
 		
 		//전체선택
-		$("search.jspallCheck-btn").on("input", function(){
+		$("#allCheck-btn").change(function(){
 			var check = $(this).prop("checked");
 			$(".check-btn").prop("checked", check);
 		});

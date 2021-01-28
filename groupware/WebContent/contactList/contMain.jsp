@@ -123,16 +123,7 @@
 			$(".check-btn").prop("checked", check);
 		});
 	
-		//쪽지보내기
-		var chkArray = new Array();
-		$("#message_write").click(function(){
-				$(".check-btn:checked").each(function(i){
-						chkArray.push($(this).val());
-					});
-				$("#hiddenValue").val(chkArray);
-				document.form.submit();
-			
-		});
+		
 			
 		//부서 선택 시 부서검색
 		$("#dep_chooser").change(function(){
@@ -156,9 +147,24 @@
 				location.href = "<%=request.getContextPath()%>/contactList/favDelete.do?fav_emp_no="+$(this).val();
 			}
 		})
-			
+		
+		
+		//쪽지보내기 ("no:1, name:홍길동")  
+		var chkArray = new Array();
+		$("#message_write").click(function(){
+				$(".check-btn:checked").each(function(i){
+						chkArray.push($(this).data("no"));
+						chkArray.push($(this).data("name"));
+					});
+		});
+		var form = $("<form>").attr("action", "주소").attr("method", "post");
+		form.append($("<input>").attr("type", "hidden").attr("name", "emp").attr("value", "값"));
+		form.append($("<input>").attr("type", "hidden").attr("name", "emp").attr("value", "값"));
+		form.append($("<input>").attr("type", "hidden").attr("name", "enp").attr("value", "값"));
+		$("body").append(form);
+		
+		form.submit();
 	});		
-			
 	
 </script>
 
@@ -181,10 +187,8 @@
 		
 	<div class="row float-box">
 		<div class="row" style="float:left;">
-		<form action="../message/MessageWrite.jsp" method="get" name="form">
-			<input type="hidden" id="hiddenValue" name="emp_no">
+			<input type="hidden" id="hiddenValue" name="emp">
 			<input type="button" value="쪽지보내기" id="message_write" class="input input-inline">
-			</form>
 		</div>
 		
 		<form action="contMain.jsp" method="get">
@@ -219,7 +223,7 @@
 				<%for(EmployeeDto empDto : empList){%>
 					<tr>
 						<td>
-							<input type="checkbox" class="check-btn" value="<%=empDto.getEmp_no() %>">
+							<input type="checkbox" class="check-btn" data-no=<%=empDto.getEmp_no() %> data-name=<%=empDto.getEmp_name()%>>
 						</td>
 						<td>
 							<%=empDto.getEmp_name()%> <%=empDto.getEmp_title()%>

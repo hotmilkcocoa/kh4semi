@@ -4,6 +4,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
+	request.setCharacterEncoding("UTF-8");
+	String emp = request.getParameter("emp");
+	
+	System.out.println(emp);
+	
 	String emp_no = request.getParameter("emp_no");
 	List<EmployeeDto> empList = new ArrayList<>();
 	EmployeeDao empDao = new EmployeeDao();
@@ -20,7 +25,7 @@
 			empDto = empDao.find(emp_no_m[i]);
 			empList.add(empDto);
 		}
-	
+
 		emp_name = new String[empList.size()];
 		int size = 0;
 		for(EmployeeDto dto : empList) {
@@ -38,22 +43,36 @@
 <script>
 	
 	$(function() {
+		
+		//주소록에서 가져온 사원추가
 		<%if(isCheck) {  %>		
-		var array = new Array();
-		<%for(int i = 0; i < emp_name.length; i++) {%>
-		array.push(
-			"<%=emp_name[i]%>"
-		);
-		<%} %>
-			 console.log(array);
-		$("#msg_receiver").val(array);
+				var array = new Array();
+				<%for(int i = 0; i < emp_name.length; i++) {%>
+					array.push(
+						"<%=emp_name[i]%>"
+					);
+					<%} %>
+				$("#msg_receiver").val(array);
 		<% } else {%>
-			$("#msg_receiver").val("");
+				$("#msg_receiver").val("");
 		<% }%>
+		
+		//검색버튼
 		$("#search-btn").click(function() {
 			window.open("search.jsp", "사원검색", "width=700px, height=600px");
 		});
+		
+		//취소버튼
+		$("#cancel-btn").click(function() {
+			if(confirm("작성 중인 내용이 사라집니다. 취소하시겠습니까?")) {
+				location.href="inbox.jsp"
+			}
+		});
 	});
+	
+	function empAdd(chkArray){
+		console.log(chkArray);
+	}
 </script>
 <div class="outbox" style="width:700px;">
 
@@ -91,8 +110,8 @@
 			</table>
 			
 			<div class="row center">
-				<input type="button" class="input input-inline" value="취소" onclick="history.back();">
-				<input type="text" name="emp_no" value=<%=emp_no%>>
+				<input type="button" class="input input-inline" value="취소" id="cancel-btn">
+				<input type="hidden" name="emp_no" value=<%=emp_no%>>
 				<input type="submit" class="input input-inline" value="전송">
 			</div>
 		</form>

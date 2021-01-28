@@ -101,11 +101,15 @@
 			$(".check-btn:checked").each(function(i){
 				chkArray.push($(this).val());
 			});
-		$("#hiddenValue").val(chkArray);
+		//부모창에 있는 empAdd라는 함수를 실행시키면서 chkArray를 전달(전송 아님)
+		window.opener.parent.empAdd(chkArray);	
+		self.close();
+			
+		/* $("#hiddenValue").val(chkArray);
 		window.opener.name = "parentPage";
 		document.form.target = "parentPage";
 		document.form.submit();
-		self.close();
+		self.close(); */
 	});
 });
 </script>
@@ -171,7 +175,7 @@
 		
 	<%} %>
 	<div class="row center"> 
-		<form action="MessageWrite.jsp" method="get" name="form">
+		<form action="messageWrite.jsp" method="get" name="form">
 			<input type="button" value="취소" onclick="window.close()" class="input input-inline">
 			<input type="button" value="확인" id="submit-btn" class="input input-inline">
 			<input type="hidden" id="hiddenValue" name="emp_no">
