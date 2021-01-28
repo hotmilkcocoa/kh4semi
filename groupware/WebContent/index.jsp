@@ -98,12 +98,13 @@
 					<div class="row">							
 						<label>Password</label>
 						<input type="password" name="emp_pw" class="input" required>
-					</div>  					 
+					</div>
 							
 					<div class="right">
 						<input type="submit" value="로그인" class="input">
-					</div>
-				</div>
+					</div>					
+				
+				</div> 
 				
 			</div>						
 		</div>
