@@ -43,17 +43,18 @@
     <%} else{%>
     <form action="sch_add.do" method="post">
     <%} %>
+    <input type="hidden" name="calType" value="<%=request.getParameter("calType")%>">
         <div class="row rel">
             <span>일정명</span>
             <div class="data">
-                <input class="dataInput text" type="text" name="sch_name" <%if(isEdit){ %> value="<%=scheduleDto.getSch_name()%>" <%} %>>
+                <input class="dataInput text" type="text" name="sch_name" required <%if(isEdit){ %> value="<%=scheduleDto.getSch_name()%>" <%} %>>
             </div>
         </div>
         <div class="row rel">
             <span>일시</span>
             <div class="data">
-                <input class="dataInput date" type="date" name="sch_start_date">
-                <select class="dataInput select" name="sch_start_time">
+                <input class="dataInput date" type="date" name="sch_start_date" required>
+                <select class="dataInput select" name="sch_start_time" required>
                     <option>00:00</option>
                     <option>01:00</option>
                     <option>02:00</option>
@@ -80,8 +81,8 @@
                     <option>23:00</option>
                 </select>
                 - 
-                <input class="dataInput date" type="date" name="sch_end_date">
-                <select class="dataInput select" name="sch_end_time">
+                <input class="dataInput date" type="date" name="sch_end_date" required>
+                <select class="dataInput select" name="sch_end_time" required>
                     <option>00:00</option>
                     <option>01:00</option>
                     <option>02:00</option>
@@ -112,13 +113,13 @@
         <div class="row rel">
             <span>내용</span>
             <div class="data">
-                <textarea class="dataInput textarea" name="sch_content" rows="10"><%if(isEdit){ %><%=scheduleDto.getSch_content()%><%} %></textarea>
+                <textarea class="dataInput textarea" name="sch_content" rows="10" required><%if(isEdit){ %><%=scheduleDto.getSch_content()%><%} %></textarea>
             </div>
         </div>
         <div class="row rel">
             <span>장소</span>
             <div class="data">
-                <input class="dataInput text" type="text" name="sch_place" <%if(isEdit){ %> value="<%=scheduleDto.getSch_place() %>" <%} %>>
+                <input class="dataInput text" type="text" name="sch_place" required <%if(isEdit){ %> value="<%=scheduleDto.getSch_place() %>" <%} %>>
             </div>
         </div>
         <div class="row rel">
@@ -171,6 +172,20 @@
 		window.history.back();
 	});
 	
+	document.forms[0].addEventListener("submit", function(e){
+		var schDate = document.querySelectorAll(".dataInput.date");
+		var schTime = document.querySelectorAll(".dataInput.select");
+		
+		var schStart = new Date(schDate[0].value + " " + schTime[0].value);
+		var schEnd = new Date(schDate[1].value + " " + schTime[1].value);
+		
+		e.preventDefault();
+		if(schEnd <= schStart){
+			alert("일시를 확인해주세요.");
+		} else{
+			this.submit();
+		}
+	});
 </script>
             
 <jsp:include page="/template/footer.jsp"></jsp:include>  

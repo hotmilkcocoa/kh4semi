@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.EmployeeDto"%>
+<%@page import="groupware.beans.EmployeeDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -143,11 +145,26 @@
 	footer img{
 	    vertical-align: middle;
 	}
+	
 </Style>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
-
+	$(function(){
+		$(".logoutBtn").click(function(){
+			location.href = "<%=request.getContextPath()%>/logout.do";
+		});
+	});
 </script>
+
+<%
+	int emp_no = (int) request.getSession().getAttribute("check");
+	EmployeeDao empDao = new EmployeeDao();
+	EmployeeDto empDto = empDao.find(emp_no);
+	
+	//부서장인지 인사부 팀장인지 검사
+	boolean isHrhead = empDto.getEmp_dep().equals("인사부") && empDto.getEmp_title().equals("팀장");
+	boolean isDephead = empDto.getEmp_title().equals("팀장");
+%>
 </head>
 <body>
 	<main>
@@ -159,12 +176,12 @@
                         <tbody>
                             <tr>
                                 <td rowspan="2" class="center"><img alt="직원사진" id="profileImg" class="img img-circle" src="<%=request.getContextPath()%>/image/profile_img.png"></td>
-                                <th>이름</th>
-                                <th>직급</th>
-                                <td rowspan="2" class="center"><button>로그아웃</button></td>
+                                <th><%=empDto.getEmp_name()%></th>
+                                <th><%=empDto.getEmp_title()%></th>
+                                <td rowspan="2" class="center logoutBtn"><button>로그아웃</button></td>
                             </tr>
                             <tr>
-                                <th>부서</th>
+                                <th><%=empDto.getEmp_dep()%></th>
                                 <td class="center"><a href="#"><img alt="개인정보수정" src="<%=request.getContextPath()%>/image/cog.svg" width="20" height="20"></a></td>     
                             </tr>
                         </tbody>
@@ -181,7 +198,7 @@
                     <table class="table table-border">
                         <tbody>
                             <tr>
-                                <td><a href="<%=request.getContextPath()%>"><img alt="홈버튼" src="<%=request.getContextPath()%>/image/house.svg"></a></td>
+                                <td><a href="<%=request.getContextPath()%>/main.jsp"><img alt="홈버튼" src="<%=request.getContextPath()%>/image/house.svg"></a></td>
                                 <td><a href="#"><img alt="쪽지버튼" src="<%=request.getContextPath()%>/image/chat.svg"></a></td>
                                 <td><a href="<%=request.getContextPath()%>/admin/home.jsp"><img alt="관리자모드버튼" src="<%=request.getContextPath()%>/image/key.svg"></a></td>
                             </tr>
@@ -198,14 +215,14 @@
                         <li class="menu menu-title"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">일정</a></li>
                         <ul>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/calendar.jsp">내 일정</a></li>
-                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/sch_manage.jsp">캘린더 설정</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/calendar/share_calendar.jsp">공유 일정</a></li>
                         </ul>
                     </ul>
                     <ul>
-                        <li class="menu menu-title"><a href="">주소록</a></li>
+                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/contactList/contList.jsp">주소록</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="">나의 주소록</a></li>
-                            <li class="menu menu-detail"><a href="">직원 목록</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/contactList/contList.jsp">나의 주소록</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/contactList/contMain.jsp">직원 주소록</a></li>
                         </ul>
                     </ul>
                     <ul>
@@ -213,6 +230,9 @@
                         <ul>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태 현황</a></li>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_status.jsp">휴가 현황</a></li>
+                            <%if(isDephead || isHrhead){ %>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_app.jsp">휴가 승인</a></li>
+                        	<%} %>
                         </ul>
                     </ul>
                     <ul>

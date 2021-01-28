@@ -20,8 +20,7 @@ public class AttendanceAddServlet extends HttpServlet{
 			req.setCharacterEncoding("utf-8");
 			
 			int att_no;
-//			int emp_no = (int) req.getSession().getAttribute("check");
-			int emp_no = 3;
+			int emp_no = (int) req.getSession().getAttribute("check");
 			
 			AttendanceDao attendanceDao = new AttendanceDao();
 			if(req.getParameter("arrive") != null) {

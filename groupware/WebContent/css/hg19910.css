@@ -114,3 +114,7 @@
 .attTable>.thead{
     background-color: lightgray;
 }
+
+.vacTable{
+	font-size: 14px;
+}
