@@ -34,7 +34,7 @@
 		top:5%;
         left:23%;
         width: 1000px;
-        height: 505px;		
+        height: 600px;		
 	}
 	
 	
@@ -78,30 +78,34 @@
 				<button class="hideBtn">x</button>
 				<h2 class="center">반갑습니다.</h2>				
 			</header>
-			
-			<div  style="height:100%; width:50%; background-color:#34495e; float:right;">
-				
-			</div>
-			<div  style="height:100%; width:50%; background-color:#95a5a6; float:left;"> 
+	
+		
+	
+			<div  style="height:100%; background-color:#34495e;">
 					
-				<div class="outbox" style="width:350px;">
-					<div class="row center">
-						<h2>로그인</h2>
-					</div>
-					<div class="row">
-						<label>ID</label>
-						<input type="text" name="emp_id" class="input" required>
-					</div>
-					<div class="row">
-						<label>Password</label>
-						<input type="password" name="emp_pw" class="input" required>
-					</div>  					 
+				<div  style="height:100%; width:50%; background-color:#95a5a6;"> 
+					
+					<div class="outbox" style="width:350px;">
+						<div class="row center">
+							<h2>로그인</h2>
+						</div>
+						<div class="row">
+							<label>ID</label>
+							<input type="text" name="emp_id" class="input" required>
+						</div>
+						<div class="row">
+							<label>Password</label>
+							<input type="password" name="emp_pw" class="input" required>
+						</div>  					 
 							
-					<div>
-						<input type="submit" value="로그인" class="input">
+						<div class="right">
+							<input type="submit" value="로그인" class="input">
+						</div>
 					</div>
-				</div>									
-			</div>	
+				
+				</div>						
+			</div>
+	
 		</div>
 	</form>		
 	</main>

@@ -31,8 +31,8 @@
 		border:1px solid black;
         display:block;
 		position: absolute;
-		top:50px;
-        left:300px;
+		top:5%;
+        left:23%;
         width: 1000px;
         height: 600px;		
 	}
@@ -78,6 +78,8 @@
 				<button class="hideBtn">x</button>
 				<h2 class="center">반갑습니다.</h2>				
 			</header>
+	
+		
 	
 			<div  style="height:100%; background-color:#34495e;">
 					
