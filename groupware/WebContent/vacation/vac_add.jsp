@@ -58,6 +58,7 @@
                     <select class="dataInput select" name="vac_category" required>
                         <option <%if(isEdit && vacationDto.getVac_category().equals("연차")){ %>selected<%} %>>연차</option>
                         <option <%if(isEdit && vacationDto.getVac_category().equals("반차")){ %>selected<%} %>>반차</option>
+                        <option <%if(isEdit && vacationDto.getVac_category().equals("기타")){ %>selected<%} %>>기타</option>
                     </select>
                 </div>
             </div>

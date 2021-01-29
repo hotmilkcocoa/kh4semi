@@ -8,6 +8,51 @@
 
 <jsp:include page="/template/header.jsp"></jsp:include>
 
+<style>
+	div{
+		border: none;
+	}
+	.shareContainer{
+		border: 1px solid lightgray;
+		background-color: #f7f7f7;
+		padding: 0.5rem;
+		width: 550px;
+		font-size: 14px;
+	}
+	.shareContainer>ul{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		text-align: left;
+		width: 550px;
+	}
+	.shareContainer>ul>li{
+		display: inline-block;
+		width: 250px;
+		max-width: 250px;
+		padding-left: 1rem;
+		position: relative;
+		overflow: hidden;
+	}
+	.shareContainer>ul>li:nth-child(even){
+		border-left: 1px solid dimgray;
+		margin-left: 1rem;
+	}
+	.shareContainer>ul>li>.mail{
+		color: #6d6d6d;
+		font-size: 12px;
+	}
+	.shareContainer>ul>li>.delBtn{
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin-right: 5px;
+	}
+	form{
+		display: inline-block;
+	}
+</style>
+
 <%
 	int emp_no = (int) session.getAttribute("check");
 	
@@ -35,37 +80,54 @@
 <div class="row">
     <span>목록</span>
 </div>
-<div>
-    <div>
-        <table class="table table-border">
-            <%
-            if(shareList.size()!=0){
-	            for(Share_schDto shareDto : shareList){ 
-	            	EmployeeDto empDto = new EmployeeDao().find(shareDto.getTarget_no());%>
-		            <tr>
-		                <td><%=empDto.getEmp_name()+"<"+empDto.getEmp_email()+">"%></td>
-		                <td><button class="shareDel">삭제하기</button><input type="hidden" value="<%=shareDto.getShare_no()%>"></td>
-		            </tr>
-            	<%}
-            } else{%>
-            	<tr>
-	                <td colspan="2">목록이 없습니다.</td>
-	            </tr>
-            <%} %>
-        </table>
-    </div>
+<div class="row">
+    <div class="shareContainer center">목록이 없어요</div>
     <div class="row">
     	<form action="share_add.do" method="post">
 	        <span>이메일</span>
-	        <input class="dataInput" type="text" name="emp_email" value="">
+	        <input class="dataInput" type="text" name="emp_email" required>
 			<input type="submit" value="추가하기">
     	</form>
-        <button id="search-btn">+ 주소록</button>
+        <button id="search-btn">주소록에서 추가하기</button>
     </div>
 </div>
 <button class="return">내 일정으로</button>
 
 <script>
+	//부모의 자식 엘리먼트 지우기
+	function removeAllChild(parent) {
+		while (parent.firstChild) {
+			parent.removeChild(parent.firstChild);
+		}
+	}
+	<%if(!shareList.isEmpty()){%>
+		var container = document.querySelector(".shareContainer");
+		removeAllChild(container);
+		var newUl = document.createElement("ul");
+		container.append(newUl);
+		<%for(Share_schDto shareDto : shareList){
+			EmployeeDto empDto = new EmployeeDao().find(shareDto.getTarget_no());%>
+			var newLi = document.createElement("li");
+			newUl.append(newLi);
+			var emp = document.createElement("span");
+			emp.classList.add("emp");
+			emp.innerText = "<%=empDto.getEmp_name()%>";
+			var mail = document.createElement("span");
+			mail.classList.add("mail");
+			mail.innerText = "<" + "<%=empDto.getEmp_email()%>" + ">";
+			var delBtn = document.createElement("span");
+			delBtn.classList.add("delBtn");
+			delBtn.classList.add("cursor-pointer");
+			delBtn.innerText = "X";
+			delBtn.addEventListener("click", function(){
+				location.href = "share_del.do?share_no=<%=shareDto.getShare_no()%>";
+			});
+			
+			newLi.append(emp);
+			newLi.append(mail);
+			newLi.append(delBtn);
+		<%}%>
+	<%}%>
 	<%if(request.getParameter("error") != null){%>
 		alert("이메일을 확인해주세요.");
 	<%}%>
@@ -82,11 +144,6 @@
 	});
 	document.querySelector(".return").addEventListener("click", function(){
 		location.href = "calendar.jsp";
-	});
-	document.querySelectorAll(".shareDel").forEach(function(ele){
-		ele.addEventListener("click", function(){
-			location.href = "share_del.do?share_no=" + this.nextElementSibling.value;
-		});
 	});
 	$("#search-btn").click(function() {
 		window.open("<%=request.getContextPath()%>/message/search.jsp", "사원검색", "width=700px, height=600px");

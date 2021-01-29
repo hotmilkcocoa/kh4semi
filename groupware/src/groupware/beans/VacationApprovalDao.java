@@ -13,7 +13,10 @@ public class VacationApprovalDao {
 	public void insert(int vac_no, int vac_target_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "insert into vacation_approval values(?, (select emp_no from employee where emp_id = (select dep_head from department where dep_name = (select emp_dep from employee where emp_no = ?))), '대기', (select emp_no from employee where emp_dep = '인사부' and emp_title = '팀장'), '대기')";
+
+		String sql = "insert into vacation_approval values(?, (select emp_no from employee where emp_id = "
+				+ "(select dep_head from department where dep_name = (select emp_dep from employee where emp_no = ?))), "
+				+ "'대기', (select emp_no from employee where emp_dep = '인사부' and emp_title = '팀장'), '대기')";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, vac_no);
