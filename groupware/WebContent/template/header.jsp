@@ -162,8 +162,7 @@
 	EmployeeDto empDto = empDao.find(emp_no);
 	
 	//부서장인지 인사부 팀장인지 검사
-	boolean isHrhead = empDto.getEmp_dep().equals("인사부") && empDto.getEmp_title().equals("팀장");
-	boolean isDephead = empDto.getEmp_title().equals("팀장");
+	boolean isDephead = empDto.getEmp_title().equals("팀장") && !empDto.getEmp_dep().equals("인사부");
 %>
 </head>
 <body>
@@ -230,7 +229,7 @@
                         <ul>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/attendance/att_status.jsp">근태 현황</a></li>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_status.jsp">휴가 현황</a></li>
-                            <%if(isDephead || isHrhead){ %>
+                            <%if(isDephead){ %>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_app.jsp">휴가 승인</a></li>
                         	<%} %>
                         </ul>
