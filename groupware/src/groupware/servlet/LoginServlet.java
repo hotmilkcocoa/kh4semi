@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import groupware.beans.AnnualDao;
 import groupware.beans.EmployeeDao;
 import groupware.beans.EmployeeDto;
 
@@ -31,6 +32,10 @@ public class LoginServlet extends HttpServlet{
 
 			if(result) {
 				EmployeeDto e = employeeDao.find(employeeDto.getEmp_id());
+				
+				AnnualDao annDao = new AnnualDao();
+				annDao.update(e.getEmp_no());
+				
 				req.getSession().setAttribute("check",e.getEmp_no());
 				req.getSession().setAttribute("title", e.getEmp_title());
 				req.getSession().setAttribute("auth", e.getEmp_auth());
