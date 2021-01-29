@@ -66,8 +66,8 @@
 					<tr>
 						<th>급여</th>
 						<td><input type="text" class="input" name="emp_salary" required></td>	
-						<th>사진</th>
-						<td><input type="file" name="f" accept=".jpg, .png"></td>					
+						<th></th>
+						<td></td>					
 					</tr>
 					<tr>
 						<th>권한</th>
