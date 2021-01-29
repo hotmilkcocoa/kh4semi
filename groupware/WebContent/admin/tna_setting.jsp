@@ -30,7 +30,7 @@
 		<span>근태 기본 설정</span>	
 	</div>
 
-	<div class="row">
+	<div class="row table table-border">
 		<h3><li>출근시간</li></h3>
 		<span>
 		<%
@@ -41,7 +41,7 @@
 		</span>
 	</div>
 
-	<div class="row">
+	<div class="row table table-border">
 		<h3><li>퇴근시간</li></h3>
 		<span>
 		<%
@@ -52,7 +52,7 @@
 		</span>
 	</div>
 
-	<div class="row">
+	<div class="row table table-border">
 		<h3><li>지각설정시간</li></h3>
 		<span><%=dataSettingDto.getAtt_set_late()%>분</span>
 	</div>

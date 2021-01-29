@@ -19,9 +19,9 @@
 		<span>사원 추가</span>	
 	</div>
 
-	<form action="<%=request.getContextPath()%>/admin/emp_add.do" method="post" style="width:800px">
+	<form action="<%=request.getContextPath()%>/admin/emp_add.do" method="post" style="width:900px">
 		<div class="row center">
-			<table class="table" style="border-color: transparent;">
+			<table class="table table-border" style="border-color: transparent;">
 				<tbody>
 					<tr>
 						<th width="15%">이름</th>

@@ -16,10 +16,12 @@
 			<label>기존 비밀번호 확인 :</label>
 			<input type="password" name="emp_pw" class="input" placeholder="비밀번호를 입력하세요" required>
 		</div>
+		<hr>
 		<div class="row">
 			<label>변경할 비밀번호 :</label>
 			<input type="password" name="change_pw" class="input" placeholder="수정할 비밀번호를 입력하세요" required>
 		</div>
+		<hr>
 		<div class="row  center">
 			<%if(request.getParameter("error")!= null){ %>
 			<span style="Color:red">비밀번호를 잘못입력하였습니다.</span>

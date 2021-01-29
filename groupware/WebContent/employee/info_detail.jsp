@@ -19,7 +19,7 @@
 	</div>
 
 		<div class="row center">
-			<table class="table">
+			<table class="table table-border">
 				<tbody>
 					<tr>
 						<th width="15%">이름</th>
