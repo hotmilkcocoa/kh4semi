@@ -35,16 +35,9 @@ public class EmployeeEditServlet extends HttpServlet{
 			
 			//처리
 			EmployeeDao employeeDao = new EmployeeDao();
-			//boolean result = employeeDao.update(employeeDto);
 			employeeDao.update(employeeDto);
 			
 			//출력
-//			if(result) {
-//				resp.sendRedirect(req.getContextPath()+"/admin/emp_detail.jsp?emp_no="+employeeDto.getEmp_no());				
-//			}
-//			else {
-//				resp.sendRedirect(req.getContextPath()+"/admin/employee.jsp");
-//			}
 			resp.sendRedirect(req.getContextPath()+"/admin/emp_detail.jsp?emp_no="+employeeDto.getEmp_no());
 		}
 		catch(Exception e) {

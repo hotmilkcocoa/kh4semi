@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.TmpFileDto"%>
+<%@page import="groupware.beans.TmpFileDao"%>
 <%@page import="groupware.beans.EmployeeDto"%>
 <%@page import="groupware.beans.EmployeeDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -240,7 +242,6 @@
                         <ul>
                             <li class="menu menu-detail"><a href="">공지사항</a></li>
                             <li class="menu menu-detail"><a href="">자유게시판</a></li>
-                            <li class="menu menu-detail"><a href="">동호회</a></li>
                             <li class="menu menu-detail"><a href="">결재</a></li>
                         </ul>
                     </ul>
@@ -248,4 +249,4 @@
             </aside>
             
             <article>
-    
+            	 
