@@ -20,7 +20,7 @@
 			if(confirm("정말 취소하시겠습니까?")){
 				location.href = $(this).attr("href");
 			}
-		});
+		}); 
 
 </script>
 
@@ -47,17 +47,17 @@
 					<tr>	
 						<th>사원번호</th>
 						<td><input type="text" class="input" name="emp_no" readonly value="<%=employeeDto.getEmp_no()%>"></td>
-						<th>이메일</th>
+						<th>이메일*</th>
 						<td><input type="text" class="input" name="emp_email" value="<%=employeeDto.getEmp_email()%>"></td>					
 					</tr>
 					<tr>	
-						<th>전화번호</th>
+						<th>전화번호*</th>
 						<td><input type="text" class="input" name="emp_phone" value="<%=employeeDto.getEmp_phone()%>"></td>
 						<th>생년월일</th>
 						<td><input type="text" class="input" readonly value="<%=employeeDto.getEmp_birth()%>"></td>						
 					</tr>
 					<tr> 
-						<th>주소</th>
+						<th>주소*</th>
 						<td colspan="3"><input type="text" class="input" name="emp_addr" value="<%=employeeDto.getEmp_addr()%>"></td>					
 					</tr>
 					<tr>
@@ -73,7 +73,7 @@
 						<td><input type="date" class="input" name="emp_hiredate" readonly value="<%=employeeDto.getEmp_hiredate()%>"></td>					
 					</tr>					
 					<tr>
-						<th>기타사항</th>
+						<th>기타사항*</th>
 						<!-- 목록부분이 Null이면 표시 않기 -->
 						<%if(employeeDto.getEmp_etc()!= null){ %>
 						<td colspan="3"><textarea rows="3" name="emp_etc" class="input"><%=employeeDto.getEmp_etc()%></textarea></td>

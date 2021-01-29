@@ -620,6 +620,7 @@ public class EmployeeDao {
 		return result;
 	}
 
+	//장기 이탈자 상태 변경
 	public void setLeave(int vac_target_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
@@ -632,6 +633,5 @@ public class EmployeeDao {
 		con.close();
 	}
 	
-	//로그아웃
 	
 }
