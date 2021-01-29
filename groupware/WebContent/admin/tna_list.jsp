@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.EmployeeDto"%>
+<%@page import="groupware.beans.EmployeeDao"%>
 <%@page import="groupware.beans.VacationDto"%>
 <%@page import="java.util.List"%>
 <%@page import="groupware.beans.VacationDao"%>
@@ -7,8 +9,8 @@
 <%
 	int emp_no = (int) session.getAttribute("check");
 	String title = (String) session.getAttribute("title");
-	//EmployeeDao empDao = new EmployeeDao();
-	//EmployeeDto empDto = empDao.find(emp_no);
+	EmployeeDao empDao = new EmployeeDao();
+	EmployeeDto empDto = empDao.find(emp_no);
 	
 	//팀장인지 검사
 	boolean isDephead = title.equals("팀장");
@@ -65,26 +67,25 @@
             <td>분류</td>
             <td>기간</td>
             <td>사유</td>
-            <td>기타사항</td>
+            <td>신청자</td>
             <td>신청일</td>
-            <td>상태</td>
             <td>관리</td>
         </tr>
         
         <%
-		//목록 가져와서 출력
+      //목록 가져와서 출력
         int index = 0;
         if(vacationList.size() != 0){
 	        for(VacationDto dto : vacationList){ 
+	        	EmployeeDto targetDto = empDao.find(dto.getVac_target_no());
 	        %>
 		        <tr>
 		            <td><%=count-((p-1)*listSize)-index%></td>
 		            <td><%=dto.getVac_category() %></td>
 		            <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
 		            <td><%=dto.getVac_reason() %></td>
-		            <td><%=dto.getVac_comment() %></td>
+		            <td><%=targetDto.getEmp_name()%>(<%=targetDto.getEmp_dep()%>)</td>
 		            <td><%=dto.getVac_write_date() %></td>
-		            <td><%=dto.getVac_status() %></td>
 		            <td>
 		        		<button class="vacRejectBtn" vac_no=<%=dto.getVac_no() %>>반려</button> | 
 		        		<button class="vacApproveBtn" vac_no=<%=dto.getVac_no() %>>승인</button>
@@ -93,7 +94,7 @@
 		        <%index++;
 	        }%>
 	        <tr>
-	        	<td colspan="8">
+	        	<td colspan="7">
 					<div class="row center">
 						<ul class="pagination">
 							<li><a href="tna_list.jsp?p=<%=startBlock-1%>">&lt;</a></li>
