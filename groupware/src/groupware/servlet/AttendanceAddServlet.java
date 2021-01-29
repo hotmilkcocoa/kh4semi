@@ -31,7 +31,7 @@ public class AttendanceAddServlet extends HttpServlet{
 				attendanceDao.leave(att_no);
 			}
 			
-			resp.sendRedirect(req.getContextPath());
+			resp.sendRedirect(req.getContextPath()+"/main.jsp");
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);

@@ -23,8 +23,7 @@ public class VacationAddServlet extends HttpServlet{
 		try {
 			req.setCharacterEncoding("utf-8");
 			
-//			int emp_no = (int) req.getSession().getAttribute("check");
-			int emp_no = 3;
+			int emp_no = (int) req.getSession().getAttribute("check");
 			
 			//휴가 정보 등록
 			VacationDto vacationDto = new VacationDto();

@@ -32,8 +32,7 @@ public class ScheduleAddServlet extends HttpServlet{
 			scheduleDto.setSch_start(Timestamp.valueOf(LocalDateTime.parse(start)));
 			scheduleDto.setSch_end(Timestamp.valueOf(LocalDateTime.parse(end)));
 			
-//			scheduleDto.setEmp_no((int) req.getSession().getAttribute("check"));
-			scheduleDto.setEmp_no(3);//나중에 바꿀 것
+			scheduleDto.setEmp_no((int) req.getSession().getAttribute("check"));
 			
 			ScheduleDao scheduleDao = new ScheduleDao();
 			if(req.getParameter("edit") == null) {
