@@ -10,9 +10,9 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
 <Style>
 	/*임시 모든 구역 구분 선(테스트)*/	
-	main, section, footer, article, aside, div, label, table, th, td{
+	/*main, section, footer, article, aside, div, label, table, th, td{
 	    border: 1px dotted #ccc;
-	}
+	}*/
 	
 	/*메인 테두리, 헤더 바닥, 섹션 중간, 푸터 위 구분선 적용*/
 	main{

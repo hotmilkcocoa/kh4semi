@@ -34,10 +34,7 @@
     </div>
 </div>
 
-			<h5 class="center">Session ID : <%=session.getId()%></h5>
-			<h5 class="center">check : <%=session.getAttribute("check")%></h5>
-			<h5 class="center">title : <%=session.getAttribute("title")%></h5>
-			<h5 class="center">auth : <%=session.getAttribute("auth")%></h5>
+		
 
 <script>
 	document.querySelector(".attBtn.start").addEventListener("click", function(){

@@ -23,6 +23,12 @@
 		margin-left: 100px;	
 	}
 	
+	article span, .headerImg{
+    	margin-left: 10px;
+    	font-size: 25px;
+    	text-align: center;
+    }
+	
 </style>
 
 <script>

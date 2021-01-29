@@ -633,5 +633,35 @@ public class EmployeeDao {
 		con.close();
 	}
 	
+	//장기 이탈자 조회
+	public List<EmployeeDto> leaveFind() throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_state = '휴가'";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+	}
+	
 	
 }
