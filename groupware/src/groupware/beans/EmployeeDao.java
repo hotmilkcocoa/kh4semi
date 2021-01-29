@@ -600,9 +600,9 @@ public class EmployeeDao {
 			
 		boolean result = rs.next();
 			
-			con.close();
-			
-			return result;
+		con.close();
+		
+		return result;
 	}
 	
 	//로그아웃

@@ -22,8 +22,8 @@ public class LoginServlet extends HttpServlet{
 			EmployeeDto employeeDto = new EmployeeDto();
 			employeeDto.setEmp_id(req.getParameter("emp_id"));
 			employeeDto.setEmp_pw(req.getParameter("emp_pw"));
-//			System.out.println(dto.getEmp_id());
-//			System.out.println(dto.getEmp_pw());
+//			System.out.println(employeeDto.getEmp_id());
+//			System.out.println(employeeDto.getEmp_pw());
 
 			EmployeeDao employeeDao = new EmployeeDao();
 			boolean result = employeeDao.login(employeeDto);

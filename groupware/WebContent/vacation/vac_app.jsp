@@ -13,7 +13,8 @@
 
 <jsp:include page="/template/header.jsp"></jsp:include>
 <%
-	int emp_no = 21;
+	int emp_no = (int) session.getAttribute("check");
+
 	EmployeeDao empDao = new EmployeeDao();
 	EmployeeDto empDto = empDao.find(emp_no);
 	
@@ -80,40 +81,49 @@
         <%
 		//목록 가져와서 출력
         int index = 0;
-        for(VacationDto dto : vacationList){ 
-        %>
-        <tr>
-            <td><%=count-((p-1)*listSize)-index%></td>
-            <td><%=dto.getVac_category() %></td>
-            <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
-            <td><%=dto.getVac_reason() %></td>
-            <td><%=dto.getVac_comment() %></td>
-            <td><%=dto.getVac_write_date() %></td>
-            <td><%=dto.getVac_status() %></td>
-            <td>
-        		<button class="vacRejectBtn" vac_no=<%=dto.getVac_no() %>>반려</button> | 
-        		<button class="vacApproveBtn" vac_no=<%=dto.getVac_no() %>>승인</button>
-            </td>
-        </tr>
-        <%index++;} %>
+        if(vacationList.size() != 0){
+	        for(VacationDto dto : vacationList){ 
+	        %>
+		        <tr>
+		            <td><%=count-((p-1)*listSize)-index%></td>
+		            <td><%=dto.getVac_category() %></td>
+		            <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
+		            <td><%=dto.getVac_reason() %></td>
+		            <td><%=dto.getVac_comment() %></td>
+		            <td><%=dto.getVac_write_date() %></td>
+		            <td><%=dto.getVac_status() %></td>
+		            <td>
+		        		<button class="vacRejectBtn" vac_no=<%=dto.getVac_no() %>>반려</button> | 
+		        		<button class="vacApproveBtn" vac_no=<%=dto.getVac_no() %>>승인</button>
+		            </td>
+		        </tr>
+		        <%index++;
+	        }%>
+	        <tr>
+	        	<td colspan="8">
+					<div class="row center">
+						<ul class="pagination">
+							<li><a href="vac_app.jsp?p=<%=startBlock-1%>">&lt;</a></li>
+							<%for(int i=startBlock; i<=endBlock; i++){ %>
+								<%if(i == p){ %>
+								<li class="active">
+								<%}else{ %>
+								<li>
+								<%} %>
+								<a href="vac_app.jsp?p=<%=i%>"><%=i%></a>
+								</li>
+							<%} %>
+							<li><a href="vac_app.jsp?p=<%=endBlock+1 > pageSize ? pageSize : endBlock+1%>">&gt;</a></li>
+						</ul>
+					</div>
+	        	</td>
+	        </tr>
+        <% } else {%>
+        	<tr>
+        		<td colspan="8">정보가 없습니다.</td>
+        	</tr>
+        <%} %>
     </table>
-</div>
-<div class="row">
-	<ul class="pagination">
-		<li><a href="vac_app.jsp?p=<%=startBlock-1%>">&lt;</a></li>
-		
-		<%for(int i=startBlock; i<=endBlock; i++){ %>
-			<%if(i == p){ %>
-			<li class="active">
-			<%}else{ %>
-			<li>
-			<%} %>
-			<a href="vac_app.jsp?p=<%=i%>"><%=i%></a>
-			</li>
-		<%} %>
-		
-		<li><a href="vac_app.jsp?p=<%=endBlock+1 > pageSize ? pageSize : endBlock+1%>">&gt;</a></li>
-	</ul>
 </div>
 <script>
 	var approver = "<%=approver%>";

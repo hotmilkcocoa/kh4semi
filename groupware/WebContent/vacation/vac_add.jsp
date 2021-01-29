@@ -7,8 +7,8 @@
 <jsp:include page="/template/header.jsp"></jsp:include>
 
 <%
-	//int emp_no = (int) session.getAttribute("check");
-	int emp_no = 3;
+	int emp_no = (int) session.getAttribute("check");
+
 	boolean isEdit = request.getParameter("edit") != null;
 	VacationDto vacationDto = null;
 	if(isEdit){
@@ -78,13 +78,13 @@
                 <span>신청기간</span>
                 <div class="data">
                     <input class="dataInput date" type="date" name="vac_start" required <%if(isEdit){ %>value="<%=vacationDto.getVac_start()%>"<%} %>>
-                    <span class="dash">-</span> 
+                    <span class="hyphen">-</span> 
                     <input class="dataInput date" type="date" name="vac_end" required <%if(isEdit){ %>value="<%=vacationDto.getVac_end()%>"<%} %>>
                 </div>
             </div>
             <div class="row rel">
                 <span>사유</span>
-                <div class="hyphen">
+                <div class="data">
                     <input class="dataInput text" type="text" name="vac_reason" required <%if(isEdit){ %>value="<%=vacationDto.getVac_reason()%>"<%} %>>
                 </div>
             </div>

@@ -19,8 +19,7 @@ public class ScheduleDeleteServlet extends HttpServlet{
 		try {
 			req.setCharacterEncoding("utf-8");
 			
-//			int emp_no = (int) req.getSession().getAttribute("check");
-			int emp_no = 3;
+			int emp_no = (int) req.getSession().getAttribute("check");
 			
 			ScheduleDao scheduleDao = new ScheduleDao();
 			

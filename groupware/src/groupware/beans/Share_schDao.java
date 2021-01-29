@@ -61,4 +61,20 @@ public class Share_schDao {
 		
 		con.close();
 	}
+
+
+	public boolean find(int emp_no, int target_no) throws Exception{
+		Connection con = JdbcUtil.getConnection(USER, PW);
+		
+		String sql = "select * from share_sch where emp_no = ? and target_no = ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, emp_no);
+		ps.setInt(2, target_no);
+		
+		int count = ps.executeUpdate();
+		
+		con.close();
+		
+		return count == 1;
+	}
 }

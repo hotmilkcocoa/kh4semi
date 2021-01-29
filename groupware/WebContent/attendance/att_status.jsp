@@ -25,8 +25,7 @@
 </div>
 
 <%
-	//int emp_no = (int) session.getAttribute("check");
-	int emp_no = 3;
+	int emp_no = (int) session.getAttribute("check");
 
 	String date = request.getParameter("date");
 	

@@ -9,10 +9,12 @@
 <jsp:include page="/template/header.jsp"></jsp:include>
 
 <%
-	//int emp_no = (int) session.getAttribute("check");
-	int emp_no = 3;
+	int emp_no = (int) session.getAttribute("check");
 	
-	String no = request.getParameter("emp_no");
+	String target_no = request.getParameter("emp_no");
+	if(target_no!=null && !target_no.isEmpty()){
+		response.sendRedirect("share_add.do?target_no="+target_no);
+	}
 	Share_schDao shareDao = new Share_schDao();
 	List<Share_schDto> shareList = shareDao.select(emp_no);
 %>
@@ -36,12 +38,19 @@
 <div>
     <div>
         <table class="table table-border">
-            <%for(Share_schDto shareDto : shareList){ 
-            	EmployeeDto empDto = new EmployeeDao().find(shareDto.getTarget_no());%>
-            <tr>
-                <td><%=empDto.getEmp_name()%></td>
-                <td><button class="shareDel">삭제하기</button><input type="hidden" value="<%=shareDto.getShare_no()%>"></td>
-            </tr>
+            <%
+            if(shareList.size()!=0){
+	            for(Share_schDto shareDto : shareList){ 
+	            	EmployeeDto empDto = new EmployeeDao().find(shareDto.getTarget_no());%>
+		            <tr>
+		                <td><%=empDto.getEmp_name()+"<"+empDto.getEmp_email()+">"%></td>
+		                <td><button class="shareDel">삭제하기</button><input type="hidden" value="<%=shareDto.getShare_no()%>"></td>
+		            </tr>
+            	<%}
+            } else{%>
+            	<tr>
+	                <td colspan="2">목록이 없습니다.</td>
+	            </tr>
             <%} %>
         </table>
     </div>
