@@ -98,42 +98,80 @@ public class EmployeeDao {
 	}
 	
 	//사원 상세 조회 메소드
-		public EmployeeDto find(String emp_id) throws Exception {
-			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+	public EmployeeDto find(String emp_id) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_id = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_id);
+		ResultSet rs = ps.executeQuery();
+		EmployeeDto employeeDto;
+		
+		if(rs.next()) {
+			employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_id(rs.getString("emp_id"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
+			employeeDto.setEmp_addr(rs.getString("emp_addr"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
+			employeeDto.setEmp_salary(rs.getInt("emp_salary"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_etc(rs.getString("emp_etc"));
 			
-			String sql = "select * from employee where emp_id = ?";
-			
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, emp_id);
-			ResultSet rs = ps.executeQuery();
-			EmployeeDto employeeDto;
-			
-			if(rs.next()) {
-				employeeDto = new EmployeeDto();
-				employeeDto.setEmp_no(rs.getInt("emp_no"));
-				employeeDto.setEmp_name(rs.getString("emp_name"));
-				employeeDto.setEmp_id(rs.getString("emp_id"));
-				employeeDto.setEmp_email(rs.getString("emp_email"));
-				employeeDto.setEmp_phone(rs.getString("emp_phone"));
-				employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
-				employeeDto.setEmp_addr(rs.getString("emp_addr"));
-				employeeDto.setEmp_dep(rs.getString("emp_dep"));
-				employeeDto.setEmp_title(rs.getString("emp_title"));
-				employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
-				employeeDto.setEmp_salary(rs.getInt("emp_salary"));
-				employeeDto.setEmp_auth(rs.getString("emp_auth"));
-				employeeDto.setEmp_state(rs.getString("emp_state"));
-				employeeDto.setEmp_etc(rs.getString("emp_etc"));
-				
-			}
-			else {
-				employeeDto = null;
-			}
-			
-			con.close();
-			
-			return employeeDto;
 		}
+		else {
+			employeeDto = null;
+		}
+		
+		con.close();
+		
+		return employeeDto;
+	}
+		
+	//이메일로 사원 찾기
+	public EmployeeDto findByEmail(String emp_email) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_email = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_email);
+		ResultSet rs = ps.executeQuery();
+		EmployeeDto employeeDto;
+		
+		if(rs.next()) {
+			employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_id(rs.getString("emp_id"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
+			employeeDto.setEmp_addr(rs.getString("emp_addr"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
+			employeeDto.setEmp_salary(rs.getInt("emp_salary"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_etc(rs.getString("emp_etc"));
+			
+		}
+		else {
+			employeeDto = null;
+		}
+		
+		con.close();
+		
+		return employeeDto;
+	}
 	
 	//사원 리스트 
 	public List<EmployeeDto> select() throws Exception {
@@ -562,9 +600,9 @@ public class EmployeeDao {
 			
 		boolean result = rs.next();
 			
-			con.close();
-			
-			return result;
+		con.close();
+		
+		return result;
 	}
 	
 	//로그아웃
