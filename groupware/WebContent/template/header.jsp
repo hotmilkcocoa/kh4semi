@@ -177,14 +177,14 @@
                     <table>
                         <tbody>
                             <tr>
-                                <td rowspan="2" class="center"><img alt="직원사진" id="profileImg" class="img img-circle" src="<%=request.getContextPath()%>/image/profile_img.png"></td>
+                                <td rowspan="2" class="center"><a href="<%=request.getContextPath()%>/employee/info_detail.jsp"><img alt="직원사진" id="profileImg" class="img img-circle" src="<%=request.getContextPath()%>/image/profile_img.png"></a></td>
                                 <th><%=empDto.getEmp_name()%></th>
                                 <th><%=empDto.getEmp_title()%></th>
                                 <td rowspan="2" class="center logoutBtn"><button>로그아웃</button></td>
                             </tr>
                             <tr>
                                 <th><%=empDto.getEmp_dep()%></th>
-                                <td class="center"><a href="#"><img alt="개인정보수정" src="<%=request.getContextPath()%>/image/cog.svg" width="20" height="20"></a></td>     
+                                <td class="center"><a href="<%=request.getContextPath()%>/employee/setting.jsp"><img alt="개인정보수정" src="<%=request.getContextPath()%>/image/cog.svg" width="20" height="20"></a></td>     
                             </tr>
                         </tbody>
                     </table>

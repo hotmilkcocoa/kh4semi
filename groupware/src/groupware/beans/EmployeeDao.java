@@ -277,7 +277,22 @@ public class EmployeeDao {
 		
 	}
 	
-	
+	//사원용 비밀번호 변경
+	public boolean editPW(int emp_no, String emp_pw, String change_pw) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update employee set emp_pw=? where emp_no=? and emp_pw=?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, change_pw);
+		ps.setInt(2, emp_no);
+		ps.setString(3, emp_pw);
+		int count = ps.executeUpdate();
+		
+		con.close();
+		
+		return count > 0;
+	}
 	
 	//페이징을 이용한 검색
 	public List<EmployeeDto> pagingList(String type, String keyword, int startRow, int endRow) throws Exception {
