@@ -29,7 +29,7 @@ public class Share_schDao {
 	public List<Share_schDto> select(int emp_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "select * from share_sch where emp_no = ?";
+		String sql = "select * from share_sch where emp_no = ? order by share_no desc";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
 		

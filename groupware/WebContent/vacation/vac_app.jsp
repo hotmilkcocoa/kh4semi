@@ -18,9 +18,9 @@
 	EmployeeDao empDao = new EmployeeDao();
 	EmployeeDto empDto = empDao.find(emp_no);
 	
-	//부서장인지 인사부 팀장인지 검사
-	boolean isHrhead = empDto.getEmp_dep().equals("인사부") && empDto.getEmp_title().equals("팀장");
-	boolean isDephead = empDto.getEmp_title().equals("팀장");
+	//부서장인지 검사(인사부 제외)
+	boolean isDephead = empDto.getEmp_title().equals("팀장") && !empDto.getEmp_dep().equals("인사부");
+	if(!isDephead) response.sendError(403);
 	
 	VacationDao vacationDao = new VacationDao();
 	List<VacationDto> vacationList;
@@ -40,15 +40,9 @@
 	//직급에 맞게 목록 가져오기
 	String approver;
 	int count;
-	if(isHrhead){
-		vacationList = vacationDao.selectForHrhead(emp_no, startRow, endRow);
-		count = vacationDao.getCountForHrhead(emp_no);
-		approver = "hrhead";
-	} else{
-		vacationList = vacationDao.selectForDephead(emp_no, startRow, endRow);
-		count = vacationDao.getCountForDephaed(emp_no);
-		approver = "dephead";
-	}
+	vacationList = vacationDao.selectForDephead(emp_no, startRow, endRow);
+	count = vacationDao.getCountForDephaed(emp_no);
+	approver = "dephead";
 	
 	//블록 정보
 	int blockSize = 5;
@@ -73,6 +67,7 @@
             <td>기간</td>
             <td>사유</td>
             <td>기타사항</td>
+            <td>신청자</td>
             <td>신청일</td>
             <td>상태</td>
             <td>관리</td>
@@ -83,6 +78,7 @@
         int index = 0;
         if(vacationList.size() != 0){
 	        for(VacationDto dto : vacationList){ 
+	        	EmployeeDto targetDto = empDao.find(dto.getVac_target_no());
 	        %>
 		        <tr>
 		            <td><%=count-((p-1)*listSize)-index%></td>
@@ -90,6 +86,7 @@
 		            <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
 		            <td><%=dto.getVac_reason() %></td>
 		            <td><%=dto.getVac_comment() %></td>
+		            <td><%=targetDto.getEmp_name()%>(<%=targetDto.getEmp_dep()%>)</td>
 		            <td><%=dto.getVac_write_date() %></td>
 		            <td><%=dto.getVac_status() %></td>
 		            <td>
@@ -120,7 +117,7 @@
 	        </tr>
         <% } else {%>
         	<tr>
-        		<td colspan="8">정보가 없습니다.</td>
+        		<td colspan="9">정보가 없습니다.</td>
         	</tr>
         <%} %>
     </table>

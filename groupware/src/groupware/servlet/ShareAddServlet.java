@@ -28,8 +28,9 @@ public class ShareAddServlet extends HttpServlet{
 				resp.sendRedirect("sch_manage.jsp?error");
 			} else {
 				Share_schDao shareDao = new Share_schDao();
-				shareDao.insert(emp_no, empDto.getEmp_no());
-				
+				if(!shareDao.find(emp_no, empDto.getEmp_no()) && emp_no!=empDto.getEmp_no()) {
+					shareDao.insert(emp_no, empDto.getEmp_no());
+				}				
 				resp.sendRedirect("sch_manage.jsp");
 			}
 		} catch (Exception e) {
@@ -51,7 +52,7 @@ public class ShareAddServlet extends HttpServlet{
 			StringTokenizer st = new StringTokenizer(target_no, ",");
 			while(st.hasMoreTokens()) {
 				int parsed = Integer.parseInt(st.nextToken());
-				if(!shareDao.find(emp_no, parsed)) {
+				if(!shareDao.find(emp_no, parsed) && emp_no!=parsed) {
 					shareDao.insert(emp_no, parsed);
 				}
 			}

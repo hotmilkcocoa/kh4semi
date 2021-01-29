@@ -604,6 +604,18 @@ public class EmployeeDao {
 		
 		return result;
 	}
+
+	public void setLeave(int vac_target_no) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update employee set emp_state = '휴가' where emp_no = ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, vac_target_no);
+		
+		ps.execute();
+		
+		con.close();
+	}
 	
 	//로그아웃
 	
