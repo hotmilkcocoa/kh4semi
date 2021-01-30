@@ -162,7 +162,7 @@
 	EmployeeDto empDto = empDao.find(emp_no);
 	
 	//부서장인지 인사부 팀장인지 검사
-	boolean isDephead = empDto.getEmp_title().equals("팀장") && !empDto.getEmp_dep().equals("인사부");
+	boolean isDephead = empDto.getEmp_title().equals("팀장");
 %>
 </head>
 <body>

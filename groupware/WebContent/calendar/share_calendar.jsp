@@ -450,7 +450,7 @@
 			});
 		}
 		//리스트에 일정이 있을 시 실행
-		<%if(schList != null){
+		<%if(schList.size() > 0){
 			for(ScheduleDto schDto : schList){%>
 				var calTdDivSchList = calType=="daily" ? document.querySelectorAll(".calTdDivSchList")[<%=schDto.getSch_start().toLocalDateTime().toLocalTime().getHour()%>] : document.querySelectorAll(".calTdDivSchList")[<%=i%>];
 				var listpopContainer = document.querySelectorAll(".listpopContainer")[<%=i%>];
