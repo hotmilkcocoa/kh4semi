@@ -277,7 +277,22 @@ public class EmployeeDao {
 		
 	}
 	
-	
+	//사원용 비밀번호 변경
+	public boolean editPW(int emp_no, String emp_pw, String change_pw) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update employee set emp_pw=? where emp_no=? and emp_pw=?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, change_pw);
+		ps.setInt(2, emp_no);
+		ps.setString(3, emp_pw);
+		int count = ps.executeUpdate();
+		
+		con.close();
+		
+		return count > 0;
+	}
 	
 	//페이징을 이용한 검색
 	public List<EmployeeDto> pagingList(String type, String keyword, int startRow, int endRow) throws Exception {
@@ -605,6 +620,7 @@ public class EmployeeDao {
 		return result;
 	}
 
+	//장기 이탈자 상태 변경
 	public void setLeave(int vac_target_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
@@ -617,6 +633,35 @@ public class EmployeeDao {
 		con.close();
 	}
 	
-	//로그아웃
+	//장기 이탈자 조회
+	public List<EmployeeDto> leaveFind() throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_state = '휴가'";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+	}
+	
 	
 }

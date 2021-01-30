@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import groupware.beans.EmployeeDao;
 import groupware.beans.EmployeeDto;
 
-@WebServlet(urlPatterns = "/admin/emp_edit.do")
-public class EmployeeEditServlet extends HttpServlet{
+@WebServlet(urlPatterns = "/employee/emp_edit.do")
+public class EmpSelfEditServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,14 +38,12 @@ public class EmployeeEditServlet extends HttpServlet{
 			employeeDao.update(employeeDto);
 			
 			//출력
-			resp.sendRedirect(req.getContextPath()+"/admin/emp_detail.jsp?emp_no="+employeeDto.getEmp_no());
+			resp.sendRedirect(req.getContextPath()+"/employee/info_detail.jsp?emp_no="+employeeDto.getEmp_no());
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);
 		}
-		
-		
-		
+			
 	}
 }
