@@ -98,42 +98,80 @@ public class EmployeeDao {
 	}
 	
 	//사원 상세 조회 메소드
-		public EmployeeDto find(String emp_id) throws Exception {
-			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+	public EmployeeDto find(String emp_id) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_id = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_id);
+		ResultSet rs = ps.executeQuery();
+		EmployeeDto employeeDto;
+		
+		if(rs.next()) {
+			employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_id(rs.getString("emp_id"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
+			employeeDto.setEmp_addr(rs.getString("emp_addr"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
+			employeeDto.setEmp_salary(rs.getInt("emp_salary"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_etc(rs.getString("emp_etc"));
 			
-			String sql = "select * from employee where emp_id = ?";
-			
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, emp_id);
-			ResultSet rs = ps.executeQuery();
-			EmployeeDto employeeDto;
-			
-			if(rs.next()) {
-				employeeDto = new EmployeeDto();
-				employeeDto.setEmp_no(rs.getInt("emp_no"));
-				employeeDto.setEmp_name(rs.getString("emp_name"));
-				employeeDto.setEmp_id(rs.getString("emp_id"));
-				employeeDto.setEmp_email(rs.getString("emp_email"));
-				employeeDto.setEmp_phone(rs.getString("emp_phone"));
-				employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
-				employeeDto.setEmp_addr(rs.getString("emp_addr"));
-				employeeDto.setEmp_dep(rs.getString("emp_dep"));
-				employeeDto.setEmp_title(rs.getString("emp_title"));
-				employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
-				employeeDto.setEmp_salary(rs.getInt("emp_salary"));
-				employeeDto.setEmp_auth(rs.getString("emp_auth"));
-				employeeDto.setEmp_state(rs.getString("emp_state"));
-				employeeDto.setEmp_etc(rs.getString("emp_etc"));
-				
-			}
-			else {
-				employeeDto = null;
-			}
-			
-			con.close();
-			
-			return employeeDto;
 		}
+		else {
+			employeeDto = null;
+		}
+		
+		con.close();
+		
+		return employeeDto;
+	}
+		
+	//이메일로 사원 찾기
+	public EmployeeDto findByEmail(String emp_email) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_email = ?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, emp_email);
+		ResultSet rs = ps.executeQuery();
+		EmployeeDto employeeDto;
+		
+		if(rs.next()) {
+			employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_id(rs.getString("emp_id"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			employeeDto.setEmp_birth(rs.getDate("emp_birth")); 
+			employeeDto.setEmp_addr(rs.getString("emp_addr"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_hiredate(rs.getDate("emp_hiredate"));
+			employeeDto.setEmp_salary(rs.getInt("emp_salary"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_etc(rs.getString("emp_etc"));
+			
+		}
+		else {
+			employeeDto = null;
+		}
+		
+		con.close();
+		
+		return employeeDto;
+	}
 	
 	//사원 리스트 
 	public List<EmployeeDto> select() throws Exception {
@@ -239,7 +277,22 @@ public class EmployeeDao {
 		
 	}
 	
-	
+	//사원용 비밀번호 변경
+	public boolean editPW(int emp_no, String emp_pw, String change_pw) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update employee set emp_pw=? where emp_no=? and emp_pw=?";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, change_pw);
+		ps.setInt(2, emp_no);
+		ps.setString(3, emp_pw);
+		int count = ps.executeUpdate();
+		
+		con.close();
+		
+		return count > 0;
+	}
 	
 	//페이징을 이용한 검색
 	public List<EmployeeDto> pagingList(String type, String keyword, int startRow, int endRow) throws Exception {
@@ -562,11 +615,55 @@ public class EmployeeDao {
 			
 		boolean result = rs.next();
 			
-			con.close();
-			return result;
-			
+
+		con.close();
+		
+		return result;
+	}
+
+	//장기 이탈자 상태 변경
+	public void setLeave(int vac_target_no) throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "update employee set emp_state = '휴가' where emp_no = ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, vac_target_no);
+		
+		ps.execute();
+		
+		con.close();
+
 	}
 	
-	//로그아웃
+	//장기 이탈자 조회
+	public List<EmployeeDto> leaveFind() throws Exception{
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from employee where emp_state = '휴가'";
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+		
+		List<EmployeeDto> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			EmployeeDto employeeDto = new EmployeeDto();
+			employeeDto.setEmp_no(rs.getInt("emp_no"));
+			employeeDto.setEmp_name(rs.getString("emp_name"));
+			employeeDto.setEmp_dep(rs.getString("emp_dep"));
+			employeeDto.setEmp_title(rs.getString("emp_title"));
+			employeeDto.setEmp_auth(rs.getString("emp_auth"));
+			employeeDto.setEmp_state(rs.getString("emp_state"));
+			employeeDto.setEmp_email(rs.getString("emp_email"));
+			employeeDto.setEmp_phone(rs.getString("emp_phone"));
+			
+			list.add(employeeDto);
+		}
+		
+		con.close(); 
+		
+		return list;
+	}
+	
 	
 }

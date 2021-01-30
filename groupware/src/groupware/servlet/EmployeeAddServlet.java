@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import groupware.beans.AnnualDao;
 import groupware.beans.EmployeeDao;
 import groupware.beans.EmployeeDto;
 
@@ -40,6 +41,9 @@ public class EmployeeAddServlet extends HttpServlet{
 			int emp_no = employeeDao.getSequence();
 			employeeDto.setEmp_no(emp_no);
 			employeeDao.empAdd(employeeDto);
+			
+			AnnualDao annDao = new AnnualDao();
+			annDao.insert(emp_no);
 			
 			//출력
 			resp.sendRedirect(req.getContextPath()+"/admin/emp_detail.jsp?emp_no="+emp_no);

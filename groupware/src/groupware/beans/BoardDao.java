@@ -37,6 +37,39 @@ public class BoardDao {
 		
 		return mainlist;
 	}
+	
+	//페이징을 이용한 목록
+	public List<BoardDto> mainlist(int startRow, int endRow) throws Exception {
+		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+		
+		String sql = "select * from(" +
+						"select rownum rn, TMP.* from(" +
+							"select * from board order by board_no desc" +
+						")TMP" +
+					") where rn between ? and ?"; 
+	
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setInt(1, startRow);
+		ps.setInt(2, endRow);
+		ResultSet rs = ps.executeQuery();
+		
+		List<BoardDto> mainlist = new ArrayList<>();
+		while(rs.next()) {
+			BoardDto dto = new BoardDto();
+			dto.setBoard_no(rs.getInt("board_no"));
+			dto.setBoard_header(rs.getString("board_header"));
+			dto.setBoard_title(rs.getString("board_title"));
+			dto.setBoard_context(rs.getString("board_context"));
+			dto.setBoard_dep(rs.getString("board_dep"));
+			dto.setBoard_writer(rs.getInt("board_writer"));
+			dto.setBoard_writedate(rs.getDate("board_writedate"));
+			mainlist.add(dto);
+		}
+		con.close();
+		
+		return mainlist;
+	}	
+	
 	//조회
 	public List<BoardDto> select() throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);

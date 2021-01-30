@@ -84,7 +84,9 @@
 				</tr>
 				<tr>
 					<th>회사조직도</th>
-					<td colspan="3" height="200"></td>
+					<td colspan="3" height="200">
+						<img alt="회사 조직도" src="<%=request.getContextPath()%>/image/com_chart.png" width="700" height="200">
+					</td>
 				</tr>
 			</tbody>
 			<tfoot>

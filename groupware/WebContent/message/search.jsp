@@ -111,6 +111,7 @@
 		/* $("#hiddenValue").val(chkArray);
 		window.opener.name = "parentPage";
 		document.form.target = "parentPage";
+		document.form.action = window.opener.location.href;//부모창의 주소로 폼 값 전송
 		document.form.submit();
 		self.close(); */
 	});

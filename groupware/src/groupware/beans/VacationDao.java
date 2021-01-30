@@ -211,7 +211,7 @@ public class VacationDao {
 		
 		String sql = "select * from(\r\n" + 
 				"select rownum rn, V.* from vacation V inner join vacation_approval P on V.vac_no = P.vac_no\r\n" + 
-				"where V.vac_status = '진행' or (V.vac_status = '대기' and P.dep_head_no = ?)) where rn between ? and ?";
+				"where V.vac_status = '대기' and P.dep_head_no = ?) where rn between ? and ?";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, dep_head_no);
 		ps.setInt(2, startRow);

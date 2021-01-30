@@ -40,19 +40,19 @@
 	
 	<form action="tna_setting_edit.do" method="post">
 		<input type="hidden" name="att_set_no" value="1">
-		<div class="row">
+		<div class="row table table-border">
 			<h3><li>출근시간</li></h3>
 			<input type="time" style="width:300px;" class="input input-inline" name="att_set_start" value="<%=start_timeFormat%>" required>
 			<span><%=start_timeFormat%></span>
 		</div>
 	
-		<div class="row">
+		<div class="row table table-border">
 			<h3><li>퇴근시간</li></h3>
 			<input type="time" style="width:300px;" class="input input-inline" name="att_set_end" value="<%=end_timeFormat%>" required>
 			<span><%=end_timeFormat%></span>
 		</div>
 	
-		<div class="row">
+		<div class="row table table-border">
 			<h3><li>지각설정시간</li></h3>
 			<input type="text" style="width:300px;" class="input input-inline" name="att_set_late" value="<%=dataSettingDto.getAtt_set_late()%>">분
 		</div>

@@ -8,6 +8,11 @@
 <%@page import="groupware.util.Util"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<style>
+	.workingHourTable{
+		font-size: 14px;
+	}
+</style>
 
 <jsp:include page="/template/header.jsp"></jsp:include>
 <div class="scrollbox">
@@ -20,8 +25,7 @@
 </div>
 
 <%
-	//int emp_no = (int) session.getAttribute("check");
-	int emp_no = 3;
+	int emp_no = (int) session.getAttribute("check");
 
 	String date = request.getParameter("date");
 	
