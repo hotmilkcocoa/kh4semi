@@ -186,7 +186,7 @@
                                 <td rowspan="2" class="center"><a href="<%=request.getContextPath()%>/employee/info_detail.jsp"><img alt="직원사진" id="profileImg" class="img img-circle" src="<%=request.getContextPath()%>/image/emp07.jpg"></a></td>
                                 <th><%=empDto.getEmp_name()%></th>
                                 <th><%=empDto.getEmp_title()%></th>
-                                <td rowspan="2" class="center logoutBtn"><button>로그아웃</button></td>
+                                <td rowspan="2" style="width:100px" class="center logoutBtn"><button>로그아웃</button></td>
                             </tr>
                             <tr>
                                 <th><%=empDto.getEmp_dep()%></th>
