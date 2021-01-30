@@ -145,6 +145,7 @@
 		<input type="button" value="월간" id="monthly" class="changeType">
 		<input type="button" value="일정 추가" id="sch_add">
 		<input type="button" value="캘린더 설정" id="sch_manage">
+		<input type="button" value="공유 목록" id="share_list">
 	</div>
 	<hr>
 	<div class="calendar">
@@ -158,6 +159,7 @@
 		</div>
 	</div>
 </div>
+<div class="shareListpop pop"></div>
 <div class="viewpop pop hide">
 	<input type="button" class="closeBtn" value="X">
     <div class="viewheader">

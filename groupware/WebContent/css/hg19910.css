@@ -113,3 +113,6 @@
 .vacTable{
 	font-size: 14px;
 }
+table#paintArea td, table.dayTable td{
+	border: 1px solid lightgray;
+}
