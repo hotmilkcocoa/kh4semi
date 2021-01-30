@@ -19,7 +19,7 @@ public class MessageDao {
 	public int getSequence() throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
-		String sql = "select message.nextval from dual";
+		String sql = "select message_seq.nextval from dual";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
@@ -33,13 +33,17 @@ public class MessageDao {
 	public void insert(MessageDto dto) throws Exception{
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
-		String sql = "insert into message values(message_seq.nextval, ?, ?, ?, ?, sysdate)";
+		String sql = "insert into "
+					+ "message(message_no, message_sender, message_receiver, message_title, message_content) "
+					+ "values("
+							+ "?, ?, ?, ?, ?)";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setInt(1, dto.getMessage_sender());
-		ps.setInt(2, dto.getMessage_receiver());
-		ps.setString(3, dto.getMessage_title());
-		ps.setString(4, dto.getMessage_content());
+		ps.setInt(1, dto.getMessage_no());
+		ps.setInt(2, dto.getMessage_sender());
+		ps.setInt(3, dto.getMessage_receiver());
+		ps.setString(4, dto.getMessage_title());
+		ps.setString(5, dto.getMessage_content());
 		
 		ps.execute();
 		
@@ -48,15 +52,16 @@ public class MessageDao {
 	}
 	
 	//받은 메세지 조회
-	public List<MessageDto> select(int emp_no) throws Exception {
+	public List<MessageDto> selectIn(int emp_no) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
 		String sql = "select "
-						+ "rownum, E.emp_no, E.emp_name, E.emp_title, M.* "
+						+ "rownum rn, E.emp_no, E.emp_name, E.emp_title, M.* "
 					+ "from "
 						+ "message M inner join employee E on M.message_sender = E.emp_no "
 					+ "where "
-						+ "message_receiver = ?";
+						+ "message_receiver = ? "
+					+ "order by message_no desc";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
@@ -64,21 +69,27 @@ public class MessageDao {
 		List<MessageDto> list = new ArrayList<>();
 		while(rs.next()) {
 			MessageDto msgDto = new MessageDto();
-			msgDto.setRownum(rs.getInt("rownum"));
-			msgDto.setEmp_no(rs.getInt("emp_no"));
-			msgDto.setEmp_name(rs.getString("emp_name"));
-			msgDto.setEmp_title(rs.getString("emp_title"));
-			msgDto.setMessage_no(rs.getInt("message_no"));
-			msgDto.setMessage_title(rs.getString("message_title"));
-			msgDto.setMessage_content(rs.getString("message_content"));
-			msgDto.setMessage_time(rs.getDate("message_time"));
-			msgDto.setMessage_sender(rs.getInt("message_sender"));
-			msgDto.setMessage_receiver(rs.getInt("message_receiver"));
-			msgDto.setRead_check(rs.getString("read_check"));
-			msgDto.setDel_receiver(rs.getString("del_receiver"));
-			msgDto.setDel_sender(rs.getString("del_sender"));
+			if(rs.getString("del_sender").equals("N")) {
+				
+				msgDto.setRownum(rs.getInt("rn"));
+				msgDto.setEmp_no(rs.getInt("emp_no"));
+				msgDto.setEmp_name(rs.getString("emp_name"));
+				msgDto.setEmp_title(rs.getString("emp_title"));
+				msgDto.setMessage_no(rs.getInt("message_no"));
+				msgDto.setMessage_title(rs.getString("message_title"));
+				msgDto.setMessage_content(rs.getString("message_content"));
+				msgDto.setMessage_time(rs.getDate("message_time"));
+				msgDto.setMessage_sender(rs.getInt("message_sender"));
+				msgDto.setMessage_receiver(rs.getInt("message_receiver"));
+				msgDto.setRead_check(rs.getString("read_check"));
+				msgDto.setDel_receiver(rs.getString("del_receiver"));
+				msgDto.setDel_sender(rs.getString("del_sender"));
+
+				list.add(msgDto);
+			} else if(rs.getString("del_sender").equals("Y") && rs.getString("del_receiver").equals("Y")) {
+				delete(rs.getInt("message_no"));
+			}
 			
-			list.add(msgDto);
 		}
 		con.close();
 		return list;
@@ -93,7 +104,7 @@ public class MessageDao {
 					+ "from "
 						+ "message M inner join employee E on M.message_sender = E.emp_no "
 					+ "where "
-						+ "M.message_no = ?";
+						+ "M.message_no = ? order by message_no desc";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, message_no);
@@ -124,20 +135,22 @@ public class MessageDao {
 	}
 	
 		//메세지 상세조회(이전 다음글 조회)
-		public MessageDto rnFind(int emp_no, int rn) throws Exception {
+		public MessageDto rnFind(int emp_no, int msg_no) throws Exception {
 			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 			
 			String sql = "select * from("
 						+ "select rownum rn, tmp.* from("
 							+ "select E.emp_no, E.emp_name, E.emp_title, M.* "
 						+ "from "
-							+ "message M inner join employee E on M.message_sender = E.emp_no "
+							+ "message M inner join employee E on M.message_receiver = E.emp_no "
 						+ "where "
-							+ "M.message_receiver = ?) tmp) where rn = ?";
+							+ "M.message_receiver = ? order by message_no) "
+						+ "tmp) "
+						+ "where message_no = ?";
 			
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, emp_no);
-			ps.setInt(2, rn);
+			ps.setInt(2, msg_no);
 			ResultSet rs = ps.executeQuery();
 			
 			MessageDto msgDto;
@@ -165,7 +178,7 @@ public class MessageDao {
 			return msgDto;
 		}
 		
-		//게시글 갯수 조회
+		//받은쪽지함 갯수 조회(inbox)
 		public int getCount(int emp_no) throws Exception {
 			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 			
@@ -174,10 +187,10 @@ public class MessageDao {
 								+ "select "
 									+ "E.emp_no, E.emp_name, E.emp_title, M.* "
 								+ "from "
-									+ "message M inner join employee E on M.message_sender = E.emp_no "
+									+ "message M inner join employee E on M.message_receiver = E.emp_no "
 								+ "where "
 									+ "M.message_receiver = ?"
-							+ ")";
+							+ " order by message_no desc)";
 	
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, emp_no);
@@ -190,15 +203,16 @@ public class MessageDao {
 
 		
 		//보낸메세지조회
-		public List<MessageDto> selectSend(int emp_no) throws Exception {
+		public List<MessageDto> selectSent(int emp_no) throws Exception {
 			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 			
 			String sql = "select "
-							+ "rownum, E.emp_no, E.emp_name, E.emp_title, M.* "
+							+ "rownum rn, E.emp_no, E.emp_name, E.emp_title, M.* "
 						+ "from "
 							+ "message M inner join employee E on M.message_receiver = E.emp_no "
 						+ "where "
-							+ "message_sender = ?";
+							+ "message_sender = ? "
+						+ "order by message_no desc";
 			
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, emp_no);
@@ -206,21 +220,25 @@ public class MessageDao {
 			List<MessageDto> list = new ArrayList<>();
 			while(rs.next()) {
 				MessageDto msgDto = new MessageDto();
-				msgDto.setRownum(rs.getInt("rownum"));
-				msgDto.setEmp_no(rs.getInt("emp_no"));
-				msgDto.setEmp_name(rs.getString("emp_name"));
-				msgDto.setEmp_title(rs.getString("emp_title"));
-				msgDto.setMessage_no(rs.getInt("message_no"));
-				msgDto.setMessage_title(rs.getString("message_title"));
-				msgDto.setMessage_content(rs.getString("message_content"));
-				msgDto.setMessage_time(rs.getDate("message_time"));
-				msgDto.setMessage_sender(rs.getInt("message_sender"));
-				msgDto.setMessage_receiver(rs.getInt("message_receiver"));
-				msgDto.setRead_check(rs.getString("read_check"));
-				msgDto.setDel_receiver(rs.getString("del_receiver"));
-				msgDto.setDel_sender(rs.getString("del_sender"));
-				
-				list.add(msgDto);
+				if(rs.getString("del_receiver").equals("N")) {
+					msgDto.setRownum(rs.getInt("rn"));
+					msgDto.setEmp_no(rs.getInt("emp_no"));
+					msgDto.setEmp_name(rs.getString("emp_name"));
+					msgDto.setEmp_title(rs.getString("emp_title"));
+					msgDto.setMessage_no(rs.getInt("message_no"));
+					msgDto.setMessage_title(rs.getString("message_title"));
+					msgDto.setMessage_content(rs.getString("message_content"));
+					msgDto.setMessage_time(rs.getDate("message_time"));
+					msgDto.setMessage_sender(rs.getInt("message_sender"));
+					msgDto.setMessage_receiver(rs.getInt("message_receiver"));
+					msgDto.setRead_check(rs.getString("read_check"));
+					msgDto.setDel_receiver(rs.getString("del_receiver"));
+					msgDto.setDel_sender(rs.getString("del_sender"));
+					
+					list.add(msgDto);
+				} else if(rs.getString("del_sender").equals("Y") && rs.getString("del_receiver").equals("Y")) {
+					delete(rs.getInt("message_no"));
+				}
 			}
 			con.close();
 			return list;
@@ -228,67 +246,233 @@ public class MessageDao {
 		
 		
 		//보낸메세지 상세조회(이전 다음글 조회)
-				public MessageDto rnFindSend(int emp_no, int rn) throws Exception {
-					Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
-					
-					String sql = "select * from("
-								+ "select rownum rn, tmp.* from("
-									+ "select E.emp_no, E.emp_name, E.emp_title, M.* "
-								+ "from "
-									+ "message M inner join employee E on M.message_receiver = E.emp_no "
-								+ "where "
-									+ "M.message_sender = ?) tmp) where rn = ?";
-					
-					PreparedStatement ps = con.prepareStatement(sql);
-					ps.setInt(1, emp_no);
-					ps.setInt(2, rn);
-					ResultSet rs = ps.executeQuery();
-					
-					MessageDto msgDto;
-					if(rs.next()) {
-						msgDto =  new MessageDto();
-						msgDto.setRownum(rs.getInt("rn"));
-						msgDto.setEmp_no(rs.getInt("emp_no"));
-						msgDto.setEmp_name(rs.getString("emp_name"));
-						msgDto.setEmp_title(rs.getString("emp_title"));
-						msgDto.setMessage_no(rs.getInt("message_no"));
-						msgDto.setMessage_title(rs.getString("message_title"));
-						msgDto.setMessage_content(rs.getString("message_content"));
-						msgDto.setMessage_time(rs.getDate("message_time"));
-						msgDto.setMessage_receiver(rs.getInt("message_receiver"));
-						msgDto.setMessage_sender(rs.getInt("message_sender"));
-						msgDto.setRead_check(rs.getString("read_check"));
-						msgDto.setDel_receiver(rs.getString("del_receiver"));
-						msgDto.setDel_sender(rs.getString("del_sender"));
-					} else {
-						msgDto = null;
-					}
-					
-					
-					con.close();
-					return msgDto;
-				}
-				
-				//게시글 갯수 조회
-				public int getCountSend(int emp_no) throws Exception {
-					Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
-					
-					String sql = "select count(*) "
-									+ "from( "
-										+ "select "
-											+ "E.emp_no, E.emp_name, E.emp_title, M.* "
-										+ "from "
-											+ "message M inner join employee E on M.message_receiver = E.emp_no "
-										+ "where "
-											+ "M.message_sender = ?"
-									+ ")";
+		public MessageDto rnFindSend(int emp_no, int msg_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 			
-					PreparedStatement ps = con.prepareStatement(sql);
-					ps.setInt(1, emp_no);
-					ResultSet rs = ps.executeQuery();
-					rs.next();
-					int count = rs.getInt(1);
-					con.close();
-					return count;
-				}
+			String sql = "select * from("
+						+ "select rownum rn, tmp.* from("
+							+ "select E.emp_no, E.emp_name, E.emp_title, M.* "
+						+ "from "
+							+ "message M inner join employee E on M.message_sender = E.emp_no "
+						+ "where "
+							+ "M.message_sender = ? order by message_no) tmp) where message_no = ?";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, emp_no);
+			ps.setInt(2, msg_no);
+			ResultSet rs = ps.executeQuery();
+			
+			MessageDto msgDto;
+			if(rs.next()) {
+				msgDto =  new MessageDto();
+				msgDto.setRownum(rs.getInt("rn"));
+				msgDto.setEmp_no(rs.getInt("emp_no"));
+				msgDto.setEmp_name(rs.getString("emp_name"));
+				msgDto.setEmp_title(rs.getString("emp_title"));
+				msgDto.setMessage_no(rs.getInt("message_no"));
+				msgDto.setMessage_title(rs.getString("message_title"));
+				msgDto.setMessage_content(rs.getString("message_content"));
+				msgDto.setMessage_time(rs.getDate("message_time"));
+				msgDto.setMessage_receiver(rs.getInt("message_receiver"));
+				msgDto.setMessage_sender(rs.getInt("message_sender"));
+				msgDto.setRead_check(rs.getString("read_check"));
+				msgDto.setDel_receiver(rs.getString("del_receiver"));
+				msgDto.setDel_sender(rs.getString("del_sender"));
+			} else {
+				msgDto = null;
+			}
+			
+			
+			con.close();
+			return msgDto;
+		}
+		
+		//보낸쪽지함 갯수 조회(sentbox)
+		public int getCountSend(int emp_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "select count(*) "
+							+ "from( "
+								+ "select "
+									+ "E.emp_no, E.emp_name, E.emp_title, M.* "
+								+ "from "
+									+ "message M inner join employee E on M.message_sender = E.emp_no "
+								+ "where "
+									+ "M.message_sender = ?"
+							+ " order by message_no desc)";
+	
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, emp_no);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			int count = rs.getInt(1);
+			con.close();
+			return count;
+		}
+		
+		//쪽지 아예 삭제
+		public void delete(int message_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "delete message where message_no = ?";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.execute();
+			
+			con.close();
+		}
+		
+		//쪽지 삭제 체크(받은쪽지함)
+		public void deleteCkInbox(int message_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "update message set del_sender = 'Y' where message_no = ?";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.execute();
+			con.close();
+		}
+		
+		//쪽지 삭제 체크(보낸쪽지함)
+		public void deleteCkSentbox(int message_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "update message set del_receiver = 'Y' where message_no = ?";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.execute();
+			con.close();
+		}
+		
+		//쪽지 읽음 체크
+		public void readCk(int message_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "update message set read_check = 'Y' where message_no = ?";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.execute();
+			con.close();
+		}
+		
+		
+		
+		//이전글 가져오기(inbox)
+		public int prevSend(int message_no, int emp_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "select message_no from message where message_no = (select max(message_no)from message where message_no < ? and message_receiver = ?)";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.setInt(2, emp_no);
+			ResultSet rs = ps.executeQuery();
+			
+			int msg_no;
+			if(rs.next()) {
+				msg_no = rs.getInt("message_no");
+			} else {
+				msg_no = 0;
+			}
+			
+			con.close();
+			return msg_no;
+			
+		}
+		
+		
+		//다음글 가져오기(inbox)
+		public int nextSend(int message_no, int emp_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "select message_no from message where message_no = (select min(message_no)from message where message_no > ? and message_receiver = ?)";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.setInt(2, emp_no);
+			ResultSet rs = ps.executeQuery();
+			
+			int msg_no;
+			if(rs.next()) {
+				msg_no = rs.getInt("message_no");
+			} else {
+				msg_no = 0;
+			}
+			
+			con.close();
+			return msg_no;
+			
+		}
+		
+		
+		//이전글 가져오기(sentbox)
+		public int prev(int message_no, int emp_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "select message_no from message where message_no = (select max(message_no)from message where message_no < ? and message_sender = ?)";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.setInt(2, emp_no);
+			ResultSet rs = ps.executeQuery();
+			
+			int msg_no;
+			if(rs.next()) {
+				msg_no = rs.getInt("message_no");
+			} else {
+				msg_no = 0;
+			}
+			
+			con.close();
+			return msg_no;
+			
+		}
+		
+		
+		//다음글 가져오기(sentbox)
+		public int next(int message_no, int emp_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "select message_no from message where message_no = (select min(message_no)from message where message_no > ? and message_sender = ?)";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, message_no);
+			ps.setInt(2, emp_no);
+			ResultSet rs = ps.executeQuery();
+			
+			int msg_no;
+			if(rs.next()) {
+				msg_no = rs.getInt("message_no");
+			} else {
+				msg_no = 0;
+			}
+			System.out.println(msg_no);
+			con.close();
+			return msg_no;
+			
+		}
+		
+		//해당 메세지가 받는사람이 나라면
+		public int boxCheck(int msg_no) throws Exception {
+			Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+			
+			String sql = "select message_receiver from message where message_no = ?";
+			
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, msg_no);
+			ResultSet rs = ps.executeQuery();
+			int no;
+			if(rs.next()) {
+				no = rs.getInt("message_receiver");
+			} else {
+				no = 0;
+			}
+			
+			con.close();
+			return no;
+		}
 }

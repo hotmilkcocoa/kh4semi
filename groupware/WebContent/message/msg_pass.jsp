@@ -4,8 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-//int emp_no = (int)request.getSession().getAttribute("check");
-	int emp_no = 1;
+	int emp_no = (int)request.getSession().getAttribute("check");
 	int msg_no = Integer.parseInt(request.getParameter("msg_no"));
 	
 	MessageDao msgDao = new MessageDao();

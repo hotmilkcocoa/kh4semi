@@ -22,9 +22,9 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	
-	//int emp_no = request.getSession().getAttribute("check");
+	int emp_no = (int)request.getSession().getAttribute("check");
 	
-	int emp_no = 1;
+	
 	String keyword = request.getParameter("keyword");
 	EmployeeDao empDao = new EmployeeDao();
 	List<EmployeeDto> empList = new ArrayList<>();
@@ -96,13 +96,16 @@
 		});
 		
 		//부모창으로 값 전달
-		var chkArray = new Array();
+		var noArray = new Array();
+		var nameArray = new Array();
 		$("#submit-btn").click(function(){
 			$(".check-btn:checked").each(function(i){
-				chkArray.push($(this).val());
+				noArray.push($(this).data("no"));
+				nameArray.push($(this).data("name"));
 			});
 		//부모창에 있는 empAdd라는 함수를 실행시키면서 chkArray를 전달(전송 아님)
-		window.opener.parent.empAdd(chkArray);	
+		window.opener.parent.empAdd2(noArray);
+		window.opener.parent.empAdd1(nameArray);
 		self.close();
 			
 		/* $("#hiddenValue").val(chkArray);
@@ -157,7 +160,7 @@
 						<%for(EmpFavoriteDto dto : favList) {%>
 							<tr>
 								<td>
-									<input type="checkbox" class="check-btn" value="<%=dto.getFav_emp_no()%>">
+									<input type="checkbox" class="check-btn" data-no=<%=dto.getFav_emp_no()%> data-name="<%=dto.getEmp_name()%>">
 								</td>
 								<td><%=dto.getEmp_name()%> <%=dto.getEmp_title()%></td>
 								<td><%=dto.getEmp_dep()%></td>

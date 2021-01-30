@@ -24,8 +24,7 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 
-	//int emp_no = request.getSession().getAttribute("check");
-	int emp_no = 1;
+	int emp_no = (int)request.getSession().getAttribute("check");
 	String key = request.getParameter("key");
 	
 	ContactListDao contDao = new ContactListDao();
@@ -34,9 +33,9 @@
 	boolean isSearch = key != null;
 	
 	if(isSearch) {
-		contList = contDao.pagination(key, startRow, endRow);
+		contList = contDao.pagination(emp_no, key, startRow, endRow);
 	} else {
-		contList = contDao.pagination(startRow, endRow);
+		contList = contDao.pagination(emp_no, startRow, endRow);
 	}
 	
 %>
@@ -49,7 +48,7 @@
 
 	int count;
 	if(isSearch) {
-		count = contDao.searchCount(key);
+		count = contDao.searchCount(emp_no, key);
 	} else {
 		count = contDao.selectCount(emp_no);
 	}

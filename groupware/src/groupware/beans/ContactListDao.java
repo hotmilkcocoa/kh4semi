@@ -79,11 +79,12 @@ public class ContactListDao {
 	}
 	
 	//검색조회 메소드
-	public List<ContactListDto> searchSelect(String key) throws Exception {
+	public List<ContactListDto> searchSelect(int emp_no, String key) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
-		String sql = "select * from emp_contact_list where (cont_name || cont_corp || cont_phone || cont_email) like ?";
+		String sql = "select * from emp_contact_list where emp_no = ? and (cont_name || cont_corp || cont_phone || cont_email) like ?";
 		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setString(1, "%"+key+"%");
+		ps.setInt(1, emp_no);
+		ps.setString(2, "%"+key+"%");
 		ResultSet rs = ps.executeQuery();
 		
 		List<ContactListDto> list = new ArrayList<>();
@@ -104,13 +105,14 @@ public class ContactListDao {
 		return list;
 	}
 	
-	public int searchCount(String key) throws Exception {
+	public int searchCount(int emp_no, String key) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
-		String sql = "select count(*) from emp_contact_list where (cont_name || cont_corp || cont_phone || cont_email) like ?";
+		String sql = "select count(*) from emp_contact_list where emp_no and (cont_name || cont_corp || cont_phone || cont_email) like ?";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setString(1, "%"+key+"%");
+		ps.setInt(1, emp_no);
+		ps.setString(2, "%"+key+"%");
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		
@@ -146,17 +148,18 @@ public class ContactListDao {
 	}
 	
 	//페이징
-	public List<ContactListDto> pagination(int startRow, int endRow) throws Exception {
+	public List<ContactListDto> pagination(int emp_no, int startRow, int endRow) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		String sql = "select * from (" + 
 						"select rownum rn, TMP.* from (" + 
-							"select * from emp_contact_list order by cont_no desc" + 
+							"select * from emp_contact_list where emp_no = ? order by cont_no desc" + 
 						")TMP" + 
 					") where rn between ? and ?";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setInt(1, startRow);
-		ps.setInt(2, endRow);
+		ps.setInt(1, emp_no);
+		ps.setInt(2, startRow);
+		ps.setInt(3, endRow);
 		ResultSet rs = ps.executeQuery();
 		
 		List<ContactListDto> list = new ArrayList<>();
@@ -176,19 +179,20 @@ public class ContactListDao {
 		return list;
 	}
 
-	public List<ContactListDto> pagination(String key, int startRow, int endRow) throws Exception {
+	public List<ContactListDto> pagination(int emp_no, String key, int startRow, int endRow) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		String sql = "select * from (" + 
 						"select rownum rn, TMP.* from (" + 
-							"select * from emp_contact_list where (cont_name || cont_corp || cont_phone || cont_email) like ? "
+							"select * from emp_contact_list where emp_no = ? and (cont_name || cont_corp || cont_phone || cont_email) like ? "
 							+ "order by cont_no desc" + 
 						")TMP" + 
 					") where rn between ? and ?";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setString(1, "%"+key+"%");
-		ps.setInt(2, startRow);
-		ps.setInt(3, endRow);
+		ps.setInt(1, emp_no);
+		ps.setString(2, "%"+key+"%");
+		ps.setInt(3, startRow);
+		ps.setInt(4, endRow);
 		ResultSet rs = ps.executeQuery();
 		
 		List<ContactListDto> list = new ArrayList<>();

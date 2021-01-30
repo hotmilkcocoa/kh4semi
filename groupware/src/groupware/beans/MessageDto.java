@@ -116,5 +116,13 @@ public class MessageDto {
 		this.del_receiver = del_receiver;
 	}
 	
+	//보낸쪽지함 : 보낸사람과 세션이 맞다면 true
+	public boolean isSentbox(int message_sender, int emp_no) {
+		return this.message_sender == this.emp_no;
+	}
+	
+	public boolean isInbox(int message_receiver, int emp_no) {
+		return this.message_receiver == this.emp_no;
+	}
 	
 }

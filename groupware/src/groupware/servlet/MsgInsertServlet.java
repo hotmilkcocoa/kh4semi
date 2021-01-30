@@ -18,25 +18,23 @@ public class MsgInsertServlet extends HttpServlet{
 		try {
 			req.setCharacterEncoding("UTF-8");
 			
-			//int message_receiver = (int)req.getSession().getAttribute("check");
+			int message_sender = (int)req.getSession().getAttribute("check"); //보내는사람
 			
 			MessageDto msgDto = new MessageDto();
 			MessageDao msgDao = new MessageDao();
-			int message_receiver = 1; //보내는 사람
-			String emp_no = req.getParameter("emp_no");//받는사람들
-			String message_title = req.getParameter("msg_title");
-			String message_content = req.getParameter("msg_content");
-			int message_no;
+			String[] msg_receiver = req.getParameterValues("msg_receiver");//받는사람들
+			System.out.println(req.getParameter("msg_receiver"));
+			System.out.println(req.getParameter("msg_title"));
+			String message_title = req.getParameter("msg_title"); //제목
+			String message_content = req.getParameter("msg_content"); //타이틀
 			
-			String[] sender = emp_no.split(",");
-			int[] message_sender = new int[sender.length];
-			for(int i = 0; i < message_sender.length; i ++) {
-				message_sender[i] = Integer.parseInt(sender[i]);
-				
-				message_no = msgDao.getSequence();
+			int[] message_receiver = new int[msg_receiver.length];
+			for(int i = 0; i < message_receiver.length; i ++) {
+				int message_no = msgDao.getSequence();
+				message_receiver[i] = Integer.parseInt(msg_receiver[i]);
 				msgDto.setMessage_no(message_no);
-				msgDto.setMessage_receiver(message_receiver);
-				msgDto.setMessage_sender(message_sender[i]); //받는사람들
+				msgDto.setMessage_sender(message_sender);
+				msgDto.setMessage_receiver(message_receiver[i]); //받는사람들
 				msgDto.setMessage_title(message_title);
 				msgDto.setMessage_content(message_content);
 				

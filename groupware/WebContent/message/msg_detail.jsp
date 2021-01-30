@@ -1,31 +1,60 @@
-<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="groupware.beans.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<jsp:include page="/template/header.jsp"></jsp:include>
+    
 <%
-	//int emp_no = (int)request.getSession().getAttribute("check");
-	int emp_no = 1;
-	int rn = Integer.parseInt(request.getParameter("rn"));
-	String box = request.getParameter("box");
+	request.setCharacterEncoding("UTF-8");
+	int emp_no = (int)request.getSession().getAttribute("check");
+	int	msg_no = Integer.parseInt(request.getParameter("msg_no"));  
 	MessageDao msgDao = new MessageDao();
-	MessageDto msgDto = new MessageDto();
-	int count;
-	if(box == null) {
-		msgDto = msgDao.rnFind(emp_no, rn);
-		count = msgDao.getCount(emp_no);
+	
+	
+	//메세지 파일첨부
+	MessageFileDao msg_FileDao = new MessageFileDao();
+	MessageFileDto msg_FileDto = msg_FileDao.find(msg_no);
+	
+	boolean inFile = msg_FileDao.check(msg_no);
+	MessageDto msgDto = msgDao.find(msg_no);
+	
+	int no = msgDao.boxCheck(msg_no);
+	boolean isSend = emp_no == no; //받은쪽지함이라면
+	boolean isReceive = emp_no != no;
+
+	//이전 다음으로 이동하기 위한 msgList 생성
+	int prev = 0;
+	int next = 0;
+	if(isSend) {
+		prev = msgDao.prevSend(msg_no, emp_no);
+		next = msgDao.nextSend(msg_no, emp_no);
 		
-	} else {
-		msgDto = msgDao.rnFindSend(emp_no, rn);
-		count = msgDao.getCountSend(emp_no);
+		//메세지 읽음처리
+		msgDao.readCk(msg_no);
+		
+		msgDto = msgDao.rnFind(emp_no, msg_no);
+	} else if(isReceive) {
+		prev = msgDao.prev(msg_no, emp_no);
+		next = msgDao.next(msg_no, emp_no);
+		
+		msgDto = msgDao.rnFindSend(emp_no, msg_no);
 	}
+	
+	
 	
 	Date time = msgDto.getMessage_time();
 	Date today = new Date();
-	String msg_time;
+	
 	SimpleDateFormat t = new SimpleDateFormat();
-	if(today == time) {
+	t = new SimpleDateFormat("yyyy-MM-dd");
+	
+	String a = t.format(today);
+	String b = t.format(time);
+	
+	String msg_time;
+	if(a != b) {
 		t = new SimpleDateFormat("HH:mm:ss");
 		msg_time = t.format(time);
 	} else {
@@ -33,45 +62,62 @@
 		msg_time = t.format(time);
 	}
 	
-	
 %>
+<jsp:include page="/template/header.jsp"></jsp:include>
+
+<style>
+	.nxpr-btn {
+		text-decoration: none;
+		color: black;
+	}
+	
+	.float-right {
+		float:right;
+	}
+</style>
+
 <script>
 	$(function(){
 		
 		//답장버튼
 		$("#reply-btn").click(function() {
-			location.href="messageWrite.jsp?emp_no=<%=msgDto.getEmp_no()%>";
+			$("#hiddenValue1").prop("value", <%=msgDto.getEmp_no()%>);
+			$("#hiddenValue2").prop("value", "<%=msgDto.getEmp_name()%>");
+			document.form.submit();
 		});
-		
+	
 		//전달버튼
 		$("#pass-btn").click(function() {
 			location.href="msg_pass.jsp?msg_no=<%=msgDto.getMessage_no()%>";
-		})
+		});
+		
+		//삭제버튼
+		$("#delete-btn").click(function() {
+			if(confirm("삭제하시겠습니까?")) {
+				if(<%=isSend%>) {
+					location.href="inbox_delete.do?msg_no=<%=msgDto.getMessage_no()%>";	
+				} else if(<%=!isSend%>) {
+					location.href="outbox_delete.do?msg_no=<%=msgDto.getMessage_no()%>";
+				}
+			}
+		});
 	});
 </script>
-<div class="outbox">
-	<div class="row" style="float:right;">
-		<%if(rn != 1) {%>
-			<%if(box == null) {%>
-				<span><a href="msg_detail.jsp?rn=<%=rn-1%>">이전</a></span>
-			<%} else {%>
-				<span><a href="msg_detail.jsp?rn=<%=rn-1%>&box=<%=box%>">이전</a></span>
+<div class="outbox" style="width:80%;">
+	<div class="row float-right">
+		<%if(prev != 0) {%>
+				<span><a class="nxpr-btn" href="msg_detail.jsp?msg_no=<%=prev%>">이전</a></span>
+				|
+				<%} %>
+		<%if(isReceive) { %>
+				<span><a class="nxpr-btn" href="sentbox.jsp">목록</a></span>
+			<%} else if(isSend){ %>
+				<span><a class="nxpr-btn" href="inbox.jsp">목록</a></span>
 			<%} %>
-		<% } %>
-		
-		<%if(box == null) {%>
-			<span><a href="inbox.jsp">목록</a></span>
-		<%} else { %>
-			<span><a href="sentbox.jsp?box=<%=box%>">목록</a></span>
-		<%} %>
-		<%if(count != rn) {%>
-			<%if(box == null) {%>
-				<span><a href="msg_detail.jsp?rn=<%=rn+1%>">다음</a></span>
-			<%} else { %>
-				<span><a href="msg_detail.jsp?rn=<%=rn+1%>&box=<%=box%>">다음</a></span>
-			<%} } %>
-		
-		
+			<%if(next != 0) {%>
+				|
+				<span><a class="nxpr-btn" href="msg_detail.jsp?msg_no=<%=next%>">다음</a></span>
+				<%} %>
 	</div>
 	<div class="row">
 		<table class="table">
@@ -79,11 +125,11 @@
 				<tr>
 					<th width="20%">제목</th>
 					<td>
-						<input class="input" type="text" name="message_title" value=<%=msgDto.getMessage_title() %> readonly>
+						<input class="input" type="text" name="message_title" value=<%=msgDto.getMessage_title()%> readonly>
 					</td>
 				</tr>
 				<tr>
-				<%if(box != null) {%>
+				<%if(!isSend) {%>
 					<th>보낸사람</th>
 				<%} else {%>
 					<th>받는사람</th>
@@ -100,7 +146,13 @@
 				</tr>
 				<tr>
 					<th>첨부파일</th>
-					<td></td>
+					<td class="left">
+					<%if(inFile) {%>
+					<span>
+						<a href="download.do?msg_no=<%=msgDto.getMessage_no()%>"><%=msg_FileDto.getFile_upload_name()%></a>
+					</span>
+					<%} %>
+					</td>
 				</tr>
 				<tr>
 					<th>내용</th>
@@ -111,8 +163,14 @@
 			</tbody>
 		</table>
 		<div class="row center">
-			<input type="button" class="input input-inline" id="reply-btn" value="답장">
-			<input type="button" class="input input-inline" id="pass-btn"value="전달">
+			<form action="messageWrite.jsp" method="post" name="form">
+				<input type="hidden" id="hiddenValue1" name="emp_no">
+				<input type="hidden" id="hiddenValue2" name="emp_name">
+				<input type="button" class="input input-inline" id="reply-btn" value="답장">
+				<input type="button" class="input input-inline" id="pass-btn"value="전달">
+				<input type="button" class="input input-inline" id="delete-btn" value="삭제">
+			</form>
+			
 		</div>
 	</div>
 </div>

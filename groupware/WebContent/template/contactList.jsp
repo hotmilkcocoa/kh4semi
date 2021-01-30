@@ -46,9 +46,8 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	
-	//int emp_no = request.getSession().getAttribute("check");
+	int emp_no = (int)request.getSession().getAttribute("check");
 	
-	int emp_no = 1;
 	String keyword = request.getParameter("keyword");
 	
 	//부서목록조회(select)
@@ -126,8 +125,8 @@
 			var check = $(this).prop("checked");
 			$(".check-btn").prop("checked", check);
 		});
-
-
+		
+		
 	});		
 			
 	
@@ -169,7 +168,7 @@
 				<%for(EmployeeDto empDto : empList){%>
 					<tr>
 						<td>
-							<input type="checkbox" class="check-btn" value="<%=empDto.getEmp_no() %>">
+							<input type="checkbox" class="check-btn" data-no=<%=empDto.getEmp_no()%> data-name=<%=empDto.getEmp_name()%>>
 						</td>
 						<td>
 							<%=empDto.getEmp_name()%> <%=empDto.getEmp_title()%>
