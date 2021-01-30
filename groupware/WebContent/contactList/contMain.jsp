@@ -112,6 +112,14 @@
 	.favCk {
 		display: none;
 	}
+	
+	.float-left {
+		float:left;
+	}
+	
+	.float-right {
+		float:right;
+	}
 </style>
 <script>
 	$(function () {
@@ -168,8 +176,17 @@
 <% for(int m = 0; m < no.length; m++) {%>
 <input type="hidden" class="hiddenCk" value="<%=no[m]%>">
 <%} %>
-		<div class="row">
-			<select class="input input-inline" name="dep_name" id="dep_chooser">
+		<div class="row float-box">
+		
+			<div class="row float-left">
+				<form action="../message/messageWrite.jsp" method="post" name="form">
+					<input type="hidden" id="hiddenValue1" name="emp_no">
+					<input type="hidden" id="hiddenValue2" name="emp_name">
+					<input type="button" value="쪽지보내기" id="message_write" class="input input-inline">
+				</form>
+				
+			</div>
+			<select class="input input-inline float-right" name="dep_name" id="dep_chooser">
 				<option value="0">부서검색</option>
 				<%
 					for(DataSettingDto dto : depList) {
@@ -180,18 +197,9 @@
 				%>
 			</select>
 		</div>
-		
-	<div class="row float-box">
-		<div class="row" style="float:left;">
-		<form action="../message/messageWrite.jsp" method="post" name="form">
-			<input type="hidden" id="hiddenValue1" name="emp_no">
-			<input type="hidden" id="hiddenValue2" name="emp_name">
-			<input type="button" value="쪽지보내기" id="message_write" class="input input-inline">
-			</form>
-		</div>
-		
+
 		<form action="contMain.jsp" method="get">
-		<div class="row" style="float:right;">
+		<div class="row float-right">
 		<%if(dep_no != null)  {%>
 			<input type="hidden" name="dep_no" value=<%=dep_no%>>
 			<%} %>

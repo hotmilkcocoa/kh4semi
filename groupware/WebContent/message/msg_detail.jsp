@@ -8,6 +8,7 @@
     
 <%
 	request.setCharacterEncoding("UTF-8");
+
 	int emp_no = (int)request.getSession().getAttribute("check");
 	int	msg_no = Integer.parseInt(request.getParameter("msg_no"));  
 	MessageDao msgDao = new MessageDao();
@@ -21,23 +22,23 @@
 	MessageDto msgDto = msgDao.find(msg_no);
 	
 	int no = msgDao.boxCheck(msg_no);
-	boolean isSend = emp_no == no; //받은쪽지함이라면
-	boolean isReceive = emp_no != no;
+	boolean isInbox = emp_no == no; //받은쪽지함이라면
+	boolean isSentbox = emp_no != no;
 
 	//이전 다음으로 이동하기 위한 msgList 생성
 	int prev = 0;
 	int next = 0;
-	if(isSend) {
-		prev = msgDao.prevSend(msg_no, emp_no);
-		next = msgDao.nextSend(msg_no, emp_no);
+	if(isInbox) {
+		prev = msgDao.prev(msg_no, emp_no);
+		next = msgDao.next(msg_no, emp_no);
 		
 		//메세지 읽음처리
 		msgDao.readCk(msg_no);
 		
 		msgDto = msgDao.rnFind(emp_no, msg_no);
-	} else if(isReceive) {
-		prev = msgDao.prev(msg_no, emp_no);
-		next = msgDao.next(msg_no, emp_no);
+	} else if(isSentbox) {
+		prev = msgDao.prevSend(msg_no, emp_no);
+		next = msgDao.nextSend(msg_no, emp_no);
 		
 		msgDto = msgDao.rnFindSend(emp_no, msg_no);
 	}
@@ -52,9 +53,9 @@
 	
 	String a = t.format(today);
 	String b = t.format(time);
-	
 	String msg_time;
-	if(a != b) {
+
+	if(a == b) {
 		t = new SimpleDateFormat("HH:mm:ss");
 		msg_time = t.format(time);
 	} else {
@@ -94,10 +95,10 @@
 		//삭제버튼
 		$("#delete-btn").click(function() {
 			if(confirm("삭제하시겠습니까?")) {
-				if(<%=isSend%>) {
+				if(<%=isInbox%>) {
 					location.href="inbox_delete.do?msg_no=<%=msgDto.getMessage_no()%>";	
-				} else if(<%=!isSend%>) {
-					location.href="outbox_delete.do?msg_no=<%=msgDto.getMessage_no()%>";
+				} else if(<%=isSentbox%>) {
+					location.href="sentbox_delete.do?msg_no=<%=msgDto.getMessage_no()%>";
 				}
 			}
 		});
@@ -109,9 +110,9 @@
 				<span><a class="nxpr-btn" href="msg_detail.jsp?msg_no=<%=prev%>">이전</a></span>
 				|
 				<%} %>
-		<%if(isReceive) { %>
+		<%if(isSentbox) { %>
 				<span><a class="nxpr-btn" href="sentbox.jsp">목록</a></span>
-			<%} else if(isSend){ %>
+			<%} else if(isInbox){ %>
 				<span><a class="nxpr-btn" href="inbox.jsp">목록</a></span>
 			<%} %>
 			<%if(next != 0) {%>
@@ -129,7 +130,7 @@
 					</td>
 				</tr>
 				<tr>
-				<%if(!isSend) {%>
+				<%if(isInbox) {%>
 					<th>보낸사람</th>
 				<%} else {%>
 					<th>받는사람</th>

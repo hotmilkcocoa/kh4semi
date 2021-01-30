@@ -16,7 +16,7 @@ import groupware.beans.MessageFileDto;
 @WebServlet(urlPatterns = "/message/download.do")
 public class MsgFileDownloadServlet extends HttpServlet{
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			//준비 : 메세지번호 수신
 			int msg_no = Integer.parseInt(req.getParameter("msg_no"));

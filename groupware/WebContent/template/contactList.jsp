@@ -133,7 +133,7 @@
 </script>
 </head>
 <body>
-<div class="outbox" style="width:600px;">
+<div class="outbox">
 <div class="row float-box">
 	
 		<form action="search.jsp" method="get">

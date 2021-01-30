@@ -108,7 +108,7 @@ public class ContactListDao {
 	public int searchCount(int emp_no, String key) throws Exception {
 		Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
 		
-		String sql = "select count(*) from emp_contact_list where emp_no and (cont_name || cont_corp || cont_phone || cont_email) like ?";
+		String sql = "select count(*) from emp_contact_list where emp_no = ? and (cont_name || cont_corp || cont_phone || cont_email) like ?";
 		
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
