@@ -127,7 +127,7 @@
 	        	</td>
 	        </tr>
         <%} else {%>
-        	<tr><td colspan="8">정보가 없습니다.</td></tr>
+        	<tr><td colspan="9">정보가 없습니다.</td></tr>
         <%} %>
     </table>
 </div>

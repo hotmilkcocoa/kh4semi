@@ -77,15 +77,10 @@
 .attContainer{
     width: 100%;
     text-align: center;
-    padding: 10px;
     border-bottom: 1px solid gray;
 }
 .attContainer>*{
     font-size: 0.75rem;
-}
-.attContainer>.attTitle{
-    font-size: 1rem;
-    font-weight: bold;
 }
 .attContainer>.attBtn{
     cursor: pointer;

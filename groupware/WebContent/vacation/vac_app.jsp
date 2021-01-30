@@ -19,8 +19,8 @@
 	EmployeeDto empDto = empDao.find(emp_no);
 	
 	//부서장인지 검사(인사부 제외)
-	//boolean isDephead = empDto.getEmp_title().equals("팀장") && !empDto.getEmp_dep().equals("인사부");
-	//if(!isDephead) response.sendError(403);
+	boolean isDephead = empDto.getEmp_title().equals("팀장");
+	if(!isDephead) response.sendError(403);
 	
 	VacationDao vacationDao = new VacationDao();
 	List<VacationDto> vacationList;
@@ -97,7 +97,7 @@
 		        <%index++;
 	        }%>
 	        <tr>
-	        	<td colspan="8">
+	        	<td colspan="9">
 					<div class="row center">
 						<ul class="pagination">
 							<li><a href="vac_app.jsp?p=<%=startBlock-1%>">&lt;</a></li>

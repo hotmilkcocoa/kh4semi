@@ -188,14 +188,14 @@
 			parent.removeChild(parent.firstChild);
 		}
 	}
-	function getDateString(date){
+	function getDateString(date, conn){
 		var year = date.getFullYear();
 		var month = (date.getMonth() + 1);
 		month = month < 10 ? "0" + month : month;
 		var day = date.getDate();
 		day = day < 10 ? "0" + day : day;
 		
-		return year + "-" + month + "-" + day;
+		return year + conn + month + conn + day;
 	}
 	function newdiv(){
 		var newdiv = document.createElement("div");
@@ -215,7 +215,7 @@
 	document.querySelectorAll(".changeType").forEach(function (ele) {
 		ele.addEventListener("click", function () {
 			var link = "calendar.jsp?calType={calType}&date={date}";
-			link = link.replace("{calType}", this.getAttribute("id")).replace("{date}", getDateString(temp_date));
+			link = link.replace("{calType}", this.getAttribute("id")).replace("{date}", getDateString(temp_date, "-"));
 			location.href = link;
 		});
 	});
@@ -226,6 +226,7 @@
 			var val = 1;
 			if (this.hasAttribute("prev")) val = -1;
 			if (calType == "monthly") {
+				temp_date.setDate(1);
 				temp_date.setMonth(temp_date.getMonth() + val);
 			} else if (calType == "weekly") {
 				temp_date.setDate(temp_date.getDate() + (val * 7));
@@ -233,7 +234,7 @@
 				temp_date.setDate(temp_date.getDate() + val);
 			}
 			var link = "calendar.jsp?calType={calType}&date={date}";
-			link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
+			link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date, "-"));
 			location.href = link;
 		});
 	});
@@ -242,7 +243,7 @@
 	document.querySelector(".today").addEventListener("click", function () {
 		temp_date = new Date(today);
 		var link = "calendar.jsp?calType={calType}&date={date}";
-		link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
+		link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date, "-"));
 		location.href = link;
 	});
 
@@ -263,7 +264,7 @@
 		var dayTableRow = document.createElement("tr");
 
 		var start = new Date(temp_date.getFullYear(), temp_date.getMonth(), 1);
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1);
+		var dateString = getDateString(start, ".").substr(0, 7);
 		start.setDate(1 - start.getDay());
 
 		for (var i = 0; i < 6; i++) {
@@ -309,7 +310,7 @@
 				var listpopDate = newdiv();
 				listpop.append(listpopDate);
 				listpopDate.classList.add("listpopDate");
-				listpopDate.innerText = getDateString(start);
+				listpopDate.innerText = getDateString(start, "-");
 				
 				var listpopContainer = newdiv();
 				listpop.append(listpopContainer);
@@ -326,7 +327,7 @@
 	function paintWeekly() {
 		var start = new Date(temp_date);
 		start.setDate(start.getDate() - start.getDay());
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate() + "-";
+		var dateString = getDateString(start, ".") + "-";
 
 		for(var i=0; i<7; i++){
 			var dayRow = document.createElement("tr");
@@ -356,7 +357,7 @@
 		}
 		
 		start.setDate(start.getDate() - 1);
-		dateString = dateString + start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate();
+		dateString = dateString + getDateString(start, ".");
 		document.querySelector(".date").innerHTML = dateString;
 	};
 	//일간 달력 칠하기
@@ -364,7 +365,7 @@
 		var dayTableRow = document.createElement("tr");
 
 		var start = new Date(temp_date);
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate();
+		var dateString = getDateString(start, ".");
 
 		var timelineTd = document.createElement("td");
 		timelineTd.classList.add("timeline");
@@ -449,7 +450,7 @@
 			});
 		}
 		//리스트에 일정이 있을 시 실행
-		<%if(schList != null){
+		<%if(schList.size() > 0){
 			for(ScheduleDto schDto : schList){%>
 				var calTdDivSchList = calType=="daily" ? document.querySelectorAll(".calTdDivSchList")[<%=schDto.getSch_start().toLocalDateTime().toLocalTime().getHour()%>] : document.querySelectorAll(".calTdDivSchList")[<%=i%>];
 				var listpopContainer = document.querySelectorAll(".listpopContainer")[<%=i%>];
