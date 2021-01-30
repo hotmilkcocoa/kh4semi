@@ -250,11 +250,8 @@ public class ScheduleDao {
 		return schMap;
 	}
 	
-	
-	
-
 	//회사일정 기간 조회
-   public TreeMap<LocalDate, List<ScheduleDto>> selectForCom(int index, Timestamp startOfCal, Timestamp endOfCal) throws Exception{
+	public TreeMap<LocalDate, List<ScheduleDto>> selectForCom(int index, Timestamp startOfCal, Timestamp endOfCal) throws Exception{
       Connection con = JdbcUtil.getConnection(USER, PW);
       
       String sql = "select * from schedule where sch_for_com = 'true' and sch_start >= ? and sch_start < ? order by sch_no desc";
@@ -300,6 +297,73 @@ public class ScheduleDao {
       return schMap;
    }
 
+   //메인 페이지용 기간 조회
+	public TreeMap<LocalDate, List<ScheduleDto>> selectForMain(int emp_no, List<Share_schDto> shareList, int index, Timestamp startOfCal, Timestamp endOfCal) throws Exception{
+		Connection con = JdbcUtil.getConnection(USER, PW);
+		
+		StringBuffer sb = new StringBuffer("select * from schedule where sch_start >= ? and sch_start < ? and sch_for_com = 'true' or emp_no = ? ");
+		for(int i=1; i<=shareList.size(); i++) {
+			if(i==1) {
+				sb.append(" or (sch_open = 'true' and (emp_no = ? ");
+			} else {
+				sb.append(" or emp_no = ? ");
+			}
+			if(i==shareList.size()) {
+				sb.append("))");
+			}
+		}
+		sb.append(" order by sch_no desc");
+		
+		String sql = sb.toString();
+		
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setTimestamp(1, startOfCal);
+		ps.setTimestamp(2, endOfCal);
+		ps.setInt(3, emp_no);
+		int j = 4;
+		for(Share_schDto shareDto : shareList) {
+			ps.setInt(j, shareDto.getTarget_no());
+			j++;
+		}
+		ResultSet rs = ps.executeQuery();
+		
+		List<ScheduleDto> schList = new ArrayList<ScheduleDto>();
+		
+		while(rs.next()) {
+			ScheduleDto scheduleDto = new ScheduleDto();
+			scheduleDto.setSch_no(rs.getInt("sch_no"));
+			scheduleDto.setSch_name(rs.getString("sch_name"));
+			scheduleDto.setSch_content(rs.getString("sch_content"));
+			scheduleDto.setSch_place(rs.getString("sch_place"));
+			scheduleDto.setSch_start(rs.getTimestamp("sch_start"));
+			scheduleDto.setSch_end(rs.getTimestamp("sch_end"));
+			scheduleDto.setSch_open(rs.getString("sch_open"));
+			scheduleDto.setEmp_no(rs.getInt("emp_no"));
+			scheduleDto.setSch_for_com(rs.getString("sch_for_com"));
+			
+			schList.add(scheduleDto);
+		}
+		con.close();
+		
+		TreeMap<LocalDate, List<ScheduleDto>> schMap = new TreeMap<>();
+		
+		for(int i=0; i<index; i++) {
+			schMap.put(startOfCal.toLocalDateTime().toLocalDate().plusDays(i), null);
+		}
+		for(LocalDate key : schMap.keySet()) {
+			List<ScheduleDto> newList = new ArrayList<ScheduleDto>();
+			for(ScheduleDto schDto : schList) {
+				if(key.isEqual(schDto.getSch_start().toLocalDateTime().toLocalDate())) {
+					newList.add(schDto);
+				}
+			}
+			schMap.replace(key, newList);
+		}
+		
+		
+		return schMap;
+	}
+   
    //회사일정 리스트
    public List<ScheduleDto> selectForCom() throws Exception {
       Connection con = JdbcUtil.getConnection(USER, PW);
@@ -330,7 +394,7 @@ public class ScheduleDao {
       return scheduleDtoList;
    }
    
- //회사일정 리스트(검색 결과)
+   //회사일정 리스트(검색 결과)
    public List<ScheduleDto> select(String start, String end) throws Exception {
       Connection con = JdbcUtil.getConnection(USER, PW);
       

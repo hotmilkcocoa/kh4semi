@@ -56,7 +56,6 @@
 	if(endBlock > pageSize) endBlock = pageSize;
 %>
 <div class="row">
-	<h1><%=approver %></h1>
 	<h3>신청 리스트</h3>
 </div>
 <div class="row">

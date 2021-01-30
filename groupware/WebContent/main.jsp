@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.Share_schDto"%>
+<%@page import="groupware.beans.Share_schDao"%>
 <%@page import="groupware.beans.EmployeeDao"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="groupware.beans.ScheduleDto"%>
@@ -149,7 +151,8 @@
 		border-radius: 50%;
 	}
 	div.calTdDiv.hasSch{
-		background-color: #ff00004f;
+	    background-color: #ff000026;
+	    border-radius: 10px;
 	}
 	.calendarTitle>*{
 		font-size: 24px;
@@ -204,8 +207,11 @@
 	int index = 42;
 	LocalDate endOfCal = startOfCal.plusDays(index);
 	
+	Share_schDao shareDao = new Share_schDao();
+	List<Share_schDto> shareList = shareDao.select(emp_no);
+	
 	ScheduleDao scheduleDao = new ScheduleDao();
-	TreeMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.select(emp_no, index, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
+	TreeMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.selectForMain(emp_no, shareList, index, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 %>
@@ -401,7 +407,8 @@
 		List<ScheduleDto> schList= schMap.get(key);%>
 		
 		var calTdDivDate = document.querySelectorAll(".calTdDivDate")[<%=i%>];
-		calTdDivDate.addEventListener("click", function(){
+		var dateSpan = document.querySelectorAll(".dateSpan")[<%=i%>];
+		dateSpan.addEventListener("click", function(){
 			location.href = "calendar/sch_add.jsp?date=<%=key.toString()%>";
 		});
 		
