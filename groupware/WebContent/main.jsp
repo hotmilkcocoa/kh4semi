@@ -29,14 +29,10 @@
 	}
 	.contentContainer.rowFlex{
 	    height: 420px;
-	    padding: 0 50px;
+	    padding: 0 100px;
 	}
 	.calendarContainer{
-		width: 85%;
-	}
-	.boardListContainer{
-		width: 15%;
-		background-color: white;
+		width: 100%;
 	}
 	.calendarArea{
 		width: 60%;
@@ -178,6 +174,9 @@
 	div.rowFlex{
 		padding: 10px;
 	}
+	.listArea{
+		word-break: break-word;
+	}
 </style>
 <%
 	AttendanceDao attendanceDao = new AttendanceDao();
@@ -208,7 +207,7 @@
 	LocalDate endOfCal = startOfCal.plusDays(index);
 	
 	Share_schDao shareDao = new Share_schDao();
-	List<Share_schDto> shareList = shareDao.select(emp_no);
+	List<Share_schDto> shareList = shareDao.selectFiltered(emp_no);
 	
 	ScheduleDao scheduleDao = new ScheduleDao();
 	TreeMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.selectForMain(emp_no, shareList, index, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
@@ -249,8 +248,6 @@
 				<div class="listArea"></div>
 			</div>			
 		</div>
-	</div>
-	<div class="boardListContainer">
 	</div>
 </div>
 <div class="viewpop pop hide">
