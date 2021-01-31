@@ -23,8 +23,7 @@ public class VacationAddServlet extends HttpServlet{
 		try {
 			req.setCharacterEncoding("utf-8");
 			
-//			int emp_no = (int) req.getSession().getAttribute("check");
-			int emp_no = 3;
+			int emp_no = (int) req.getSession().getAttribute("check");
 			
 			//휴가 정보 등록
 			VacationDto vacationDto = new VacationDto();
@@ -40,11 +39,11 @@ public class VacationAddServlet extends HttpServlet{
 				vacationDto.setVac_target_no(Integer.parseInt(req.getParameter("othres_emp_no")));
 			}
 			
-			//받은 기간으로 사용될 연차를 구하고 잔여연차보다 크면 돌아감
-			double use = 0;
-			if(vacationDto.getVac_category().equals("반차")) {
+			//사용될 연차기간 산출
+			double use = 0;//기타는 0
+			if(vacationDto.getVac_category().equals("반차")) {//반차는 0.5
 				use = 0.5;
-			} else {
+			} else if(vacationDto.getVac_category().equals("연차")) {//연차는 주말 제외 산출
 				LocalDate start = LocalDate.parse(vacationDto.getVac_start().toString());
 				LocalDate end = LocalDate.parse(vacationDto.getVac_end().toString());				
 				for(; !start.equals(end.plusDays(1)); start=start.plusDays(1)) {
@@ -53,20 +52,23 @@ public class VacationAddServlet extends HttpServlet{
 					}
 				}				
 			}
+			
 			AnnualDao annualDao = new AnnualDao();
 			AnnualDto annualDto = annualDao.find(vacationDto.getVac_target_no());
 			double remain = annualDto.getAnn_occurred() - annualDto.getAnn_used();
-			if(use > remain) {
+			
+			if(use > remain) {//잔여연차보다 사용될 연차가 많으면 에러로 리턴
 				resp.sendRedirect("vac_add.jsp?error");
 			} else {
 				VacationDao vacationDao = new VacationDao();
 				VacationApprovalDao vacAppDao = new VacationApprovalDao();
-				if(req.getParameter("edit") == null) {//수정이 아닐경우 일반 등록, 승인 테이블 생성
+				
+				if(req.getParameter("edit") == null) {//등록
 					vacationDto.setVac_no(vacationDao.getSequence());
 					vacationDao.insert(vacationDto);
 					
 					vacAppDao.insert(vacationDto.getVac_no(), vacationDto.getVac_target_no());
-				} else {//수정일 경우 업데이트
+				} else {//수정
 					vacationDto.setVac_no(Integer.parseInt(req.getParameter("vac_no")));
 					vacationDao.update(vacationDto);
 				}

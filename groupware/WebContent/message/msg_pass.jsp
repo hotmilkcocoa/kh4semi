@@ -4,32 +4,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	String emp_no = request.getParameter("emp_no");
-	List<EmployeeDto> empList = new ArrayList<>();
-	EmployeeDao empDao = new EmployeeDao();
-	EmployeeDto empDto = new EmployeeDto();
-	String[] m_emp_no = new String[]{};
-	String[] emp_name = new String[]{};
-	boolean isCheck = emp_no != null;
-	if(isCheck) {
-		m_emp_no = emp_no.split(",");
-		int[] emp_no_m = new int[m_emp_no.length];
-
-		for(int i = 0; i < emp_no_m.length; i++) {
-			emp_no_m[i] = Integer.parseInt(m_emp_no[i]);
-			empDto = empDao.find(emp_no_m[i]);
-			empList.add(empDto);
-		}
+	int emp_no = (int)request.getSession().getAttribute("check");
+	int msg_no = Integer.parseInt(request.getParameter("msg_no"));
 	
-		emp_name = new String[empList.size()];
-		int size = 0;
-		for(EmployeeDto dto : empList) {
-			emp_name[size++] = dto.getEmp_name();
-		}
-		
-	} else {
-		
-	}
+	MessageDao msgDao = new MessageDao();
+	MessageDto msgDto = msgDao.find(msg_no);
 	
 %>
 
@@ -38,20 +17,16 @@
 <script>
 	
 	$(function() {
-		<%if(isCheck) {  %>		
-		var array = new Array();
-		<%for(int i = 0; i < emp_name.length; i++) {%>
-		array.push(
-			"<%=emp_name[i]%>"
-		);
-		<%} %>
-			 console.log(array);
-		$("#msg_receiver").val(array);
-		<% } else {%>
-			$("#msg_receiver").val("");
-		<% }%>
+		//검색버튼
 		$("#search-btn").click(function() {
 			window.open("search.jsp", "사원검색", "width=700px, height=600px");
+		});
+		
+		//취소버튼
+		$("#cancel-btn").click(function() {
+			if(confirm("작성 중인 내용이 사라집니다. 취소하시겠습니까?")) {
+				location.href="inbox.jsp"
+			}
 		});
 	});
 </script>
@@ -64,7 +39,7 @@
 					<tr>
 						<th width="20%">제목</th>
 						<td>
-							<input type="text" name="message_title" placeholder="제목을 입력하세요" class="input">
+							<input type="text" name="message_title" placeholder="제목을 입력하세요" class="input" value=<%=msgDto.getMessage_title()%>>
 						</td>
 					</tr>
 					<tr>
@@ -84,15 +59,15 @@
 					<tr>
 						<th>내용</th>
 						<td>
-							<textarea class="input" rows="15"></textarea>
+							<textarea class="input" rows="15"><%=msgDto.getMessage_content()%></textarea>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 			
 			<div class="row center">
-				<input type="button" class="input input-inline" value="취소" onclick="history.back();">
-				<input type="text" name="emp_no" value=<%=emp_no%>>
+				<input type="button" class="input input-inline" value="취소" id="cancel-btn">
+				<input type="hidden" name="emp_no" value=<%=emp_no%>>
 				<input type="submit" class="input input-inline" value="전송">
 			</div>
 		</form>

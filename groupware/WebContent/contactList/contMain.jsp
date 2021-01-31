@@ -23,9 +23,8 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	
-	//int emp_no = request.getSession().getAttribute("check");
+	int emp_no = (int)request.getSession().getAttribute("check");
 	
-	int emp_no = 1;
 	String keyword = request.getParameter("keyword");
 	
 	//부서목록조회(select)
@@ -113,6 +112,14 @@
 	.favCk {
 		display: none;
 	}
+	
+	.float-left {
+		float:left;
+	}
+	
+	.float-right {
+		float:right;
+	}
 </style>
 <script>
 	$(function () {
@@ -124,12 +131,15 @@
 		});
 	
 		//쪽지보내기
-		var chkArray = new Array();
+		var noArray = new Array();
+		var nameArray = new Array();
 		$("#message_write").click(function(){
 				$(".check-btn:checked").each(function(i){
-						chkArray.push($(this).val());
-					});
-				$("#hiddenValue").val(chkArray);
+					noArray.push($(this).data("no"));
+					nameArray.push($(this).data("name"));
+				});
+				$("#hiddenValue1").val(noArray);
+				$("#hiddenValue2").val(nameArray);
 				document.form.submit();
 			
 		});
@@ -166,8 +176,17 @@
 <% for(int m = 0; m < no.length; m++) {%>
 <input type="hidden" class="hiddenCk" value="<%=no[m]%>">
 <%} %>
-		<div class="row">
-			<select class="input input-inline" name="dep_name" id="dep_chooser">
+		<div class="row float-box">
+		
+			<div class="row float-left">
+				<form action="../message/messageWrite.jsp" method="post" name="form">
+					<input type="hidden" id="hiddenValue1" name="emp_no">
+					<input type="hidden" id="hiddenValue2" name="emp_name">
+					<input type="button" value="쪽지보내기" id="message_write" class="input input-inline">
+				</form>
+				
+			</div>
+			<select class="input input-inline float-right" name="dep_name" id="dep_chooser">
 				<option value="0">부서검색</option>
 				<%
 					for(DataSettingDto dto : depList) {
@@ -178,17 +197,9 @@
 				%>
 			</select>
 		</div>
-		
-	<div class="row float-box">
-		<div class="row" style="float:left;">
-		<form action="../message/MessageWrite.jsp" method="get" name="form">
-			<input type="hidden" id="hiddenValue" name="emp_no">
-			<input type="button" value="쪽지보내기" id="message_write" class="input input-inline">
-			</form>
-		</div>
-		
+
 		<form action="contMain.jsp" method="get">
-		<div class="row" style="float:right;">
+		<div class="row float-right">
 		<%if(dep_no != null)  {%>
 			<input type="hidden" name="dep_no" value=<%=dep_no%>>
 			<%} %>
@@ -219,7 +230,7 @@
 				<%for(EmployeeDto empDto : empList){%>
 					<tr>
 						<td>
-							<input type="checkbox" class="check-btn" value="<%=empDto.getEmp_no() %>">
+							<input type="checkbox" class="check-btn" data-no=<%=empDto.getEmp_no()%> data-name="<%=empDto.getEmp_name() %>">
 						</td>
 						<td>
 							<%=empDto.getEmp_name()%> <%=empDto.getEmp_title()%>

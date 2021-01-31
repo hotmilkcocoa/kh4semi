@@ -1,3 +1,5 @@
+<%@page import="groupware.beans.TmpFileDto"%>
+<%@page import="groupware.beans.TmpFileDao"%>
 <%@page import="groupware.beans.EmployeeDto"%>
 <%@page import="groupware.beans.EmployeeDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -182,7 +184,7 @@
                             </tr>
                             <tr>
                                 <th><%=empDto.getEmp_dep()%></th>
-                                <td class="center"><a href="#"><img alt="개인정보수정" src="<%=request.getContextPath()%>/image/cog.svg" width="20" height="20"></a></td>     
+                                <td class="center"><a href="<%=request.getContextPath()%>/employee/setting.jsp"><img alt="개인정보수정" src="<%=request.getContextPath()%>/image/cog.svg" width="20" height="20"></a></td>     
                             </tr>
                         </tbody>
                     </table>
@@ -247,4 +249,3 @@
             </aside>
             
             <article>
-    

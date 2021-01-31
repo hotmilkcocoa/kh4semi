@@ -22,9 +22,9 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	
-	//int emp_no = request.getSession().getAttribute("check");
+	int emp_no = (int)request.getSession().getAttribute("check");
 	
-	int emp_no = 1;
+	
 	String keyword = request.getParameter("keyword");
 	EmployeeDao empDao = new EmployeeDao();
 	List<EmployeeDto> empList = new ArrayList<>();
@@ -96,17 +96,24 @@
 		});
 		
 		//부모창으로 값 전달
-		var chkArray = new Array();
+		var noArray = new Array();
+		var nameArray = new Array();
 		$("#submit-btn").click(function(){
 			$(".check-btn:checked").each(function(i){
-				chkArray.push($(this).val());
+				noArray.push($(this).data("no"));
+				nameArray.push($(this).data("name"));
 			});
-		$("#hiddenValue").val(chkArray);
+		//부모창에 있는 empAdd라는 함수를 실행시키면서 chkArray를 전달(전송 아님)
+		window.opener.parent.empAdd2(noArray);
+		window.opener.parent.empAdd1(nameArray);
+		self.close();
+			
+		/* $("#hiddenValue").val(chkArray);
 		window.opener.name = "parentPage";
 		document.form.target = "parentPage";
-		document.form.action = window.opener.location.href;
+		document.form.action = window.opener.location.href;//부모창의 주소로 폼 값 전송
 		document.form.submit();
-		self.close();
+		self.close(); */
 	});
 });
 </script>
@@ -154,7 +161,7 @@
 						<%for(EmpFavoriteDto dto : favList) {%>
 							<tr>
 								<td>
-									<input type="checkbox" class="check-btn" value="<%=dto.getFav_emp_no()%>">
+									<input type="checkbox" class="check-btn" data-no=<%=dto.getFav_emp_no()%> data-name="<%=dto.getEmp_name()%>">
 								</td>
 								<td><%=dto.getEmp_name()%> <%=dto.getEmp_title()%></td>
 								<td><%=dto.getEmp_dep()%></td>
@@ -172,7 +179,7 @@
 		
 	<%} %>
 	<div class="row center"> 
-		<form action="MessageWrite.jsp" method="get" name="form">
+		<form action="messageWrite.jsp" method="get" name="form">
 			<input type="button" value="취소" onclick="window.close()" class="input input-inline">
 			<input type="button" value="확인" id="submit-btn" class="input input-inline">
 			<input type="hidden" id="hiddenValue" name="emp_no">

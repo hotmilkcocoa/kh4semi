@@ -59,13 +59,13 @@
 	    <%} else{%>
 	    <form action="event_add_edit.do" method="post">
 	    <%} %>	
-			<div class="row rel">
+			<div class="row rel table table-border">
 	            <span>일정명</span>
 	            <div class="row">
 	                <input class="input" type="text" name="sch_name" <%if(isEdit){ %> value="<%=scheduleDto.getSch_name()%>" <%} %>>
 	            </div>
 	        </div>
-	        <div class="row rel">
+	        <div class="row rel table table-border">
 	            <span>일시</span>
 	            <div class="row">
 	                <input class="dataInput date input input-inline" style="width:200px;" type="date" name="sch_start_date">
@@ -125,19 +125,19 @@
 	                </select>
 	            </div>
 	        </div>
-	        <div class="row rel">
+	        <div class="row rel table table-border">
 	            <span>내용</span>
 	            <div class="row">
 	                <textarea class="input textarea" name="sch_content" rows="5"><%if(isEdit){ %><%=scheduleDto.getSch_content()%><%} %></textarea>
 	            </div>
 	        </div>
-	        <div class="row rel">
+	        <div class="row rel table table-border">
 	            <span>장소</span>
 	            <div class="row">
 	                <input class="input" type="text" name="sch_place" <%if(isEdit){ %> value="<%=scheduleDto.getSch_place()%>" <%} %>>
 	            </div>
 	        </div>
-	        <div class="row rel">
+	        <div class="row rel table table-border">
 	            <span>공개</span>
 	            <div class="row">
 	                <label>

@@ -25,7 +25,7 @@ public class ContEditServlet extends HttpServlet{
 			contDto.setCont_phone(req.getParameter("cont_phone"));
 			contDto.setCont_email(req.getParameter("cont_email"));
 			contDto.setCont_memo(req.getParameter("cont_memo"));
-			//contDto.setEmp_no((int)req.getSession().getAttribute("check"));
+			contDto.setEmp_no((int)req.getSession().getAttribute("check"));
 			
 			ContactListDao contDao = new ContactListDao();
 			contDao.update(contDto);

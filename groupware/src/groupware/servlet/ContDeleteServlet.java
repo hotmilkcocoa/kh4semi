@@ -22,9 +22,6 @@ public class ContDeleteServlet extends HttpServlet{
 			
 			String check = req.getParameter("cont_no");
 			
-//			for(int i = 0; i < check.length; i ++ ) {
-//				System.out.println(check[i]);
-//			}
 			String[] checks = check.split(",");
 			int[] checked = new int[checks.length];
 			for(int i = 0; i < checks.length; i ++) {

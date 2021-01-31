@@ -17,8 +17,7 @@ public class FavInsertServlet extends HttpServlet{
 		try {
 			req.setCharacterEncoding("UTF-8");
 			
-			int emp_no = 1;
-			//int emp_no = (int) req.getSession().getAttribute("check");
+			int emp_no = (int) req.getSession().getAttribute("check");
 			int fav_emp_no = Integer.parseInt(req.getParameter("fav_emp_no"));
 			
 			EmpFavoriteDao emp_favDao = new EmpFavoriteDao();

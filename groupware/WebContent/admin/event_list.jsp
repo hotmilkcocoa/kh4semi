@@ -78,6 +78,7 @@
 	.monthTd{
 		width: 140px;
 		height: 50px;
+		border: 1px dotted gray;
 	}
 	.schedule{
 		max-width: 130px;
@@ -133,8 +134,7 @@
 </style>
 
 <%
-	//int emp_no = (int) session.getAttribute("check");
-	int emp_no = 3;
+	int emp_no = (int) session.getAttribute("check");
 
 	String calType = request.getParameter("calType")!=null ? request.getParameter("calType") : "monthly";
 	
