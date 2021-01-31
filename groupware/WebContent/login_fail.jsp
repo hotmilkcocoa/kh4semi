@@ -33,11 +33,12 @@
 		border:1px solid black;
         display:block;
 		position: absolute;
-		top:5%;
-        left:23%;
+		top:50px;
+        left:300px;
         width: 1000px;
         height: 600px;		
-	}	
+	}
+		
 </style>
 
 <%
@@ -96,8 +97,7 @@
 			<div class="right" style="height:auto; width:400px; background-color:#2980b9;"></div>			
 		</div>
 	
-	
-		<div class="outbox popup">
+	<div class="outbox popup">
 			<header class="right">
 				<button class="hideBtn">x</button>
 				<h2 class="center">반갑습니다.</h2>				
@@ -131,8 +131,9 @@
 			
 				</div>
 			</div>
-		<form action="login.do" method="post">		
-			<div  style="height:503px; width:50%; background-color:#95a5a6; float:left"> 
+	
+	<form action="login.do" method="post">	
+		<div  style="height:503px; width:50%; background-color:#95a5a6; float:left"> 
 					
 				<div class="outbox" style="width:350px;">
 					<div class="center">
@@ -154,8 +155,7 @@
 				</div>
 			</div>
 		</form>	
-		</div>		
-		
+	</div>
 	</main>
 	
 </body>
