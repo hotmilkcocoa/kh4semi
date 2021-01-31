@@ -236,12 +236,11 @@
                         </ul>
                     </ul>
                     <ul>
-                        <li class="menu menu-title"><a href="">게시판</a></li>
+                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/board/board_main.jsp">게시판</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="">공지사항</a></li>
-                            <li class="menu menu-detail"><a href="">자유게시판</a></li>
-                            <li class="menu menu-detail"><a href="">동호회</a></li>
-                            <li class="menu menu-detail"><a href="">결재</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/board/notice_list.jsp">공지사항</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/board/free_list.jsp">자유게시판</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/board/payment_list.jsp">결재</a></li>
                         </ul>
                     </ul>
                 </div>

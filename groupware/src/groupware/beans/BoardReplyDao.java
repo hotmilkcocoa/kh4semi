@@ -25,7 +25,8 @@ public class BoardReplyDao {
 		ps.setInt(2, replyDto.getReply_origin());
 		ps.setInt(3, replyDto.getReply_writer());
 		ps.execute();
-		
+		System.out.println("reply_origin");
+		System.out.println("reply_writer");
 		con.close();
 	}
 	

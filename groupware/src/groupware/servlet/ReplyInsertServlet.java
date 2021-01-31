@@ -12,6 +12,7 @@ import groupware.beans.BoardFreeDto;
 import groupware.beans.BoardReplyDao;
 import groupware.beans.BoardReplyDto;
 import groupware.beans.EmployeeDao;
+import groupware.beans.EmployeeDto;
 @WebServlet(urlPatterns = "/board/reply_insert.do")
 public class ReplyInsertServlet extends HttpServlet{
 	@Override
@@ -22,12 +23,11 @@ public class ReplyInsertServlet extends HttpServlet{
 			replyDto.setReply_context(req.getParameter("reply_context"));
 			replyDto.setReply_origin(Integer.parseInt(req.getParameter("reply_origin")));
 			
-			/*
-			 * int emp_no = 1; EmployeeDao employeeDao = new EmployeeDao(); EmployeeDao
-			 * EmployeeDao = employeeDao.find(emp_no);
-			 */
-			 
-			replyDto.setReply_writer(1);
+			int emp_no = (int)req.getSession().getAttribute("check");
+			EmployeeDao employeeDao = new EmployeeDao();
+			EmployeeDto EmployeeDto = employeeDao.find(emp_no);
+			
+			replyDto.setReply_writer(EmployeeDto.getEmp_no());
 			
 //			계산 : 댓글 테이블에 등록
 			BoardReplyDao replyDao = new BoardReplyDao();

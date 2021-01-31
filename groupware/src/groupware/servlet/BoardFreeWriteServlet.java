@@ -19,14 +19,14 @@ public class BoardFreeWriteServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			req.setCharacterEncoding("UTF-8");
-			
+			//정보
 			BoardFreeDto freeDto = new BoardFreeDto();
 			freeDto.setFree_header(req.getParameter("free_header"));
 			freeDto.setFree_title(req.getParameter("free_title"));
 			freeDto.setFree_context(req.getParameter("free_context"));
 			
 			//로그인한 사람정보
-			int emp_no=1;
+			int emp_no=(int)req.getSession().getAttribute("check");
 			EmployeeDao employeeDao = new EmployeeDao();
 			EmployeeDto employeeDto = employeeDao.find(emp_no);
 			

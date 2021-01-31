@@ -8,6 +8,16 @@
 
 	BoardFreeDao dao = new BoardFreeDao();
 	BoardFreeDto dto = dao.find(free_no);
+	
+	EmployeeDao employeedao = new EmployeeDao();
+	EmployeeDto writedto = employeedao.find(dto.getFree_writer());
+	
+	String auth = (String)session.getAttribute("auth");
+	boolean isAdmin = auth.equals("관리자");
+	
+	int emp_no = (int)session.getAttribute("check");
+	EmployeeDto employeedto = employeedao.find(emp_no);
+	boolean isOwner = employeedto.getEmp_no()==(dto.getFree_writer());
 %>
 <%
 	BoardReplyDao replyDao = new BoardReplyDao();
@@ -173,10 +183,14 @@
 									
 									<!-- 수정은 본인만, 삭제는 본인과 관리자만 -->
 									<%
-										boolean isReplyOwner = dto.getFree_writer()==(replyDto.getReply_writer());
+										boolean isReplyOwner = employeedto.getEmp_no()==(replyDto.getReply_writer());
+										
 									%>
 									<%if(isReplyOwner){ %>
 									<a href="#" class="reply-edit-btn">수정</a> |
+									<a href="reply_delete.do?reply_no=<%=replyDto.getReply_no()%>&free_no=<%=free_no%>">삭제</a>
+									<%} %>
+									<%if(isAdmin || isReplyOwner){ %>
 									<a href="reply_delete.do?reply_no=<%=replyDto.getReply_no()%>&free_no=<%=free_no%>">삭제</a>
 									<%} %>
 								</div>

@@ -9,6 +9,16 @@
 
 	BoardDao dao = new BoardDao();
 	BoardDto dto = dao.find(board_no);
+	
+	EmployeeDao employeedao = new EmployeeDao();
+	EmployeeDto writedto = employeedao.find(dto.getBoard_writer());
+	
+	String auth = (String)session.getAttribute("auth");
+	boolean isAdmin = auth.equals("관리자");
+	
+	int emp_no = (int)session.getAttribute("check");
+	EmployeeDto employeedto = employeedao.find(emp_no);
+	boolean isOwner = employeedto.getEmp_no()==(dto.getBoard_writer());
 %>
 
 <jsp:include page="/template/header.jsp"></jsp:include>

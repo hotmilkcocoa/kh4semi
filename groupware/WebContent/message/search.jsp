@@ -104,6 +104,7 @@
 		$("#hiddenValue").val(chkArray);
 		window.opener.name = "parentPage";
 		document.form.target = "parentPage";
+		document.form.action = window.opener.location.href;
 		document.form.submit();
 		self.close();
 	});

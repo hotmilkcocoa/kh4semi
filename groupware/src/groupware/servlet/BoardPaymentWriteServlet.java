@@ -20,12 +20,12 @@ public class BoardPaymentWriteServlet extends HttpServlet{
 		req.setCharacterEncoding("UTF-8");
 		
 		BoardPaymentDto paymentDto = new BoardPaymentDto();
-		paymentDto.setPayment_header(req.getParameter("payment_header"));
+		paymentDto.setPayment_heater(req.getParameter("payment_heater"));
 		paymentDto.setPayment_title(req.getParameter("payment_title"));
 		paymentDto.setPayment_context(req.getParameter("payment_context"));
-		paymentDto.setPayment_recive(req.getParameter("payment_recive"));
+		paymentDto.setPayment_recive(Integer.parseInt(req.getParameter("payment_recive")));
 		
-		int emp_no=1;
+		int emp_no = (int)req.getSession().getAttribute("check");
 		EmployeeDao employeeDao = new EmployeeDao();
 		EmployeeDto employeeDto = employeeDao.find(emp_no);
 		
@@ -37,7 +37,7 @@ public class BoardPaymentWriteServlet extends HttpServlet{
 		paymentDto.setBoard_dep(employeeDto.getEmp_dep());
 		paymentDao.writeWithPrimaryKey(paymentDto);	
 		
-		resp.sendRedirect("payment_list.jsp?payment_no="+payment_no);
+		resp.sendRedirect("payment_list.jsp");
 		
 	}catch(Exception e) {
 		e.printStackTrace();

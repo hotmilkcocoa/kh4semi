@@ -70,9 +70,23 @@
 %>
 <link rel="stylesheet" type="text/css" href="./css/common.css">
 <style>
-.pagination{
-position:absolute; top:550px; left:600px;
-}
+	.pagination {
+		text-align: center;
+		width: 100%;
+	}
+	
+	.pagination > ul> li {
+		display: inline-block;
+		text-decoration: none;
+
+	}
+	.pagination a{
+		text-decoration: none;
+		font-size: 17px;
+    	line-height: 24px;
+    	font-weight: 300;
+    	color: black;
+	}
 .write{
 position:absolute; top:550px;
 }
@@ -119,6 +133,7 @@ position:absolute; top:550px;
 					<th>작성자</th>
 					<th>작성일</th>
 					<th>부서</th>
+					<th>결재상태</th>
 				</tr>
 			</thead>
 			
@@ -127,8 +142,8 @@ position:absolute; top:550px;
 					<tr>
 						<td><%=dto.getPayment_no() %></td>
 						<td width="45%">
-							<%if(dto.getPayment_header()!=null){ %>
-								[<%=dto.getPayment_header()%>]
+							<%if(dto.getPayment_heater()!=null){ %>
+								[<%=dto.getPayment_heater()%>]
 							<%} %>
 							<a href="payment_detail.jsp?payment_no=<%=dto.getPayment_no()%>">				
 									<%=dto.getPayment_title()%>
@@ -137,6 +152,7 @@ position:absolute; top:550px;
 							<td><%=dto.getPayment_writer() %></td>
 							<td><%=dto.getPayment_date() %></td>
 							<td><%=dto.getBoard_dep() %></td>
+							<td><%=dto.getPayment_state() %></td>
 					</tr>
 				<%}%>
 			</tbody>

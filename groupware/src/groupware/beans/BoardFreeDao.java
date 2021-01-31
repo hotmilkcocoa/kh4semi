@@ -240,7 +240,7 @@ public class BoardFreeDao {
 			con.close();
 			
 			return count;
-		}		
+		}	
 		
 	}
 

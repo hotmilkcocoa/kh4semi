@@ -11,7 +11,6 @@
 			<select name="board_header" class="input">
 				<option value="">말머리를 선택하세요</option>
 				<option value="공지">공지</option>
-				<option value="자유">자유</option>
 			</select>	
 		</div>
 	
