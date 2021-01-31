@@ -615,6 +615,7 @@ public class EmployeeDao {
 			
 		boolean result = rs.next();
 			
+
 		con.close();
 		
 		return result;
@@ -631,6 +632,7 @@ public class EmployeeDao {
 		ps.execute();
 		
 		con.close();
+
 	}
 	
 	//장기 이탈자 조회
