@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="groupware.beans.*" %>
-<jsp:include page="/template/board_header.jsp"></jsp:include>
+<jsp:include page="/template/header.jsp"></jsp:include>
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
@@ -45,7 +45,7 @@ List<BoardFreeDto> freelist = boardfreeDao.pagingList(startRow, endRow);
 </style>
     <div class="outbox" align="center">
     
-    		<table class="payment" style="width:900px">
+    		<table class="payment table table-border" style="width:900px">
     			<tbody>
   		  			<tr>
     					<th>번호</th>
@@ -80,7 +80,7 @@ List<BoardFreeDto> freelist = boardfreeDao.pagingList(startRow, endRow);
 <br>
 <hr>
 <br>
-    		<table class="notice" style="width:900px">
+    		<table class="notice table table-border" style="width:900px">
     			<tbody>
     				<tr>
     					<th>번호</th>
@@ -113,7 +113,7 @@ List<BoardFreeDto> freelist = boardfreeDao.pagingList(startRow, endRow);
          <br>
          <hr>
          <br>
-    		<table class="free" style="width:900px;">
+    		<table class="free table table-border" style="width:900px;">
     		    	<tr>
     		    		<th>글 번호</th>
     		    		<th>제목</th>
@@ -140,5 +140,5 @@ List<BoardFreeDto> freelist = boardfreeDao.pagingList(startRow, endRow);
     			</tbody>  			
     		</table>
     </div>
-<jsp:include page="/template/board_footer.jsp"></jsp:include>
+<jsp:include page="/template/footer.jsp"></jsp:include>
 
