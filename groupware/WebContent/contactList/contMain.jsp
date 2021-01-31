@@ -177,7 +177,18 @@
 <input type="hidden" class="hiddenCk" value="<%=no[m]%>">
 <%} %>
 		<div class="row float-box">
-		
+			<div class="row float-left">
+				<select class="input input-inline float-right" name="dep_name" id="dep_chooser">
+					<option value="0">부서검색</option>
+					<%
+						for(DataSettingDto dto : depList) {
+					%>
+						<option value="<%=dto.getDep_no()%>" <%if(dep_name!=null&&dep_name.equals(dto.getDep_name())){%>selected<%}%>><%=dto.getDep_name()%></option>
+					<%
+						}
+					%>
+				</select>
+			</div>
 			<div class="row float-left">
 				<form action="../message/messageWrite.jsp" method="post" name="form">
 					<input type="hidden" id="hiddenValue1" name="emp_no">
@@ -186,31 +197,23 @@
 				</form>
 				
 			</div>
-			<select class="input input-inline float-right" name="dep_name" id="dep_chooser">
-				<option value="0">부서검색</option>
-				<%
-					for(DataSettingDto dto : depList) {
-				%>
-					<option value="<%=dto.getDep_no()%>" <%if(dep_name!=null&&dep_name.equals(dto.getDep_name())){%>selected<%}%>><%=dto.getDep_name()%></option>
-				<%
-					}
-				%>
-			</select>
+			<form action="contMain.jsp" method="get">
+				<div class="row float-right">
+				<%if(dep_no != null)  {%>
+					<input type="hidden" name="dep_no" value=<%=dep_no%>>
+					<%} %>
+					<%if(isSearch) {%>
+						<input type="text" name="keyword" class="input input-inline" value="<%=keyword%>">
+						<%} else { %>
+						<input type="text" name="keyword" class="input input-inline" placeholder="검색어를 입력해주세요.">
+						<%} %>
+					<input type="submit" class="input input-inline" value="검색">
+				</div>
+			</form>
+	
 		</div>
 
-		<form action="contMain.jsp" method="get">
-		<div class="row float-right">
-		<%if(dep_no != null)  {%>
-			<input type="hidden" name="dep_no" value=<%=dep_no%>>
-			<%} %>
-			<%if(isSearch) {%>
-				<input type="text" name="keyword" class="input input-inline" value="<%=keyword%>">
-				<%} else { %>
-				<input type="text" name="keyword" class="input input-inline" placeholder="검색어를 입력해주세요.">
-				<%} %>
-			<input type="submit" class="input input-inline" value="검색">
-		</div>
-	</form>
+		
 	</div>
 
 	<div class="row">
