@@ -33,7 +33,7 @@ public class MsgFileUploadServlet extends HttpServlet{
 			int message_sender = (int)req.getSession().getAttribute("check"); //보내는사람
 			
 			//수신 : req로 불가능하기 때문에 새로운 해석기를 생성해야 한다.(MultipartRequest) - cos.jar 필요
-			String path = "/Users/yujin/Documents/kh_upload";
+			String path = "../msgfile/";
 			int max = 10 * 1024 * 1024; //10MB
 			String encoding = "UTF-8";
 			DefaultFileRenamePolicy policy = new DefaultFileRenamePolicy();
