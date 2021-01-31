@@ -123,9 +123,10 @@
 			$(this).parents(".reply-edit").hide();
 			$(this).parents(".reply-edit").prev().show();
 		});
+
 	});
 </script>
-<div class="outbox">
+<div class="outbox" style="overflow:auto; height: 450px">
 	<div class="row center">
 		<h2>
 			<%=dto.getFree_no() %>번 자유게시글
@@ -202,7 +203,7 @@
 									<input type="hidden" name="reply_no" value="<%=replyDto.getReply_no()%>">
 									<input type="hidden" name="reply_origin" value="<%=free_no%>">
 									<div class="row">
-										<textarea class="input" name="reply_context" required rows="5" 
+										<textarea class="input" name="reply_context" required rows="2" 
 											placeholder="댓글 작성"><%=replyDto.getReply_context()%></textarea>
 									</div>
 									<div class="row">

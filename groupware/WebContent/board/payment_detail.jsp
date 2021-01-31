@@ -59,9 +59,18 @@ $(function(){
 	          }
 	       });
 		
- 		$(".reject").click(function(){
-			location.href = "payment_delete.do?payment_no=<%=payment_no%>";
-		}); 
+	      $(".reject").click(function(){
+	          var sessionCheck = '<%=session.getAttribute("check")%>';
+	          var isMember = '<%=employeedto.getEmp_no()%>';
+	          if(sessionCheck == isMember){
+ 	             var re = "결재진행중"
+	             re.replace("결재진행중","결재반려");
+		         location.href = "payment_btn_reject.do?payment_no=<%=payment_no%>";
+	          }
+	          else{
+	             alert("권한이 없습니다.");
+	          }
+	       }); 
 
 	});
 </script>
