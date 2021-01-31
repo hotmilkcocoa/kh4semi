@@ -4,14 +4,13 @@
 <style>
 
 </style>
-	<div>
+	<div class="outbox">
 		<form action="write.do" method="post" >
 		<div class="row">
 			<label>말머리</label>
 			<select name="board_header" class="input">
 				<option value="">말머리를 선택하세요</option>
 				<option value="공지">공지</option>
-				<option value="자유">자유</option>
 			</select>	
 		</div>
 	
@@ -26,7 +25,7 @@
 		</div>
 		
 		<div class="row">
-			<input type="submit" class="input" value="등록">
+			<input type="submit" class="input" onclick="alert('글을 등록하시겠습니까?')" value="등록">
 		</div>
 		
 		</form>

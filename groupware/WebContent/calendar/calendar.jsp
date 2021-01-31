@@ -26,10 +26,12 @@
 		font-size: 14px;
 	}
 	.monthTd{
-		width: 140px;
-		height: 100px;
+		height: 80px;	
 	}
-	.schedule{
+	.monthTd, .monthDayTableTd{
+		width: 142px;
+	}
+	.monthTd .schedule{
 		max-width: 130px;
 		overflow: hidden;
 	}
@@ -78,17 +80,68 @@
     	width: 70px;
     }
     .listpop{
-    	position: fixed;
-    	width: 150px;
-    	padding: 0.5rem;
-    	border: 1px solid lightgray;
-    	background-color: white;
-    }
+	    position: fixed;
+	    width: 150px;
+	    border: 1px solid lightgray;
+	    background-color: white;
+	    font-size: 14px;
+	    padding: 0.25rem;
+	}
+	.schedule{
+		font-weight: bold;
+		margin-left: 0.5rem;
+		overflow: hidden;
+	}
+	.pop>div{
+		word-break: break-all;
+		padding-right: 30px;
+	}
+	.calendarTitle>.date{
+		font-size: 30px;
+	}
+	.calendarTitle>button{
+		font-size: 18px;
+		background-color: #ffffff00;
+		border: none;
+		cursor: pointer;
+	}
+	.calendarTitle>.today{
+		font-size: 14px;
+		border: 1px solid gray;
+		border-radius: 10px;
+	}
+	.calendarTitle{
+		position: relative;
+	    border-bottom: 1px solid lightgray;
+		padding-bottom: 10px;
+		margin: 10px 20px;
+	}
+	.calendarTitle>.changeTypeBtns{
+		position: absolute;
+	    bottom: 10px;
+	    left: 15px;
+	}
+	.calendarTitle>.manageBtns{
+		position: absolute;
+	    bottom: 10px;
+	    right: 15px;
+	}
+	.calendarTitle>.changeTypeBtns>input,
+	.calendarTitle>.manageBtns>input{
+		border: 1px solid gray;
+		border-radius: 10px;
+		background-color: white;
+	}
+	.calendarContainer{
+		margin: 20px;
+	}
+	.today{
+		background-color: #daf6ff91;
+	}
 </style>
 
 <%
-	//int emp_no = (int) session.getAttribute("check");
-	int emp_no = 3;
+	int emp_no = (int) session.getAttribute("check");
 
 	String calType = request.getParameter("calType")!=null ? request.getParameter("calType") : "monthly";
 	String date = request.getParameter("date");
@@ -118,19 +171,21 @@
 %>
 <div class="blurarea hide"></div>
 <div class="scrollbox">
-	<h1 class="center date"></h1>
-	<input type="button" value="이전" class="prevNext" prev>
-	<input type="button" value="다음" class="prevNext">
-	<input type="button" value="오늘" class="today">
-	<hr>
-	<div>
-		<input type="button" value="일간" id="daily" class="changeType">
-		<input type="button" value="주간" id="weekly" class="changeType">
-		<input type="button" value="월간" id="monthly" class="changeType">
-		<input type="button" value="일정 추가" id="sch_add">
-		<input type="button" value="캘린더 설정" id="sch_manage">
+	<div class="row calendarTitle center">
+		<span class="changeTypeBtns">
+			<input type="button" value="일간" id="daily" class="changeType">
+			<input type="button" value="주간" id="weekly" class="changeType">
+			<input type="button" value="월간" id="monthly" class="changeType">
+		</span>
+		<button class="prevNext" prev><</button>
+		<span class="center date"></span>
+		<button class="prevNext">></button>
+		<button class="today">Today</button>
+		<span class="manageBtns">
+			<input type="button" value="일정 추가" id="sch_add">
+			<input type="button" value="캘린더 설정" id="sch_manage">
+		</span>
 	</div>
-	<hr>
 	<div class="calendar">
 		<div class="calendarContainer">
 			<div>
@@ -142,7 +197,7 @@
 		</div>
 	</div>
 </div>
-<div class="viewpop hide">
+<div class="viewpop pop hide">
 	<input type="button" class="closeBtn" value="X">
     <div class="viewheader">
         <div class="data schName"></div>
@@ -177,14 +232,14 @@
 			parent.removeChild(parent.firstChild);
 		}
 	}
-	function getDateString(date){
+	function getDateString(date, conn){
 		var year = date.getFullYear();
 		var month = (date.getMonth() + 1);
 		month = month < 10 ? "0" + month : month;
 		var day = date.getDate();
 		day = day < 10 ? "0" + day : day;
 		
-		return year + "-" + month + "-" + day;
+		return year + conn + month + conn + day;
 	}
 	function newdiv(){
 		var newdiv = document.createElement("div");
@@ -204,7 +259,7 @@
 	document.querySelectorAll(".changeType").forEach(function (ele) {
 		ele.addEventListener("click", function () {
 			var link = "calendar.jsp?calType={calType}&date={date}";
-			link = link.replace("{calType}", this.getAttribute("id")).replace("{date}", getDateString(temp_date));
+			link = link.replace("{calType}", this.getAttribute("id")).replace("{date}", getDateString(temp_date, "-"));
 			location.href = link;
 		});
 	});
@@ -215,6 +270,7 @@
 			var val = 1;
 			if (this.hasAttribute("prev")) val = -1;
 			if (calType == "monthly") {
+				temp_date.setDate(1);
 				temp_date.setMonth(temp_date.getMonth() + val);
 			} else if (calType == "weekly") {
 				temp_date.setDate(temp_date.getDate() + (val * 7));
@@ -222,7 +278,7 @@
 				temp_date.setDate(temp_date.getDate() + val);
 			}
 			var link = "calendar.jsp?calType={calType}&date={date}";
-			link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
+			link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date, "-"));
 			location.href = link;
 		});
 	});
@@ -231,7 +287,7 @@
 	document.querySelector(".today").addEventListener("click", function () {
 		temp_date = new Date(today);
 		var link = "calendar.jsp?calType={calType}&date={date}";
-		link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
+		link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date, "-"));
 		location.href = link;
 	});
 
@@ -252,7 +308,7 @@
 		var dayTableRow = document.createElement("tr");
 
 		var start = new Date(temp_date.getFullYear(), temp_date.getMonth(), 1);
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1);
+		var dateString = getDateString(start, ".").substr(0, 7);
 		start.setDate(1 - start.getDay());
 
 		for (var i = 0; i < 6; i++) {
@@ -260,11 +316,13 @@
 			for (var j = 0; j < 7; j++) {
 				if (!dayTable.firstChild) {
 					var dayTableTb = document.createElement("td");
+					dayTableTb.classList.add("monthDayTableTd");
 					dayTableTb.innerHTML = dayArr[j];
 					dayTableRow.append(dayTableTb);
 				}
 				var newTd = document.createElement("td");
 				newTd.classList.add("monthTd");
+				if(getDateString(start, "-") == getDateString(today, "-")) newTd.classList.add("today");
 				newTr.append(newTd);
 
 				var calTdDiv = newdiv();
@@ -289,8 +347,19 @@
 				
 				var listpop = newdiv();
 				calTdDiv.append(listpop);
+				listpop.innerHTML = '<input type="button" class="closeBtn" value="X">';
 				listpop.classList.add("listpop");
+				listpop.classList.add("pop");
 				listpop.classList.add("hide");
+				
+				var listpopDate = newdiv();
+				listpop.append(listpopDate);
+				listpopDate.classList.add("listpopDate");
+				listpopDate.innerText = getDateString(start, "-");
+				
+				var listpopContainer = newdiv();
+				listpop.append(listpopContainer);
+				listpopContainer.classList.add("listpopContainer");
 				
 				start.setDate(start.getDate() + 1);
 			}
@@ -303,12 +372,13 @@
 	function paintWeekly() {
 		var start = new Date(temp_date);
 		start.setDate(start.getDate() - start.getDay());
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate() + "-";
+		var dateString = getDateString(start, ".") + "-";
 
 		for(var i=0; i<7; i++){
 			var dayRow = document.createElement("tr");
 			paintArea.append(dayRow);
 			dayRow.classList.add("dayRow");
+			if(getDateString(start, "-") == getDateString(today, "-")) dayRow.classList.add("today");
 			
 			var calTdDivDate = document.createElement("td");
 			dayRow.append(calTdDivDate);
@@ -319,6 +389,7 @@
 			var schRow = document.createElement("tr");
 			paintArea.append(schRow);
 			schRow.classList.add("schRow");
+			if(getDateString(start, "-") == getDateString(today, "-")) schRow.classList.add("today");
 			
 			var weekTd = document.createElement("td");
 			schRow.append(weekTd);
@@ -333,7 +404,7 @@
 		}
 		
 		start.setDate(start.getDate() - 1);
-		dateString = dateString + start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate();
+		dateString = dateString + getDateString(start, ".");
 		document.querySelector(".date").innerHTML = dateString;
 	};
 	//일간 달력 칠하기
@@ -341,7 +412,7 @@
 		var dayTableRow = document.createElement("tr");
 
 		var start = new Date(temp_date);
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate();
+		var dateString = getDateString(start, ".");
 
 		var timelineTd = document.createElement("td");
 		timelineTd.classList.add("timeline");
@@ -402,6 +473,11 @@
 			ele.classList.add("hide");
 			this.remove();
         });
+        
+        ele.children[0].addEventListener("click", function(){
+        	ele.classList.add("hide");
+        	blurarea.remove();
+        });
 	}
 <%
 	int i = 0;
@@ -421,21 +497,25 @@
 			});
 		}
 		//리스트에 일정이 있을 시 실행
-		<%if(schList != null){
+		<%if(schList.size() > 0){
 			for(ScheduleDto schDto : schList){%>
 				var calTdDivSchList = calType=="daily" ? document.querySelectorAll(".calTdDivSchList")[<%=schDto.getSch_start().toLocalDateTime().toLocalTime().getHour()%>] : document.querySelectorAll(".calTdDivSchList")[<%=i%>];
-				var listpop = document.querySelectorAll(".listpop")[<%=i%>];
+				var listpopContainer = document.querySelectorAll(".listpopContainer")[<%=i%>];
 				
 				var newSch = document.createElement("div");
 				//월간일 때 일정이 3개 초과면 리스트 팝업에 추가
 				if(calType=="monthly" && calTdDivSchList.children.length>2){
-					listpop.append(newSch);
+					listpopContainer.append(newSch);
 				} else{
 					calTdDivSchList.append(newSch);					
 				}
 				newSch.classList.add("schedule");
 				newSch.classList.add("cursor-pointer");
-				newSch.innerText = "<%=schDto.getSch_name()%>";
+				if(calType=="monthly"){
+					newSch.innerText = "<%=schDto.getSch_name()%>";
+				} else{
+					newSch.innerText = "<%=schDto.getSch_name()%>" + " (" + "<%=schDto.getSch_start().toLocalDateTime().toLocalTime().toString()+" - "+schDto.getSch_end().toLocalDateTime().toLocalTime().toString()%>" + ")";
+				}
 				
 				//일정 클릭 이벤트
 				//팝업 내용 수정하고 열기
@@ -448,6 +528,9 @@
 					document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
 					document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
 					
+					<%if(emp_no != schDto.getEmp_no()){%>
+						document.querySelector(".btns").classList.add("hide");
+					<%}%>
 					document.querySelector(".viewDelBtn").addEventListener("click", function(){
 						location.href = "sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
 					});
@@ -464,8 +547,6 @@
 				listCount.innerText = "<%=schList.size() > 3 ? schList.size()-3 : ""%>";
 				listCount.addEventListener("click", function(){
 					var listpop = document.querySelectorAll(".listpop")[<%=i%>];
-					var daterow = newdiv();
-					date
 					openpop(listpop, 100);
 				});
 			}

@@ -3,18 +3,64 @@ package groupware.beans;
 import java.sql.Date;
 
 public class MessageDto {
+	private int rownum;
+	private int emp_no;
+	private String emp_name;
+	private String emp_title;
 	private int message_no;
 	private String message_title;
 	private String message_content;
 	private Date message_time;
 	private int message_sender;
 	private int message_receiver;
-	private char read_check;
-	private char del_sender;
-	private char del_receiver;
+	private String read_check;
+	private String del_sender;
+	private String del_receiver;
 	public MessageDto() {
 		super();
 	}
+	
+	
+	public int getRownum() {
+		return rownum;
+	}
+
+
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+
+
+	public int getEmp_no() {
+		return emp_no;
+	}
+
+
+	public void setEmp_no(int emp_no) {
+		this.emp_no = emp_no;
+	}
+
+
+	public String getEmp_name() {
+		return emp_name;
+	}
+
+
+	public void setEmp_name(String emp_name) {
+		this.emp_name = emp_name;
+	}
+
+
+	public String getEmp_title() {
+		return emp_title;
+	}
+
+
+	public void setEmp_title(String emp_title) {
+		this.emp_title = emp_title;
+	}
+
+
 	public int getMessage_no() {
 		return message_no;
 	}
@@ -51,24 +97,32 @@ public class MessageDto {
 	public void setMessage_receiver(int message_receiver) {
 		this.message_receiver = message_receiver;
 	}
-	public char getRead_check() {
+	public String getRead_check() {
 		return read_check;
 	}
-	public void setRead_check(char read_check) {
+	public void setRead_check(String read_check) {
 		this.read_check = read_check;
 	}
-	public char getDel_sender() {
+	public String getDel_sender() {
 		return del_sender;
 	}
-	public void setDel_sender(char del_sender) {
+	public void setDel_sender(String del_sender) {
 		this.del_sender = del_sender;
 	}
-	public char getDel_receiver() {
+	public String getDel_receiver() {
 		return del_receiver;
 	}
-	public void setDel_receiver(char del_receiver) {
+	public void setDel_receiver(String del_receiver) {
 		this.del_receiver = del_receiver;
 	}
 	
+	//보낸쪽지함 : 보낸사람과 세션이 맞다면 true
+	public boolean isSentbox(int message_sender, int emp_no) {
+		return this.message_sender == this.emp_no;
+	}
+	
+	public boolean isInbox(int message_receiver, int emp_no) {
+		return this.message_receiver == this.emp_no;
+	}
 	
 }

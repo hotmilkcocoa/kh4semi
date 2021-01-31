@@ -41,7 +41,7 @@
 		<input type="hidden" name="com_no" value="<%=companyDto.getCom_no()%>">
 	
 	<div class="row">
-		<table class="table">
+		<table class="table table-border">
 			<tbody>
 				<tr>
 					<th width="20%">회사명</th>

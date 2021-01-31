@@ -1,3 +1,4 @@
+<%@page import="groupware.beans.EmployeeDao"%>
 <%@page import="groupware.beans.AnnualDto"%>
 <%@page import="groupware.beans.AnnualDao"%>
 <%@page import="groupware.beans.VacationDto"%>
@@ -7,8 +8,8 @@
 <jsp:include page="/template/header.jsp"></jsp:include>
 
 <%
-	//int emp_no = (int) session.getAttribute("check");
-	int emp_no = 3;
+	int emp_no = (int) session.getAttribute("check");
+
 	boolean isEdit = request.getParameter("edit") != null;
 	VacationDto vacationDto = null;
 	if(isEdit){
@@ -17,23 +18,24 @@
 	}
 	AnnualDao annualDao = new AnnualDao();
 	AnnualDto annualDto = annualDao.find(emp_no);
+	
+	String target_no = request.getParameter("emp_no");
+	String[] noArr = target_no!=null ? target_no.split(",") : null;
+	
+	EmployeeDao empDao = new EmployeeDao();
 %>
 
-<h1 class="title center">2021.1</h1>
-<hr>
 <div class="row right">
  	입사일 : <%=annualDao.getHireDate(emp_no) %>
 </div>
 <div class="row center">
     <table class="table table-border vacationTable">
         <tr>
-            <td>발생 월차</td>
             <td>총 연차</td>
             <td>사용 연차</td>
             <td>잔여 연차</td>
         </tr>
         <tr>
-            <td>?</td>
             <td><%=annualDto.getAnn_occurred() %></td>
             <td><%=annualDto.getAnn_used() %></td>
             <td><%=annualDto.getAnn_occurred() - annualDto.getAnn_used() %></td>
@@ -62,6 +64,7 @@
                     <select class="dataInput select" name="vac_category" required>
                         <option <%if(isEdit && vacationDto.getVac_category().equals("연차")){ %>selected<%} %>>연차</option>
                         <option <%if(isEdit && vacationDto.getVac_category().equals("반차")){ %>selected<%} %>>반차</option>
+                        <option <%if(isEdit && vacationDto.getVac_category().equals("기타")){ %>selected<%} %>>기타</option>
                     </select>
                 </div>
             </div>
@@ -76,14 +79,19 @@
 	                    <input type="radio" name="vac_target" value="false">
 	                   	 타 사용자
 	                </label>
+	                <span class="addr">
+		                <input type="text" name="" class="target_no" readonly>
+		                <input type="hidden" name="target_no" value="<%=target_no%>">
+		                <button id="search-btn">주소록</button>
+	                </span>
                 </div>
             </div>
             <div class="row rel">
                 <span>신청기간</span>
                 <div class="data">
-                    <input class="dataInput date" type="date" name="vac_start" required <%if(isEdit){ %>value="<%=vacationDto.getVac_start()%>"<%} %>>
-                     - 
-                    <input class="dataInput date" type="date" name="vac_end" required <%if(isEdit){ %>value="<%=vacationDto.getVac_end()%>"<%} %>>
+                    <input class="dataInput date start" type="date" name="vac_start" required <%if(isEdit){ %>value="<%=vacationDto.getVac_start()%>"<%} %>>
+                    <span class="hyphen">-</span> 
+                    <input class="dataInput date end" type="date" name="vac_end" required <%if(isEdit){ %>value="<%=vacationDto.getVac_end()%>"<%} %>>
                 </div>
             </div>
             <div class="row rel">
@@ -106,6 +114,28 @@
     </form>
 </div>
 <script>
+	document.querySelector(".dataInput.select").addEventListener("input", function(){
+		if(this.value=="반차"){
+			document.querySelector(".hyphen").classList.add("hide");
+			document.querySelector(".date.end").classList.add("hide");
+			document.querySelector(".date.end").value = document.querySelector(".date.start").value;
+		} else{
+			document.querySelector(".hyphen").classList.remove("hide");
+			document.querySelector(".date.end").classList.remove("hide");
+		}
+	});
+	document.querySelector(".date.start").addEventListener("input", function(){
+		if(document.querySelector(".dataInput.select").value == "반차"){
+			document.querySelector(".date.end").value = this.value;
+		}
+	});
+	var targetInput = document.querySelector(".target_no");
+	<%if(noArr!=null){
+		for(int i=0; i<noArr.length; i++){%>
+			targetInput.value = targetInput.value + "<%=empDao.find(Integer.parseInt(noArr[i])).getEmp_name() + (i==noArr.length-1?"":", ")%>";
+		<%}
+	}%>
+
 	document.querySelector(".cancelBtn").addEventListener("click", function(){
 		window.history.back();
 	});
@@ -122,5 +152,8 @@
 		alert("잔여 연차가 부족합니다.");
 	<%}%>
 
+	$("#search-btn").click(function() {
+		window.open("<%=request.getContextPath()%>/message/search.jsp", "사원검색", "width=700px, height=600px");
+	});
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include>

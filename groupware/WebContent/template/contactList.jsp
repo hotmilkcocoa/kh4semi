@@ -46,9 +46,8 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	
-	//int emp_no = request.getSession().getAttribute("check");
+	int emp_no = (int)request.getSession().getAttribute("check");
 	
-	int emp_no = 1;
 	String keyword = request.getParameter("keyword");
 	
 	//부서목록조회(select)
@@ -122,19 +121,19 @@
 	$(function () {
 		
 		//전체선택
-		$("search.jspallCheck-btn").on("input", function(){
+		$("#allCheck-btn").change(function(){
 			var check = $(this).prop("checked");
 			$(".check-btn").prop("checked", check);
 		});
-
-
+		
+		
 	});		
 			
 	
 </script>
 </head>
 <body>
-<div class="outbox" style="width:600px;">
+<div class="outbox">
 <div class="row float-box">
 	
 		<form action="search.jsp" method="get">
@@ -169,7 +168,7 @@
 				<%for(EmployeeDto empDto : empList){%>
 					<tr>
 						<td>
-							<input type="checkbox" class="check-btn" value="<%=empDto.getEmp_no() %>">
+							<input type="checkbox" class="check-btn" data-no=<%=empDto.getEmp_no()%> data-name=<%=empDto.getEmp_name()%>>
 						</td>
 						<td>
 							<%=empDto.getEmp_name()%> <%=empDto.getEmp_title()%>
