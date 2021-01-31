@@ -4,6 +4,7 @@ public class Share_schDto {
 	private int share_no;
 	private int emp_no;
 	private int target_no;
+	private String checked;
 	
 	public Share_schDto() {
 		// TODO Auto-generated constructor stub
@@ -31,6 +32,14 @@ public class Share_schDto {
 
 	public void setTarget_no(int target_no) {
 		this.target_no = target_no;
+	}
+
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
 	}
 	
 	

@@ -30,17 +30,14 @@ public class VacationSignServlet extends HttpServlet{
 			
 			VacationDao vacationDao = new VacationDao();
 			VacationApprovalDao vacationApprovalDao = new VacationApprovalDao();
-			
-			String addr = "";
+			boolean checkEnough = true;
 			//개인이 휴가신청 취소
 			if(req.getParameter("cancel")!=null) {
 				vacationDao.cancel(vac_no);		
 				vacationApprovalDao.cancel(vac_no);
-				addr = "vac_status.jsp";
 			//상급자가 승인 or 반려일 때
 			} else {
 				//반려일 때
-				addr = "vac_app.jsp";
 				String sign;
 				if(req.getParameter("reject")!=null) {
 					sign = "반려";
@@ -96,7 +93,9 @@ public class VacationSignServlet extends HttpServlet{
 						double remain = annualDto.getAnn_occurred() - annualDto.getAnn_used();
 						
 						if(use > remain) {//잔여연차보다 사용될 연차가 많으면 에러로 리턴
-							addr = "vac_app.jsp?error";
+							checkEnough = false;
+							vacationDao.reject(vac_no);
+							vacationApprovalDao.rejectForHrhead(vac_no);
 						} else {
 							if(vacationApprovalDao.find(vac_no).getDep_head_app().equals("대기")) {
 								vacationApprovalDao.signForDephead(vac_no, sign);
@@ -115,8 +114,11 @@ public class VacationSignServlet extends HttpServlet{
 					}
 				}
 			}
-			
-			resp.sendRedirect(addr);
+			if(checkEnough) {
+				resp.sendRedirect(req.getHeader("referer"));
+			} else {
+				resp.sendRedirect(req.getHeader("referer") + "?error");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);

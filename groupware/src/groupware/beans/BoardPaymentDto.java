@@ -4,13 +4,14 @@ import java.sql.Date;
 
 public class BoardPaymentDto {
 	public int payment_no;
-	public String payment_writer;
-	public String payment_header;
+	public int payment_writer;
+	public String payment_heater;
 	public String payment_title;
 	public String payment_context;
 	public Date payment_date;
-	public String payment_recive;
+	public int payment_recive;
 	public String board_dep;
+	public String payment_state;
 	public BoardPaymentDto() {
 		super();
 	}
@@ -20,17 +21,17 @@ public class BoardPaymentDto {
 	public void setPayment_no(int payment_no) {
 		this.payment_no = payment_no;
 	}
-	public String getPayment_writer() {
+	public int getPayment_writer() {
 		return payment_writer;
 	}
-	public void setPayment_writer(String payment_writer) {
+	public void setPayment_writer(int payment_writer) {
 		this.payment_writer = payment_writer;
 	}
-	public String getPayment_header() {
-		return payment_header;
+	public String getPayment_heater() {
+		return payment_heater;
 	}
-	public void setPayment_header(String payment_header) {
-		this.payment_header = payment_header;
+	public void setPayment_heater(String payment_heater) {
+		this.payment_heater = payment_heater;
 	}
 	public String getPayment_title() {
 		return payment_title;
@@ -50,10 +51,10 @@ public class BoardPaymentDto {
 	public void setPayment_date(Date payment_date) {
 		this.payment_date = payment_date;
 	}
-	public String getPayment_recive() {
+	public int getPayment_recive() {
 		return payment_recive;
 	}
-	public void setPayment_recive(String payment_recive) {
+	public void setPayment_recive(int payment_recive) {
 		this.payment_recive = payment_recive;
 	}
 	public String getBoard_dep() {
@@ -62,5 +63,19 @@ public class BoardPaymentDto {
 	public void setBoard_dep(String board_dep) {
 		this.board_dep = board_dep;
 	}
-
+	public String getPayment_state() {
+		return payment_state;
+	}
+	public void setPayment_state(String payment_state) {
+		this.payment_state = payment_state;
+	}
+	public String getPayment_header_string() {
+		if(this.payment_heater == null) 
+			return "";
+		else
+			return this.payment_heater;
+	}
 }
+
+
+

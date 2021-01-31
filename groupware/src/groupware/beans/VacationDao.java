@@ -74,9 +74,10 @@ public class VacationDao {
 	public int getCount(int emp_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "select count(*) from vacation where vac_writer_no = ?";
+		String sql = "select count(*) from vacation where vac_target_no = ? or vac_writer_no = ?";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
+		ps.setInt(2, emp_no);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		int count = rs.getInt(1);
@@ -117,7 +118,7 @@ public class VacationDao {
 	public List<VacationDto> select(int emp_no) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "select * from vacation where vac_writer_no = ? order by vac_no desc";
+		String sql = "select * from vacation where vac_target_no = ? order by vac_no desc";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
 		ResultSet rs = ps.executeQuery();
@@ -146,11 +147,12 @@ public class VacationDao {
 	public List<VacationDto> select(int emp_no, int startRow, int endRow) throws Exception{
 		Connection con = JdbcUtil.getConnection(USER, PW);
 		
-		String sql = "select * from(select rownum rn, V.* from vacation V order by vac_no desc) where vac_writer_no = ? and rn between ? and ?";
+		String sql = "select * from(select rownum rn, V.* from vacation V where vac_target_no = ? or vac_writer_no = ? order by vac_no desc) where rn between ? and ?";
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setInt(1, emp_no);
-		ps.setInt(2, startRow);
-		ps.setInt(3, endRow);
+		ps.setInt(2, emp_no);
+		ps.setInt(3, startRow);
+		ps.setInt(4, endRow);
 		ResultSet rs = ps.executeQuery();
 		
 		List<VacationDto> list = new ArrayList<VacationDto>();

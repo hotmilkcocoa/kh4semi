@@ -1,3 +1,4 @@
+<%@page import="groupware.beans.EmployeeDto"%>
 <%@page import="groupware.beans.Share_schDto"%>
 <%@page import="groupware.beans.Share_schDao"%>
 <%@page import="java.time.LocalTime"%>
@@ -33,7 +34,7 @@
 	.monthTd, .monthDayTableTd{
 		width: 142px;
 	}
-	.schedule{
+	.monthTd .schedule{
 		max-width: 130px;
 		overflow: hidden;
 	}
@@ -98,6 +99,92 @@
 		word-break: break-all;
 		padding-right: 30px;
 	}
+	.shareListpop{
+		position: fixed;
+		background-color: white;
+		padding: 5px;
+		border: 1px solid lightgray;
+	}
+	.shareListpop .btn{
+		margin-top: 5px;
+	}
+	.shareContainer{
+		border: 1px solid lightgray;
+		background-color: #f7f7f7;
+		padding: 0.5rem;
+		width: 300px;
+		font-size: 14px;
+	}
+	.shareContainer>ul{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		text-align: left;
+		width: 300px;
+	}
+	.shareContainer>ul>li{
+		display: inline-block;
+		width: 250px;
+		max-width: 250px;
+		padding-left: 1rem;
+		position: relative;
+		overflow: hidden;
+	}
+	.shareContainer>ul>li>.mail{
+		color: #6d6d6d;
+		font-size: 12px;
+	}
+	.shareContainer>ul>li>.delBtn{
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin-right: 5px;
+	}
+	.calendarTitle>.date{
+		font-size: 30px;
+	}
+	.calendarTitle>button{
+		font-size: 18px;
+		background-color: #ffffff00;
+		border: none;
+		cursor: pointer;
+	}
+	.calendarTitle>.today{
+		font-size: 14px;
+		border: 1px solid gray;
+		border-radius: 10px;
+	}
+	.calendarTitle{
+		position: relative;
+	    border-bottom: 1px solid lightgray;
+		padding-bottom: 10px;
+		margin: 10px 20px;
+	}
+	.calendarTitle>.changeTypeBtns{
+		position: absolute;
+	    bottom: 10px;
+	    left: 15px;
+	}
+	.calendarTitle>.manageBtns{
+		position: absolute;
+	    bottom: 10px;
+	    right: 15px;
+	}
+	.calendarTitle>.changeTypeBtns>input,
+	.calendarTitle>.manageBtns>input{
+		border: 1px solid gray;
+		border-radius: 10px;
+		background-color: white;
+	}
+	.calendarContainer{
+		margin: 20px;
+	}
+	.forCom{
+		color: red;
+	}
+	.today{
+		background-color: #daf6ff91;
+	}
 </style>
 
 <%
@@ -125,29 +212,40 @@
 	
 	Share_schDao shareDao = new Share_schDao();
 	List<Share_schDto> shareList = shareDao.select(emp_no);
-	
+	List<Share_schDto> shareListFilterd = shareDao.selectFiltered(emp_no);
+
 	ScheduleDao scheduleDao = new ScheduleDao();
-	TreeMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.selectForShare(shareList, index, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
+	TreeMap<LocalDate, List<ScheduleDto>> schMap = scheduleDao.selectForShare(shareListFilterd, index, Timestamp.valueOf(startOfCal.atStartOfDay()), Timestamp.valueOf(endOfCal.atStartOfDay()));
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-	
 %>
+<div class="shareListpop pop hide">
+	<input type="button" class="closeBtn" value="X">
+	<form action="share_update.do" method="post">
+		<div class="shareContainer center">목록이 없어요</div>
+		<div class="row right">
+			<input type="submit" value="확인" class="btn">
+		</div>
+	</form>
+</div>
 <div class="blurarea hide"></div>
 <div class="scrollbox">
-	<h1 class="center date"></h1>
-	<input type="button" value="이전" class="prevNext" prev>
-	<input type="button" value="다음" class="prevNext">
-	<input type="button" value="오늘" class="today">
-	<hr>
-	<div>
-		<input type="button" value="일간" id="daily" class="changeType">
-		<input type="button" value="주간" id="weekly" class="changeType">
-		<input type="button" value="월간" id="monthly" class="changeType">
-		<input type="button" value="일정 추가" id="sch_add">
-		<input type="button" value="캘린더 설정" id="sch_manage">
-		<input type="button" value="공유 목록" id="share_list">
+	<div class="row calendarTitle center">
+		<span class="changeTypeBtns">
+			<input type="button" value="일간" id="daily" class="changeType">
+			<input type="button" value="주간" id="weekly" class="changeType">
+			<input type="button" value="월간" id="monthly" class="changeType">
+		</span>
+		<button class="prevNext" prev><</button>
+		<span class="center date"></span>
+		<button class="prevNext">></button>
+		<button class="today">Today</button>
+		<span class="manageBtns">
+			<input type="button" value="공유 목록" id="share_list">
+			<input type="button" value="일정 추가" id="sch_add">
+			<input type="button" value="캘린더 설정" id="sch_manage">
+		</span>
 	</div>
-	<hr>
 	<div class="calendar">
 		<div class="calendarContainer">
 			<div>
@@ -159,7 +257,6 @@
 		</div>
 	</div>
 </div>
-<div class="shareListpop pop"></div>
 <div class="viewpop pop hide">
 	<input type="button" class="closeBtn" value="X">
     <div class="viewheader">
@@ -182,23 +279,61 @@
             <span>작성자</span>
             <div class="data schWriter"></div>
         </div>
+        <div class="row rel center btns">
+            <input type="button" value="삭제" class="viewDelBtn">
+            <input type="button" value="수정" class="viewEditBtn">
+        </div>
     </div>
 </div>
 <script>
+	//공유 목록 클릭 시 리스트 팝업 열기
+	document.querySelector("#share_list").addEventListener("click", function(){
+		openpop(document.querySelector(".shareListpop"), 100);
+	});
+	//리스트 팝업 채우기
+	<%if(!shareList.isEmpty()){%>
+		var container = document.querySelector(".shareContainer");
+		removeAllChild(container);
+		var newUl = document.createElement("ul");
+		container.append(newUl);
+		<%for(Share_schDto shareDto : shareList){
+			EmployeeDto empDto = new EmployeeDao().find(shareDto.getTarget_no());%>
+			var newLi = document.createElement("li");
+			newUl.append(newLi);
+			
+			var checkbox = document.createElement("input");
+			checkbox.setAttribute("type", "checkbox");
+			checkbox.setAttribute("name", "share_no");
+			checkbox.setAttribute("value", "<%=shareDto.getShare_no()%>");
+			<%if(shareDto.getChecked().equals("true")){%>checkbox.checked = 'true';<%}%>
+			
+			var emp = document.createElement("span");
+			emp.classList.add("emp");
+			emp.innerText = "<%=empDto.getEmp_name()%>";
+			var mail = document.createElement("span");
+			mail.classList.add("mail");
+			mail.innerText = "<" + "<%=empDto.getEmp_email()%>" + ">";
+			
+			newLi.append(checkbox);
+			newLi.append(emp);
+			newLi.append(mail);
+		<%}%>
+	<%}%>
+	
 	//부모의 자식 엘리먼트 지우기
 	function removeAllChild(parent) {
 		while (parent.firstChild) {
 			parent.removeChild(parent.firstChild);
 		}
 	}
-	function getDateString(date){
+	function getDateString(date, conn){
 		var year = date.getFullYear();
 		var month = (date.getMonth() + 1);
 		month = month < 10 ? "0" + month : month;
 		var day = date.getDate();
 		day = day < 10 ? "0" + day : day;
 		
-		return year + "-" + month + "-" + day;
+		return year + conn + month + conn + day;
 	}
 	function newdiv(){
 		var newdiv = document.createElement("div");
@@ -217,8 +352,8 @@
 	//일간, 주간, 월간 버튼 클릭 시 캘린더 타입 변경
 	document.querySelectorAll(".changeType").forEach(function (ele) {
 		ele.addEventListener("click", function () {
-			var link = "calendar.jsp?calType={calType}&date={date}";
-			link = link.replace("{calType}", this.getAttribute("id")).replace("{date}", getDateString(temp_date));
+			var link = "share_calendar.jsp?calType={calType}&date={date}";
+			link = link.replace("{calType}", this.getAttribute("id")).replace("{date}", getDateString(temp_date, "-"));
 			location.href = link;
 		});
 	});
@@ -235,8 +370,8 @@
 			} else {
 				temp_date.setDate(temp_date.getDate() + val);
 			}
-			var link = "calendar.jsp?calType={calType}&date={date}";
-			link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
+			var link = "share_calendar.jsp?calType={calType}&date={date}";
+			link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date, "-"));
 			location.href = link;
 		});
 	});
@@ -244,8 +379,8 @@
 	// 오늘 클릭 시 오늘 날짜로 페인트
 	document.querySelector(".today").addEventListener("click", function () {
 		temp_date = new Date(today);
-		var link = "calendar.jsp?calType={calType}&date={date}";
-		link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date));
+		var link = "share_calendar.jsp?calType={calType}&date={date}";
+		link = link.replace("{calType}", calType).replace("{date}", getDateString(temp_date, "-"));
 		location.href = link;
 	});
 
@@ -266,7 +401,7 @@
 		var dayTableRow = document.createElement("tr");
 
 		var start = new Date(temp_date.getFullYear(), temp_date.getMonth(), 1);
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1);
+		var dateString = getDateString(start, ".").substr(0, 7);
 		start.setDate(1 - start.getDay());
 
 		for (var i = 0; i < 6; i++) {
@@ -280,6 +415,7 @@
 				}
 				var newTd = document.createElement("td");
 				newTd.classList.add("monthTd");
+				if(getDateString(start, "-") == getDateString(today, "-")) newTd.classList.add("today");
 				newTr.append(newTd);
 
 				var calTdDiv = newdiv();
@@ -329,12 +465,13 @@
 	function paintWeekly() {
 		var start = new Date(temp_date);
 		start.setDate(start.getDate() - start.getDay());
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate() + "-";
+		var dateString = getDateString(start, ".") + "-";
 
 		for(var i=0; i<7; i++){
 			var dayRow = document.createElement("tr");
 			paintArea.append(dayRow);
 			dayRow.classList.add("dayRow");
+			if(getDateString(start, "-") == getDateString(today, "-")) dayRow.classList.add("today");
 			
 			var calTdDivDate = document.createElement("td");
 			dayRow.append(calTdDivDate);
@@ -345,6 +482,7 @@
 			var schRow = document.createElement("tr");
 			paintArea.append(schRow);
 			schRow.classList.add("schRow");
+			if(getDateString(start, "-") == getDateString(today, "-")) schRow.classList.add("today");
 			
 			var weekTd = document.createElement("td");
 			schRow.append(weekTd);
@@ -359,7 +497,7 @@
 		}
 		
 		start.setDate(start.getDate() - 1);
-		dateString = dateString + start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate();
+		dateString = dateString + getDateString(start, ".");
 		document.querySelector(".date").innerHTML = dateString;
 	};
 	//일간 달력 칠하기
@@ -367,7 +505,7 @@
 		var dayTableRow = document.createElement("tr");
 
 		var start = new Date(temp_date);
-		var dateString = start.getFullYear() + "." + (start.getMonth() + 1) + "." + start.getDate();
+		var dateString = getDateString(start, ".");
 
 		var timelineTd = document.createElement("td");
 		timelineTd.classList.add("timeline");
@@ -466,7 +604,12 @@
 				}
 				newSch.classList.add("schedule");
 				newSch.classList.add("cursor-pointer");
-				newSch.innerText = "<%=schDto.getSch_name()%>";
+				if(calType=="monthly"){
+					newSch.innerText = "<%=schDto.getSch_name()%>";
+				} else{
+					newSch.innerText = "<%=schDto.getSch_name()%>" + " (" + "<%=schDto.getSch_start().toLocalDateTime().toLocalTime().toString()+" - "+schDto.getSch_end().toLocalDateTime().toLocalTime().toString()%>" + ")";
+				}
+				<%if(schDto.getSch_for_com().equals("true")){%>newSch.classList.add("forCom");<%}%>
 				
 				//일정 클릭 이벤트
 				//팝업 내용 수정하고 열기
@@ -479,6 +622,15 @@
 					document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
 					document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
 					
+					document.querySelector(".viewDelBtn").addEventListener("click", function(){
+						location.href = "sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
+					});
+					document.querySelector(".viewEditBtn").addEventListener("click", function(){
+						location.href = "sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
+					});
+					<%if(emp_no != schDto.getEmp_no()){%>
+						document.querySelector(".btns").remove();
+					<%}%>
 				});
 			<%
 			}
