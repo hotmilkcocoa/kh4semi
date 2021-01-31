@@ -239,6 +239,18 @@ public class BoardPaymentDao {
 				ps.execute();
 				
 				con.close();
+			}
+			public void reject(int payment_no) throws Exception{
+				Connection con = JdbcUtil.getConnection(USERNAME, PASSWORD);
+				
+				String sql = "update board_payment set payment_state='결재반려' "
+						+ "where payment_no=?";
+				
+				PreparedStatement ps = con.prepareStatement(sql);
+				ps.setInt(1, payment_no);
+				ps.execute();
+				
+				con.close();
 			}		
 			
 		}
