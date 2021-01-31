@@ -3,7 +3,7 @@
 <%@page import="groupware.beans.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<jsp:include page="/template/header.jsp"></jsp:include>
+
 <%
 	
 	int viewSize = 8;
@@ -24,8 +24,7 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 
-	//int emp_no = request.getSession().getAttribute("check");
-	int emp_no = 1;
+	int emp_no = (int)request.getSession().getAttribute("check");
 	String key = request.getParameter("key");
 	
 	ContactListDao contDao = new ContactListDao();
@@ -34,9 +33,9 @@
 	boolean isSearch = key != null;
 	
 	if(isSearch) {
-		contList = contDao.pagination(key, startRow, endRow);
+		contList = contDao.pagination(emp_no, key, startRow, endRow);
 	} else {
-		contList = contDao.pagination(startRow, endRow);
+		contList = contDao.pagination(emp_no, startRow, endRow);
 	}
 	
 %>
@@ -49,7 +48,7 @@
 
 	int count;
 	if(isSearch) {
-		count = contDao.searchCount(key);
+		count = contDao.searchCount(emp_no, key);
 	} else {
 		count = contDao.selectCount(emp_no);
 	}
@@ -59,7 +58,21 @@
 		endBlock = pageSize;
 	}
 %>
-
+<jsp:include page="/template/header.jsp"></jsp:include>
+<style>
+	.float-left {
+		float:left;
+	}
+	
+	.float-right {
+		float:right;
+	}
+	
+	td > a{
+		 text-decoration: none;
+  		 color: #6633FF;
+	}
+</style>
 <script>
 	window.name="mainWin";
 
@@ -86,31 +99,28 @@
 			$(".check-btn").prop("checked", check);
 		});
 
+		$("#memo").each(function() {
+			if($(this).text().length > 12) {
+				$(this).html($(this).text().substr(0,12) + "...");
+			}
+		});
 	})
 </script>
 
 <div class="outbox">
 	<div class="row float-box">
-
-	<div class="row" style="float:left;">
-		<input type="button" value="주소록 추가" id="add_cont" class="input input-inline">
-	</div>
-
-	<div class="row" style="float:left;">
-	<form action="delete.do" method="get" name="form">
-		<input type="hidden" id="hiddenValue" name="cont_no">
-		<input type="button" id="delete_btn" value="선택삭제" class="input input-inline">
-	</form>
-	</div>
+		<div class="row float-left">
+			<input type="button" value="주소록 추가" id="add_cont" class="input input-inline">
+		</div>
 	
-	
-	<form action="contList.jsp" method="get">
-		<div class="row" style="float:right;">
+	<div class="row float-right">
+		<form action="contList.jsp" method="get">
 			<input type="text" name="key" class="input input-inline" placeholder="검색어를 입력해주세요." required>
 			<input type="submit" class="input input-inline" value="검색">
-		</div>
-	</form>
+		</form>
 	</div>
+	</div>
+	
 
 	
 	<div class="row">
@@ -141,13 +151,19 @@
 						<td><%=contDto.getCont_corp()%></td>
 						<td><%=contDto.getCont_phone()%></td>
 						<td><%=contDto.getCont_email()%></td>
-						<td><%=contDto.getCont_memo()%></td>
+						<td><span id="memo"><%=contDto.getCont_memo()%></span></td>
 					</tr>
 				<%} %>
 			</tbody>
 		</table>
 	</div>
-	
+	<div class="row float-left">
+		<form action="delete.do" method="get" name="form">
+			<input type="hidden" id="hiddenValue" name="cont_no">
+			<input type="button" id="delete_btn" value="선택삭제" class="input input-inline">
+		</form>
+	 </div>
+	 
 	<!-- 페이지 네비게이션 -->
 	<div class="row center">
 			<ul class="pagination">
