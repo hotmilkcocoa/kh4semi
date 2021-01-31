@@ -177,6 +177,9 @@
 	.listArea{
 		word-break: break-word;
 	}
+	.forCom{
+		color: red;
+	}
 </style>
 <%
 	AttendanceDao attendanceDao = new AttendanceDao();
@@ -432,7 +435,7 @@
 				newUl.append(newLi);
 				newLi.classList.add("cursor-pointer");
 				newLi.innerText = "<%=schDto.getSch_name()%>";
-				
+				<%if(schDto.getSch_for_com().equals("true")){%>newLi.classList.add("forCom");<%}%>
 				newLi.addEventListener("click", function(){
 					var viewpop = document.querySelector(".viewpop");
 					openpop(viewpop, 200);
@@ -448,6 +451,11 @@
 					document.querySelector(".viewEditBtn").addEventListener("click", function(){
 						location.href = "sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
 					});
+					if(<%=emp_no != schDto.getEmp_no()%>){
+						document.querySelector(".btns").classList.add("hide");
+					} else{
+						document.querySelector(".btns").classList.remove("hide");
+					}
 				});
 				
 				i++;
