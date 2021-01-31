@@ -13,13 +13,16 @@
 		$("select[name=board_header]").val("<%=boardDto.getBoard_header_string()%>"); 
 	});
 </script>
-	<div class="outbox" style="width:1000px">
+	<div class="outbox" style="width:900px">
 		<div class="row center">
 			<h2>게시글 수정</h2>
 		</div>
 		
 		<div>
-			<form action="<%=request.getContextPath()%>/#" method="post">
+			<form action="<%=request.getContextPath()%>/board/edit.do" method="post">
+			
+			<input type="hidden" name="board_no" value="<%=boardDto.getBoard_no()%>">
+			
 			<div class="row">
 				<label>말머리</label>
 				<select name="board_header" class="input">
@@ -36,21 +39,11 @@
 	
 			<div class="row">
 				<label>내용</label>
-				<textarea name="board_content" class="input" required rows="20"><%=boardDto.getBoard_context()%>></textarea>
+				<textarea name="board_context" class="input" required rows="20"><%=boardDto.getBoard_context()%>></textarea>
 			</div>
 	
-			<!--  -->
-			<form action="receive.do" method="post" enctype="multipart/form-data">
-
-				<input type="file" name="f" accept=".jpg , .png , .gif">
-				<input type="submit" value="업로드">
-	
-			</form>
-		
-			<!--  -->
-			
 			<div class="row">
-				<input type="submit" class="input" value="수정">
+				<input type="submit" class="input" value="수정" onclick="alert('글을 수정하시겠습니까?')">
 			</div>
 		
 			</form>
