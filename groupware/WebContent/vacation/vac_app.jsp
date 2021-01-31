@@ -66,7 +66,8 @@
             <td>기간</td>
             <td>사유</td>
             <td>기타사항</td>
-            <td>신청자</td>
+            <td>작성</td>
+            <td>대상</td>
             <td>신청일</td>
             <td>상태</td>
             <td>관리</td>
@@ -85,7 +86,8 @@
 		            <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
 		            <td><%=dto.getVac_reason() %></td>
 		            <td><%=dto.getVac_comment() %></td>
-		            <td><%=targetDto.getEmp_name()%>(<%=targetDto.getEmp_dep()%>)</td>
+		            <td><%=empDao.find(emp_no).getEmp_name()+"("+empDao.find(emp_no).getEmp_dep()+")" %></td>
+		            <td><%=empDao.find(dto.getVac_target_no()).getEmp_name()+"("+empDao.find(dto.getVac_target_no()).getEmp_dep()+")" %></td>
 		            <td><%=dto.getVac_write_date() %></td>
 		            <td><%=dto.getVac_status() %></td>
 		            <td>
@@ -96,7 +98,7 @@
 		        <%index++;
 	        }%>
 	        <tr>
-	        	<td colspan="9">
+	        	<td colspan="10">
 					<div class="row center">
 						<ul class="pagination">
 							<li><a href="vac_app.jsp?p=<%=startBlock-1%>">&lt;</a></li>
@@ -116,7 +118,7 @@
 	        </tr>
         <% } else {%>
         	<tr>
-        		<td colspan="9">정보가 없습니다.</td>
+        		<td colspan="10">정보가 없습니다.</td>
         	</tr>
         <%} %>
     </table>

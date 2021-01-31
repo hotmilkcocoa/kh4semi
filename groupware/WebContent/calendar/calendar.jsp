@@ -96,6 +96,48 @@
 		word-break: break-all;
 		padding-right: 30px;
 	}
+	.calendarTitle>.date{
+		font-size: 30px;
+	}
+	.calendarTitle>button{
+		font-size: 18px;
+		background-color: #ffffff00;
+		border: none;
+		cursor: pointer;
+	}
+	.calendarTitle>.today{
+		font-size: 14px;
+		border: 1px solid gray;
+		border-radius: 10px;
+	}
+	.calendarTitle{
+		position: relative;
+	    border-bottom: 1px solid lightgray;
+		padding-bottom: 10px;
+		margin: 10px 20px;
+	}
+	.calendarTitle>.changeTypeBtns{
+		position: absolute;
+	    bottom: 10px;
+	    left: 15px;
+	}
+	.calendarTitle>.manageBtns{
+		position: absolute;
+	    bottom: 10px;
+	    right: 15px;
+	}
+	.calendarTitle>.changeTypeBtns>input,
+	.calendarTitle>.manageBtns>input{
+		border: 1px solid gray;
+		border-radius: 10px;
+		background-color: white;
+	}
+	.calendarContainer{
+		margin: 20px;
+	}
+	.today{
+		background-color: #daf6ff91;
+	}
 </style>
 
 <%
@@ -129,19 +171,21 @@
 %>
 <div class="blurarea hide"></div>
 <div class="scrollbox">
-	<h1 class="center date"></h1>
-	<input type="button" value="이전" class="prevNext" prev>
-	<input type="button" value="다음" class="prevNext">
-	<input type="button" value="오늘" class="today">
-	<hr>
-	<div>
-		<input type="button" value="일간" id="daily" class="changeType">
-		<input type="button" value="주간" id="weekly" class="changeType">
-		<input type="button" value="월간" id="monthly" class="changeType">
-		<input type="button" value="일정 추가" id="sch_add">
-		<input type="button" value="캘린더 설정" id="sch_manage">
+	<div class="row calendarTitle center">
+		<span class="changeTypeBtns">
+			<input type="button" value="일간" id="daily" class="changeType">
+			<input type="button" value="주간" id="weekly" class="changeType">
+			<input type="button" value="월간" id="monthly" class="changeType">
+		</span>
+		<button class="prevNext" prev><</button>
+		<span class="center date"></span>
+		<button class="prevNext">></button>
+		<button class="today">Today</button>
+		<span class="manageBtns">
+			<input type="button" value="일정 추가" id="sch_add">
+			<input type="button" value="캘린더 설정" id="sch_manage">
+		</span>
 	</div>
-	<hr>
 	<div class="calendar">
 		<div class="calendarContainer">
 			<div>
@@ -278,6 +322,7 @@
 				}
 				var newTd = document.createElement("td");
 				newTd.classList.add("monthTd");
+				if(getDateString(start, "-") == getDateString(today, "-")) newTd.classList.add("today");
 				newTr.append(newTd);
 
 				var calTdDiv = newdiv();
@@ -333,6 +378,7 @@
 			var dayRow = document.createElement("tr");
 			paintArea.append(dayRow);
 			dayRow.classList.add("dayRow");
+			if(getDateString(start, "-") == getDateString(today, "-")) dayRow.classList.add("today");
 			
 			var calTdDivDate = document.createElement("td");
 			dayRow.append(calTdDivDate);
@@ -343,6 +389,7 @@
 			var schRow = document.createElement("tr");
 			paintArea.append(schRow);
 			schRow.classList.add("schRow");
+			if(getDateString(start, "-") == getDateString(today, "-")) schRow.classList.add("today");
 			
 			var weekTd = document.createElement("td");
 			schRow.append(weekTd);
@@ -464,7 +511,11 @@
 				}
 				newSch.classList.add("schedule");
 				newSch.classList.add("cursor-pointer");
-				newSch.innerText = "<%=schDto.getSch_name()%>";
+				if(calType=="monthly"){
+					newSch.innerText = "<%=schDto.getSch_name()%>";
+				} else{
+					newSch.innerText = "<%=schDto.getSch_name()%>" + " (" + "<%=schDto.getSch_start().toLocalDateTime().toLocalTime().toString()+" - "+schDto.getSch_end().toLocalDateTime().toLocalTime().toString()%>" + ")";
+				}
 				
 				//일정 클릭 이벤트
 				//팝업 내용 수정하고 열기
@@ -477,6 +528,9 @@
 					document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
 					document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
 					
+					<%if(emp_no != schDto.getEmp_no()){%>
+						document.querySelector(".btns").classList.add("hide");
+					<%}%>
 					document.querySelector(".viewDelBtn").addEventListener("click", function(){
 						location.href = "sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
 					});

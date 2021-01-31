@@ -109,12 +109,22 @@
 			EmployeeDto empDto = new EmployeeDao().find(shareDto.getTarget_no());%>
 			var newLi = document.createElement("li");
 			newUl.append(newLi);
+			
+			var checkbox = document.createElement("input");
+			checkbox.setAttribute("type", "checkbox");
+			<%if(shareDto.getChecked().equals("true")){%>checkbox.checked = 'true';<%}%>
+			checkbox.addEventListener("input", function(){
+				location.href = "share_update.do?share_no=<%=shareDto.getShare_no()%>";
+			});
+			
 			var emp = document.createElement("span");
 			emp.classList.add("emp");
 			emp.innerText = "<%=empDto.getEmp_name()%>";
+			
 			var mail = document.createElement("span");
 			mail.classList.add("mail");
 			mail.innerText = "<" + "<%=empDto.getEmp_email()%>" + ">";
+			
 			var delBtn = document.createElement("span");
 			delBtn.classList.add("delBtn");
 			delBtn.classList.add("cursor-pointer");
@@ -123,6 +133,7 @@
 				location.href = "share_del.do?share_no=<%=shareDto.getShare_no()%>";
 			});
 			
+			newLi.append(checkbox);
 			newLi.append(emp);
 			newLi.append(mail);
 			newLi.append(delBtn);
