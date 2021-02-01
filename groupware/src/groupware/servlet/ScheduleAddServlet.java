@@ -42,8 +42,8 @@ public class ScheduleAddServlet extends HttpServlet{
 				scheduleDao.update(scheduleDto);
 			}
 			
-			String link = "calendar.jsp?calType={1}&date={2}".replace("{1}", req.getParameter("calType")).replace("{2}", req.getParameter("sch_start_date"));
-			resp.sendRedirect(link);
+//			String link = "calendar.jsp?calType={1}&date={2}".replace("{1}", req.getParameter("calType")).replace("{2}", req.getParameter("sch_start_date"));
+			resp.sendRedirect(req.getParameter("referer"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);

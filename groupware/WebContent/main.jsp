@@ -446,10 +446,10 @@
 					document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
 					
 					document.querySelector(".viewDelBtn").addEventListener("click", function(){
-						location.href = "sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
+						location.href = "<%=request.getContextPath()%>/calendar/sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
 					});
 					document.querySelector(".viewEditBtn").addEventListener("click", function(){
-						location.href = "sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
+						location.href = "<%=request.getContextPath()%>/calendar/sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
 					});
 					if(<%=emp_no != schDto.getEmp_no()%>){
 						document.querySelector(".btns").classList.add("hide");
