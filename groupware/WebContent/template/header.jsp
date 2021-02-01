@@ -12,10 +12,10 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/common.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/hg19910.css">
 <Style>
-	/*임시 모든 구역 구분 선(테스트)*/	
-	/*main, header, section, footer, article, aside, div, label, table, th, td{
-	    border: 1px dotted #ccc;
-	}*/
+	/*임시 모든 구역 구분 선(테스트)*/   
+   /*main, header, section, footer, article, aside, div, label, table, th, td{
+       border: 1px dotted #ccc;
+   }*/
 	
 	/*메인 테두리, 헤더 바닥, 섹션 중간, 푸터 위 구분선 적용*/
 	main{
@@ -82,10 +82,10 @@
 	    width: 45%;
 	}
 	header .iconbox{
-	    margin-top : 5px;
-	    margin-right: 1px;
-	    float: left;
-	    width: 24%;
+	   margin-top : 5px;
+       margin-right: 1px;
+       float: left;
+       width: 24%;
 	}
 	header .profile th,
 	header .profile td{
@@ -160,18 +160,17 @@
 	});
 </script>
 <% 
-	request.setCharacterEncoding("UTF-8");
+   request.setCharacterEncoding("UTF-8");
 %>
-
 <%
-	String pageName = request.getParameter("page");
+   String pageName = request.getParameter("page");
 
-	int emp_no = (int) request.getSession().getAttribute("check");
-	EmployeeDao empDao = new EmployeeDao();
-	EmployeeDto empDto = empDao.find(emp_no);
-	
-	//부서장인지 인사부 팀장인지 검사
-	boolean isDephead = empDto.getEmp_title().equals("팀장");
+   int emp_no = (int) request.getSession().getAttribute("check");
+   EmployeeDao empDao = new EmployeeDao();
+   EmployeeDto empDto = empDao.find(emp_no);
+   
+   //부서장인지 인사부 팀장인지 검사
+   boolean isDephead = empDto.getEmp_title().equals("팀장");
 %>
 </head>
 <body>
@@ -244,15 +243,15 @@
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_status.jsp?page=휴가 현황">휴가 현황</a></li>
                             <%if(isDephead){ %>
                             <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/vacation/vac_app.jsp?page=휴가 승인">휴가 승인</a></li>
-                        	<%} %>
+                           <%} %>
                         </ul>
                     </ul>
                     <ul>
-                        <li class="menu menu-title"><a href="">게시판</a></li>
+                        <li class="menu menu-title"><a href="<%=request.getContextPath()%>/board/board_main.jsp?page=종합게시판">게시판</a></li>
                         <ul>
-                            <li class="menu menu-detail"><a href="">공지사항</a></li>
-                            <li class="menu menu-detail"><a href="">자유게시판</a></li>
-                            <li class="menu menu-detail"><a href="">결재</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/board/notice_list.jsp?page=공지사항">공지사항</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/board/free_list.jsp?page=자유게시판">자유게시판</a></li>
+                            <li class="menu menu-detail"><a href="<%=request.getContextPath()%>/board/payment_list.jsp?page=결재게시판">결재</a></li>
                         </ul>
                     </ul>
                 </div>

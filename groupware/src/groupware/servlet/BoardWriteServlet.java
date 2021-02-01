@@ -26,8 +26,7 @@ public class BoardWriteServlet extends HttpServlet{
 			boardDto.setBoard_context(req.getParameter("board_context"));
 			
 //			현재 로그인한 사용자 정보를 불러오는 코드
-			/* int emp_no = (int)req.getSession().getAttribute("check"); */
-			int emp_no=1;
+			int emp_no=(int)req.getSession().getAttribute("check");
 			EmployeeDao employeeDao = new EmployeeDao();
 			EmployeeDto employeeDto = employeeDao.find(emp_no);
 			

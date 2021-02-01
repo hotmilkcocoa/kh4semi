@@ -2,38 +2,41 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="groupware.beans.*" %>
-<jsp:include page="/template/board_header.jsp"></jsp:include>
+<jsp:include page="/template/header.jsp"></jsp:include>
 <%
 	request.setCharacterEncoding("UTF-8");
 %>
+<%
+//페이지 분할 계산 코드 작성
+	int boardSize = 2;
+	int p;
+	try{
+		p = Integer.parseInt(request.getParameter("p"));
+		if(p <= 0) throw new Exception();
+	}
+	catch(Exception e){
+		p = 1;
+	}
 
+	//p의 값에 따라 시작 row번호와 종료 row번호를 계산
+	int endRow = p * boardSize;
+	int startRow = endRow - boardSize +1;
+%>
 <%
 BoardDao boardDao = new BoardDao();
-List<BoardDto> mainlist = boardDao.mainlist();
+List<BoardDto> mainlist = boardDao.pagingList(startRow, endRow);
 %>
 
 <%
 BoardPaymentDao boardpaymentDao = new BoardPaymentDao();
-List<BoardPaymentDto> paymentlist = boardpaymentDao.paymentlist();
+List<BoardPaymentDto> paymentlist = boardpaymentDao.pagingList(startRow, endRow);
 %>
 
 <%
 BoardFreeDao boardfreeDao = new BoardFreeDao();
-List<BoardFreeDto> freelist = boardfreeDao.freelist();
+List<BoardFreeDto> freelist = boardfreeDao.pagingList(startRow, endRow);
 %>
 
-<%
-// 	목록,검색을 위해 필요한 프로그래밍 코드
-// 	type : 분류 , key : 검색어
-	String type = request.getParameter("type");
-	String key = request.getParameter("key");
-	boolean isSearch = type != null && key != null;
-		if(isSearch){
-			mainlist = boardDao.select(type,key);
-		}else{
-			mainlist = boardDao.mainlist();
-		}
-%>
 <link rel="stylesheet" type="text/css" href="./css/common.css">
 <style>
 .outbox{
@@ -42,27 +45,7 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
 </style>
     <div class="outbox" align="center">
     
-    <!-- 검색창 -->	
-	 <div class="trans" align ="right" style="line-height:20px">
-		<form action="board_main.jsp" method="post">
-			<div class="row">
-				<select name="type" class="input input-inline">
-					<option value="board_title" <%if(type!=null&&type.equals("board_title")){%>selected<%}%>>제목</option>
-					<option value="board_dep" <%if(type!=null&&type.equals("board_dep")){%>selected<%}%>>부서</option>
-				</select>
-				
-			<%if(isSearch){ %>
-				<input type="text" class="input input-inline" name="key" required value="<%=key%>">
-			<%}else{ %>
-				<input type="text" class="input input-inline" name="key" required>
-			<%} %>
-			
-				<input type="submit" class="input input-inline" value="검색">
-			
-			</div>
-		</form>
-    </div>
-    		<table class="payment" style="width:900px">
+    		<table class="payment table table-border" style="width:900px">
     			<tbody>
   		  			<tr>
     					<th>번호</th>
@@ -78,12 +61,12 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
     			<%for(BoardPaymentDto dto : paymentlist){ %>
     				<tr>	
     					<td><%=dto.getPayment_no() %></td>
-    					<td><%=dto.getPayment_header()%></td>
+    					<td><%=dto.getPayment_heater()%></td>
 						<td class="left">
-							<%if(dto.getPayment_header() != null){ %>
-								[<%=dto.getPayment_header()%>]
+							<%if(dto.getPayment_heater() != null){ %>
+								[<%=dto.getPayment_heater()%>]
 							<%}%>
-							<a href="detail.jsp?board_no=<%=dto.getPayment_no()%>">				
+							<a href="payment_detail.jsp?board_no=<%=dto.getPayment_no()%>">				
 								<%=dto.getPayment_title()%>
 							</a>
 						</td>
@@ -97,7 +80,7 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
 <br>
 <hr>
 <br>
-    		<table class="notice" style="width:900px">
+    		<table class="notice table table-border" style="width:900px">
     			<tbody>
     				<tr>
     					<th>번호</th>
@@ -130,7 +113,7 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
          <br>
          <hr>
          <br>
-    		<table class="free" style="width:900px;">
+    		<table class="free table table-border" style="width:900px;">
     		    	<tr>
     		    		<th>글 번호</th>
     		    		<th>제목</th>
@@ -146,7 +129,7 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
 							<%if(dto.getFree_header() != null){ %>
 								[<%=dto.getFree_header()%>]
 							<%}%>
-							<a href="detail.jsp?free_no=<%=dto.getFree_no()%>">				
+							<a href="free_detail.jsp?free_no=<%=dto.getFree_no()%>">				
 								<%=dto.getFree_title()%>
 							</a>
 						</td>
@@ -157,5 +140,5 @@ List<BoardFreeDto> freelist = boardfreeDao.freelist();
     			</tbody>  			
     		</table>
     </div>
-<jsp:include page="/template/board_footer.jsp"></jsp:include>
+<jsp:include page="/template/footer.jsp"></jsp:include>
 

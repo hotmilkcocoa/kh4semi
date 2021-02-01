@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class BoardFreeDto {
 	public int free_no;
-	public String free_writer;
+	public int free_writer;
 	public String free_header;
 	public String free_title;
 	public String free_context;
@@ -18,10 +18,10 @@ public class BoardFreeDto {
 	public void setFree_no(int free_no) {
 		this.free_no = free_no;
 	}
-	public String getFree_writer() {
+	public int getFree_writer() {
 		return free_writer;
 	}
-	public void setFree_writer(String free_writer) {
+	public void setFree_writer(int free_writer) {
 		this.free_writer = free_writer;
 	}
 	public String getFree_header() {
@@ -48,5 +48,10 @@ public class BoardFreeDto {
 	public void setFree_writedate(Date free_writedate) {
 		this.free_writedate = free_writedate;
 	}
-
+	public String getFree_header_string() {
+		if(this.free_header == null) 
+			return "";
+		else
+			return this.free_header;
+	}
 }
