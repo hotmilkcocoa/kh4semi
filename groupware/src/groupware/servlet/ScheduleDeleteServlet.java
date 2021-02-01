@@ -28,17 +28,13 @@ public class ScheduleDeleteServlet extends HttpServlet{
 			String only = req.getParameter("only");
 			if(delDate != null) {
 				scheduleDao.delete(emp_no, Timestamp.valueOf(LocalDate.parse(delDate).atStartOfDay()));
-				resp.getWriter().println("<script>window.history.back()</script>");
 			} else if(only != null){
 				int sch_no = Integer.parseInt(req.getParameter("sch_no"));
 				scheduleDao.deleteOne(sch_no);
-				String link = "calendar.jsp?calType={1}&date={2}".replace("{1}", req.getParameter("calType")).replace("{2}", req.getParameter("date"));
-				resp.sendRedirect(link);
 			} else {
 				scheduleDao.delete(emp_no);
-				resp.getWriter().println("<script>window.history.back()</script>");
 			}
-			
+			resp.sendRedirect(req.getHeader("referer"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			resp.sendError(500);

@@ -44,6 +44,7 @@
     <form action="sch_add.do" method="post">
     <%} %>
     <input type="hidden" name="calType" value="<%=request.getParameter("calType")%>">
+    <input type="hidden" name="referer" value="<%=request.getHeader("referer")%>">
         <div class="row rel">
             <span>일정명</span>
             <div class="data">
