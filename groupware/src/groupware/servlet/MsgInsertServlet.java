@@ -23,8 +23,6 @@ public class MsgInsertServlet extends HttpServlet{
 			MessageDto msgDto = new MessageDto();
 			MessageDao msgDao = new MessageDao();
 			String[] msg_receiver = req.getParameterValues("msg_receiver");//받는사람들
-			System.out.println(req.getParameter("msg_receiver"));
-			System.out.println(req.getParameter("msg_title"));
 			String message_title = req.getParameter("msg_title"); //제목
 			String message_content = req.getParameter("msg_content"); //타이틀
 			

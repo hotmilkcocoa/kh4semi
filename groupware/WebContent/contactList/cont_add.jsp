@@ -4,12 +4,17 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
 	$(function() {
-
-		$("#submit_btn").click(function(){
+		$("#submit_btn").click(function(e){
+				e.preventDefault();
 				document.form.target = opener.name;
 				document.form.submit();
 				self.close();
-			
+		});
+		
+		$("#candel_btn").click(function() {
+			if(confirm("취소하시겠습니까?")) {
+				window.close();
+			}
 		});
 	});
 </script>
@@ -23,9 +28,9 @@
 		<table class="table table-border">
 			<tbody>
 				<tr>
-					<th width="20%">이름</th>
+					<th width="20%">이름 *</th>
 					<td>
-						<input class="input" type="text" name="cont_name">
+						<input class="input" type="text" name="cont_name" required>
 					</td>
 				</tr>
 				<tr>
@@ -35,9 +40,9 @@
 					</td>
 				</tr>
 				<tr>
-					<th>연락처</th>
+					<th>연락처 *</th>
 					<td>
-						<input class="input" type="text" name="cont_phone">
+						<input class="input" type="text" name="cont_phone" required>
 					</td>
 				</tr>
 				<tr>
@@ -54,11 +59,13 @@
 				</tr>
 			</tbody>
 		</table>
+		
+		<div class="row center" >
+			<input type="button" value="취소" id="candel_btn" class="input input-inline">
+			<input type="submit" value="추가" id="submit_btn" class="input input-inline">
+		</div>
 	</form>
 	
-	<div class="row center" >
-			<input type="button" value="취소" onclick="window.close()" class="input input-inline">
-			<input type="button" value="추가" id = "submit_btn" class="input input-inline"">
-		</div>
+	
 </div>
 </div>

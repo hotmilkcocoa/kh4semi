@@ -134,6 +134,9 @@
 		var noArray = new Array();
 		var nameArray = new Array();
 		$("#message_write").click(function(){
+			if($(".check-btn:checked").val() == null) {
+				alert("쪽지 수신인을 선택하세요");
+			} else {
 				$(".check-btn:checked").each(function(i){
 					noArray.push($(this).data("no"));
 					nameArray.push($(this).data("name"));
@@ -141,6 +144,7 @@
 				$("#hiddenValue1").val(noArray);
 				$("#hiddenValue2").val(nameArray);
 				document.form.submit();
+			}
 			
 		});
 			
@@ -210,12 +214,10 @@
 					<input type="submit" class="input input-inline" value="검색">
 				</div>
 			</form>
-	
 		</div>
 
 		
 	</div>
-
 	<div class="row">
 		<table class="table table-border table-pattern">
 			<thead>
