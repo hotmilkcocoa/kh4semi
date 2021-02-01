@@ -54,6 +54,20 @@
 </style>
 
 <%
+	request.setCharacterEncoding("UTF-8");
+	
+	String emp_name = request.getParameter("emp_name"); //주소록에서 선택한 사원의 이름
+	String empno = request.getParameter("emp_no"); //주소록에서 선택한 사원의 번호
+	
+	boolean isCheck = emp_name != null && empno != null; //체크가 되어서 들어온 정보라면 isCheck
+	
+	String[] empName = new String[]{};
+	String[] empNo = new String[]{};
+	if(isCheck) {
+		empName = emp_name.split(",");
+		empNo = empno.split(",");
+	}	
+
 	int emp_no = (int) session.getAttribute("check");
 	
 	String target_no = request.getParameter("emp_no");
@@ -63,6 +77,66 @@
 	Share_schDao shareDao = new Share_schDao();
 	List<Share_schDto> shareList = shareDao.select(emp_no);
 %>
+<script>
+	//자식창에서 값전달
+	function empAdd1(nameArray){
+		var a = $("#msg_receiver").prop("value");
+		if(a != "") {
+		var b = a +","+ nameArray;
+		var valArray = b.split(",");
+		var set = new Set(valArray);
+		var uniqueArr = [...set];
+		$("#msg_receiver").prop("value", uniqueArr);
+		} else {
+			var set = new Set(nameArray);
+			var uniqueArr = [...set];
+			$("#msg_receiver").prop("value", uniqueArr);
+		}
+	};
+	
+	function empAdd2(noArray) {
+		location.href = "<%=request.getContextPath()%>/calendar/share_add.do?target_no="+noArray.toString();
+	}
+	$(function() {
+		var empno = new Array();
+		<% for(int i = 0; i < empNo.length; i ++) {%>
+			empno.push(<%=empNo[i]%>)
+		<%}%>
+		$("input[name=msg_receiver]").attr("value", empno);
+		
+		
+		//주소록에서 가져온 사원추가
+		<%if(isCheck) {  %>		
+				var array = new Array();
+				<%for(int i = 0; i < empName.length; i++) {%>
+					array.push(
+						"<%=empName[i]%>"
+					);
+					<%} %>
+				$("#msg_receiver").val(array);
+		<% } else {%>
+				$("#msg_receiver").val("");
+		<% }%>
+		
+		$("#search-btn").click(function() {
+			window.open("<%=request.getContextPath()%>/message/search.jsp", "사원검색", "width=700px, height=600px");
+		});
+		
+		//취소버튼
+		$("#cancel-btn").click(function() {
+			if(confirm("작성 중인 내용이 사라집니다. 취소하시겠습니까?")) {
+				location.href="inbox.jsp"
+			}
+		});
+		
+		
+		
+	});
+	
+	
+</script>
+
+
 <h3>내 일정 관리</h3>
 <div class="row">
     <span>내 일정 전체 정리하기</span>

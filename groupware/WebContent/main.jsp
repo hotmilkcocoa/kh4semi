@@ -108,6 +108,81 @@
        right: 5px;
     }
     .listpop{
+<<<<<<< HEAD
+	    position: fixed;
+	    width: 150px;
+	    border: 1px solid lightgray;
+	    background-color: white;
+	    font-size: 14px;
+	    padding: 0.25rem;
+	}
+	.schedule{
+		font-weight: bold;
+		margin-left: 0.5rem;
+		overflow: hidden;
+	}
+	.pop>div{
+		word-break: break-all;
+		padding-right: 30px;
+	}
+	.calTdDivDate{
+		display: inline-block;
+	}
+	.calendarTitle{
+		text-align: center;
+	}
+	span.dateSpan{
+		font-size: 1rem;
+		font-weight: bold;
+		width: 25px;
+		height: 25px;
+		display: inline-block;
+	    padding-left: 3px;
+	    padding-top: 2px;
+	}
+	span.dateSpan.weekend{
+		color: #989898;
+	}
+	span.dateSpan.today{
+		color: white;
+		background-color: tomato;
+		border-radius: 50%;
+	}
+	div.calTdDiv.hasSch{
+	    background-color: #ff000026;
+	    border-radius: 10px;
+	}
+	.calendarTitle>*{
+		font-size: 24px;
+	}
+	.calendarTitle>button{
+		background-color: #ffffff00;
+		border: none;
+		cursor: pointer;
+	}
+	table.dayTable{
+		font-size: 1rem;
+		font-weight: bold;
+		background-color: white;
+	}
+	table#paintArea, div.calendarList{
+		background-color: white;
+	}
+	div.calendarList{
+		background-color: white;
+		padding: 5px;
+		margin-left: 15px;
+	}
+	div.rowFlex{
+		padding: 10px;
+	}
+	.listArea{
+		word-break: break-word;
+	}
+	.forCom{
+		color: red;
+	}
+=======
        position: fixed;
        width: 150px;
        border: 1px solid lightgray;
@@ -181,6 +256,7 @@
    .forCom{
       color: red;
    }
+>>>>>>> refs/remotes/origin/main
 </style>
 <%
    AttendanceDao attendanceDao = new AttendanceDao();
@@ -403,68 +479,68 @@
    paintMonthly();
    
 <%
-   int i = 0;
-   for(LocalDate key : schMap.keySet()){
-      List<ScheduleDto> schList= schMap.get(key);%>
-      
-      var calTdDivDate = document.querySelectorAll(".calTdDivDate")[<%=i%>];
-      var dateSpan = document.querySelectorAll(".dateSpan")[<%=i%>];
-      dateSpan.addEventListener("click", function(){
-         location.href = "calendar/sch_add.jsp?date=<%=key.toString()%>";
-      });
-      
-      var calTdDiv = calTdDivDate.parentElement;
-      <%if(schList.size()>0){%>
-         calTdDiv.classList.add("hasSch");
-      <%}%>
-      calTdDiv.addEventListener("click", function(){
-         var calendarList = document.querySelector(".calendarList");
-         calendarList.children[0].innerText = "<%=LocalDate.now().toString().equals(key.toString()) ? "TODAY" : key.toString()%>";
-         
-         var listArea = calendarList.children[1];
-         removeAllChild(listArea);
-         var newUl = document.createElement("ul");
-         listArea.append(newUl);
-         var newLi = document.createElement("li");
-         newLi.innerText = "일정이 없어요";
-         newUl.append(newLi);
-         var i=0;
-         <%
-         for(ScheduleDto schDto : schList){%>
-            if(i==0) removeAllChild(newUl);
-            var newLi = document.createElement("li");
-            newUl.append(newLi);
-            newLi.classList.add("cursor-pointer");
-            newLi.innerText = "<%=schDto.getSch_name()%>";
-            <%if(schDto.getSch_for_com().equals("true")){%>newLi.classList.add("forCom");<%}%>
-            newLi.addEventListener("click", function(){
-               var viewpop = document.querySelector(".viewpop");
-               openpop(viewpop, 200);
-               document.querySelector(".schName").innerText = "<%=schDto.getSch_name()%>";
-               document.querySelector(".schDateTime").innerText = "<%=sdf.format(schDto.getSch_start())+" - "+sdf.format(schDto.getSch_end())%>";
-               document.querySelector(".schContent").innerHTML = "<%=schDto.getSch_content()%>";
-               document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
-               document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";                  
-               
-               document.querySelector(".viewDelBtn").addEventListener("click", function(){
-                  location.href = "sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
-               });
-               document.querySelector(".viewEditBtn").addEventListener("click", function(){
-                  location.href = "sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
-               });
-               if(<%=emp_no != schDto.getEmp_no()%>){
-                  document.querySelector(".btns").classList.add("hide");
-               } else{
-                  document.querySelector(".btns").classList.remove("hide");
-               }
-            });
-            
-            i++;
-         <%}%>
-      });
-      if(<%=tempDate.toString().equals(key.toString())%>)calTdDiv.click();
-      <%i++;
-   }
+	int i = 0;
+	for(LocalDate key : schMap.keySet()){
+		List<ScheduleDto> schList= schMap.get(key);%>
+		
+		var calTdDivDate = document.querySelectorAll(".calTdDivDate")[<%=i%>];
+		var dateSpan = document.querySelectorAll(".dateSpan")[<%=i%>];
+		dateSpan.addEventListener("click", function(){
+			location.href = "calendar/sch_add.jsp?date=<%=key.toString()%>";
+		});
+		
+		var calTdDiv = calTdDivDate.parentElement;
+		<%if(schList.size()>0){%>
+			calTdDiv.classList.add("hasSch");
+		<%}%>
+		calTdDiv.addEventListener("click", function(){
+			var calendarList = document.querySelector(".calendarList");
+			calendarList.children[0].innerText = "<%=LocalDate.now().toString().equals(key.toString()) ? "TODAY" : key.toString()%>";
+			
+			var listArea = calendarList.children[1];
+			removeAllChild(listArea);
+			var newUl = document.createElement("ul");
+			listArea.append(newUl);
+			var newLi = document.createElement("li");
+			newLi.innerText = "일정이 없어요";
+			newUl.append(newLi);
+			var i=0;
+			<%
+			for(ScheduleDto schDto : schList){%>
+				if(i==0) removeAllChild(newUl);
+				var newLi = document.createElement("li");
+				newUl.append(newLi);
+				newLi.classList.add("cursor-pointer");
+				newLi.innerText = "<%=schDto.getSch_name()%>";
+				<%if(schDto.getSch_for_com().equals("true")){%>newLi.classList.add("forCom");<%}%>
+				newLi.addEventListener("click", function(){
+					var viewpop = document.querySelector(".viewpop");
+					openpop(viewpop, 200);
+					document.querySelector(".schName").innerText = "<%=schDto.getSch_name()%>";
+					document.querySelector(".schDateTime").innerText = "<%=sdf.format(schDto.getSch_start())+" - "+sdf.format(schDto.getSch_end())%>";
+					document.querySelector(".schContent").innerHTML = "<%=schDto.getSch_content()%>";
+					document.querySelector(".schPlace").innerText = "<%=schDto.getSch_place()%>";
+					document.querySelector(".schWriter").innerText = "<%=new EmployeeDao().find(schDto.getEmp_no()).getEmp_name()%>";						
+					
+					document.querySelector(".viewDelBtn").addEventListener("click", function(){
+						location.href = "<%=request.getContextPath()%>/calendar/sch_del.do?only&calType=<%=calType%>&date=<%=key.toString()%>&sch_no=<%=schDto.getSch_no()%>";
+					});
+					document.querySelector(".viewEditBtn").addEventListener("click", function(){
+						location.href = "<%=request.getContextPath()%>/calendar/sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
+					});
+					if(<%=emp_no != schDto.getEmp_no()%>){
+						document.querySelector(".btns").classList.add("hide");
+					} else{
+						document.querySelector(".btns").classList.remove("hide");
+					}
+				});
+				
+				i++;
+			<%}%>
+		});
+		if(<%=tempDate.toString().equals(key.toString())%>)calTdDiv.click();
+		<%i++;
+	}
 %>
 </script>
 <jsp:include page="/template/footer.jsp"></jsp:include> 

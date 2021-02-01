@@ -93,7 +93,7 @@
 		            <td><%=dto.getVac_start() %> - <%=dto.getVac_end() %></td>
 		            <td><%=dto.getVac_reason() %></td>
 		            <td><%=dto.getVac_comment() %></td>
-		            <td><%=empDao.find(emp_no).getEmp_name()+"("+empDao.find(emp_no).getEmp_dep()+")" %></td>
+		            <td><%=empDao.find(dto.getVac_writer_no()).getEmp_name()+"("+empDao.find(dto.getVac_writer_no()).getEmp_dep()+")" %></td>
 		            <td><%=empDao.find(dto.getVac_target_no()).getEmp_name()+"("+empDao.find(dto.getVac_target_no()).getEmp_dep()+")" %></td>
 		            <td><%=dto.getVac_write_date() %></td>
 		            <td><%=dto.getVac_status() %></td>

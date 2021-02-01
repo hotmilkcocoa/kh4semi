@@ -628,9 +628,11 @@
 					document.querySelector(".viewEditBtn").addEventListener("click", function(){
 						location.href = "sch_add.jsp?calType=<%=calType%>&edit&sch_no=<%=schDto.getSch_no()%>";
 					});
-					<%if(emp_no != schDto.getEmp_no()){%>
-						document.querySelector(".btns").remove();
-					<%}%>
+					if(<%=emp_no != schDto.getEmp_no()%>){
+						document.querySelector(".btns").classList.add("hide");
+					} else{
+						document.querySelector(".btns").classList.remove("hide");
+					}
 				});
 			<%
 			}
