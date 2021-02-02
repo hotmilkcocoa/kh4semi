@@ -33,15 +33,15 @@ public class MsgFileUploadServlet extends HttpServlet{
 			int message_sender = (int)req.getSession().getAttribute("check"); //보내는사람
 			
 			//수신 : req로 불가능하기 때문에 새로운 해석기를 생성해야 한다.(MultipartRequest) - cos.jar 필요
-			String path = "../msgfile/";
+			String path = "D:/upload/kh41/msg";
 			int max = 10 * 1024 * 1024; //10MB
 			String encoding = "UTF-8";
 			DefaultFileRenamePolicy policy = new DefaultFileRenamePolicy();
-			
+			 
 			//수신폴더 생성
 			File dir = new File(path);
 			dir.mkdir();
-			
+			 
 			//MultipartRequest mRequest = new MultipartRequest(요청객체, 저장경로, 저장크기, 인코딩방식, 작명정책);
 			MultipartRequest mRequest = new MultipartRequest(req, path, max, encoding, policy);
 			
@@ -54,12 +54,11 @@ public class MsgFileUploadServlet extends HttpServlet{
 			String message_content = mRequest.getParameter("msg_content"); //타이틀
 			MessageFileDto msgFileDto = new MessageFileDto();
 			File target = mRequest.getFile("f");
-			MessageFileDao tmpFileDao = new MessageFileDao();
+			MessageFileDao msgFileDao = new MessageFileDao();
 			
 			int[] message_receiver = new int[msg_receiver.length];
-			int message_no;
 			for(int i = 0; i < message_receiver.length; i ++) {
-				message_no = msgDao.getSequence();
+				int message_no = msgDao.getSequence();
 				message_receiver[i] = Integer.parseInt(msg_receiver[i]);
 				
 				msgDto.setMessage_no(message_no);
@@ -72,15 +71,13 @@ public class MsgFileUploadServlet extends HttpServlet{
 				
 				if(mRequest.getFilesystemName("f") != null) {
 					msgFileDto.setMessage_no(message_no);
-					msgFileDto.setFile_save_name(mRequest.getFilesystemName("f"));
+					msgFileDto.setFile_save_name(mRequest.getFilesystemName("f")); //unique
 					msgFileDto.setFile_upload_name(mRequest.getOriginalFileName("f"));
-					
-					
 					msgFileDto.setFile_size(target.length());
 					msgFileDto.setFile_type(mRequest.getContentType("f"));
 					
 					
-					tmpFileDao.insert(msgFileDto);
+					msgFileDao.insert(msgFileDto);
 				}
 			}
 			
