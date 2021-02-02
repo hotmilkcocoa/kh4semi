@@ -191,7 +191,7 @@
 				<select name="type" class="input input-inline">
 					<option value="emp_name" <%if(type!=null&&type.equals("emp_name")) {%>selected<%}%>>이름</option>
 					<option value="message_title" <%if(type!=null&&type.equals("message_title")) {%>selected<%}%>>제목</option>
-					<option value="message_content" <%if(type!=null&&type.equals("mseeage_content")) {%>selected<%}%>>내용</option>
+					<option value="message_content" <%if(type!=null&&type.equals("message_content")) {%>selected<%}%>>내용</option>
 				</select>
 				<%if(isSearch) {%>
 					<input type="text" name="key" class="input input-inline" value=<%=key%>>
