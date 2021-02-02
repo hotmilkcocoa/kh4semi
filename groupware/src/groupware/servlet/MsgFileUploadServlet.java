@@ -37,11 +37,11 @@ public class MsgFileUploadServlet extends HttpServlet{
 			int max = 10 * 1024 * 1024; //10MB
 			String encoding = "UTF-8";
 			DefaultFileRenamePolicy policy = new DefaultFileRenamePolicy();
-			
+			 
 			//수신폴더 생성
 			File dir = new File(path);
 			dir.mkdir();
-			
+			 
 			//MultipartRequest mRequest = new MultipartRequest(요청객체, 저장경로, 저장크기, 인코딩방식, 작명정책);
 			MultipartRequest mRequest = new MultipartRequest(req, path, max, encoding, policy);
 			

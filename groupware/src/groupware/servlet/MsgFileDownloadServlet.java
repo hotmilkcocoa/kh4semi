@@ -26,7 +26,7 @@ public class MsgFileDownloadServlet extends HttpServlet{
 			MessageFileDao msgFileDao = new MessageFileDao();
 			MessageFileDto msgFileDto = msgFileDao.find(msg_no);
 			System.out.println(msgFileDto.getFile_save_name());
-			String path = "D:/upload/kh41/msg";
+			String path = "D:/upload/kh41/msg"; 
 			File target = new File(path, msgFileDto.getFile_save_name());
 			byte[] data = new byte[(int)target.length()];//파일크기만큼 배열생성
 			FileInputStream in = new FileInputStream(target);

@@ -185,7 +185,7 @@
 		</div>
 	</div>
 		
-		
+		 
 		<div class="row center">
 			<form action="inbox.jsp" method="get">
 				<select name="type" class="input input-inline">
